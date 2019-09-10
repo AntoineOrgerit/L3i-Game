@@ -1,0 +1,77 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'view',
+1 verbose cli   'org.apache.cordova.camera',
+1 verbose cli   '--json' ]
+2 info using npm@3.10.10
+3 info using node@v6.11.3
+4 silly mapToRegistry name org.apache.cordova.camera
+5 silly mapToRegistry using default registry
+6 silly mapToRegistry registry https://registry.npmjs.org/
+7 silly mapToRegistry data Result {
+7 silly mapToRegistry   raw: 'org.apache.cordova.camera',
+7 silly mapToRegistry   scope: null,
+7 silly mapToRegistry   escapedName: 'org.apache.cordova.camera',
+7 silly mapToRegistry   name: 'org.apache.cordova.camera',
+7 silly mapToRegistry   rawSpec: '',
+7 silly mapToRegistry   spec: 'latest',
+7 silly mapToRegistry   type: 'tag' }
+8 silly mapToRegistry uri https://registry.npmjs.org/org.apache.cordova.camera
+9 verbose request uri https://registry.npmjs.org/org.apache.cordova.camera
+10 verbose request no auth needed
+11 info attempt registry request try #1 at 11:20:09
+12 verbose request id e3c23d4193feeb78
+13 http request GET https://registry.npmjs.org/org.apache.cordova.camera
+14 http 200 https://registry.npmjs.org/org.apache.cordova.camera
+15 verbose headers { date: 'Mon, 09 Sep 2019 09:20:10 GMT',
+15 verbose headers   'content-type': 'application/json; charset=UTF-8',
+15 verbose headers   'transfer-encoding': 'chunked',
+15 verbose headers   connection: 'keep-alive',
+15 verbose headers   'set-cookie': [ '__cfduid=de0b0cfe60f22d64dfb94ad46144db81e1568020810; expires=Tue, 08-Sep-20 09:20:10 GMT; path=/; domain=.npmjs.org; HttpOnly' ],
+15 verbose headers   'cf-cache-status': 'REVALIDATED',
+15 verbose headers   'cache-control': 'max-age=300',
+15 verbose headers   'cf-ray': '513815af7a6c3c7b-CDG',
+15 verbose headers   etag: 'W/"35581b0a66f8a45cd377ec3240583b3e"',
+15 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+15 verbose headers   'last-modified': 'Sun, 27 May 2018 11:21:56 GMT',
+15 verbose headers   vary: 'accept-encoding, accept',
+15 verbose headers   server: 'cloudflare',
+15 verbose headers   'content-encoding': 'gzip' }
+16 silly get cb [ 200,
+16 silly get   { date: 'Mon, 09 Sep 2019 09:20:10 GMT',
+16 silly get     'content-type': 'application/json; charset=UTF-8',
+16 silly get     'transfer-encoding': 'chunked',
+16 silly get     connection: 'keep-alive',
+16 silly get     'set-cookie': [ '__cfduid=de0b0cfe60f22d64dfb94ad46144db81e1568020810; expires=Tue, 08-Sep-20 09:20:10 GMT; path=/; domain=.npmjs.org; HttpOnly' ],
+16 silly get     'cf-cache-status': 'REVALIDATED',
+16 silly get     'cache-control': 'max-age=300',
+16 silly get     'cf-ray': '513815af7a6c3c7b-CDG',
+16 silly get     etag: 'W/"35581b0a66f8a45cd377ec3240583b3e"',
+16 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+16 silly get     'last-modified': 'Sun, 27 May 2018 11:21:56 GMT',
+16 silly get     vary: 'accept-encoding, accept',
+16 silly get     server: 'cloudflare',
+16 silly get     'content-encoding': 'gzip' } ]
+17 verbose get saving org.apache.cordova.camera to /Users/aprigent/.npm/registry.npmjs.org/org.apache.cordova.camera/.cache.json
+18 verbose correctMkdir /Users/aprigent/.npm correctMkdir not in flight; initializing
+19 verbose stack Error: Unpublished by stevegill on 2015-01-30T00:59:15.025Z
+19 verbose stack     at /usr/local/lib/node_modules/npm/lib/view.js:115:14
+19 verbose stack     at saved (/usr/local/lib/node_modules/npm/lib/cache/caching-client.js:174:7)
+19 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/graceful-fs/polyfills.js:241:18
+19 verbose stack     at FSReqWrap.oncomplete (fs.js:123:15)
+20 verbose statusCode 404
+21 verbose pkgid org.apache.cordova.camera
+22 verbose cwd /Users/aprigent/GoogleD/DONNEES/DocumentsPro/2019-2020/Cours/MasterIcone/M2/RechercheEtMobilite/TEST_APPLI/TPQuizz
+23 error Darwin 18.6.0
+24 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "view" "org.apache.cordova.camera" "--json"
+25 error node v6.11.3
+26 error npm  v3.10.10
+27 error code E404
+28 error 404 Unpublished by stevegill on 2015-01-30T00:59:15.025Z
+29 error 404
+30 error 404 'org.apache.cordova.camera' is not in the npm registry.
+31 error 404 You should bug the author to publish it (or use the name yourself!)
+32 error 404 Note that you can also install from a
+33 error 404 tarball, folder, http url, or git url.
+34 verbose exit [ 1, true ]
