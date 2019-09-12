@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="node_modules/cordova-lib/templates/platforms/android"/>
+	<classpathentry kind="src" path="node_modules/cordova-plugin-barcodescanner-browser-support/src/android"/>
+	<classpathentry kind="src" path="node_modules/properties-parser/test"/>
+	<classpathentry kind="src" path="plugins/phonegap-plugin-barcodescanner/src/android"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

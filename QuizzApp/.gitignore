@@ -19,3 +19,4 @@ plugins/**/LICENSE
 plugins/**/NOTICE
 plugins/**/*.gradle
 plugins/**/tests/
+/bin/
