@@ -6,8 +6,17 @@
     <link rel="stylesheet" type="text/css" href="js/jquery-1.5.0.mobile.min.css">
     <!-- custom CSS -->
     <link rel="stylesheet" type="text/css" href="css/my-style.css">
+    <title>Le mini-jeu de quizz</title>
 </head>
+<!------------------------------------------------------------------------------------------------------- START BODY -->
 <body>
+<!-- LOADER -->
+<div class="spinner">
+    <div class="double-bounce1"></div>
+    <div class="double-bounce2"></div>
+</div>
+
+<div id="content" class="content">
 <!-- START PAGE 1 - MENU -->
 <div data-role="page" id="menu-view">
     <!-- BEGIN HEADER TITLE -->
@@ -18,7 +27,7 @@
     <!-- BEGIN HEADER MENU TITLE -->
     <div role="main" class="ui-content">
         <br><br>
-        <div align="center">
+        <div class="center-wrapper">
             <h1>Menu</h1>
         </div>
         <!-- END HEADER MENU TITLE -->
@@ -27,13 +36,13 @@
         <div class="ui-grid-menu ui-responsive">
             <div class="ui-block-menu">
                 <a id="start-button" href="#categories-view" class="ui-btn ui-shadow ui-corner-all"
-                   data-role="button">Commencer</a>
+                   data-role="button" data-transition="none">Commencer</a>
                 <a id="score-button" href="#score-view" class="ui-btn ui-shadow ui-corner-all"
-                   data-role="button">Scores</a>
+                   data-role="button" data-transition="none">Scores</a>
                 <a id="help-button" href="#help-view" class="ui-btn ui-shadow ui-corner-all"
                    data-role="button">Aide</a>
                 <a id="exit-button" href="#quit" class="ui-btn ui-shadow ui-corner-all"
-                   data-role="button">Quitter</a>
+                   data-role="button" data-transition="none">Quitter</a>
             </div>
         </div>
         <!-- END MENU BUTTONS -->
@@ -51,14 +60,14 @@
     <!-- BEGIN HEADER TITLE -->
     <div data-role="header" data-theme="a">
         <a id="back-btn-header" class="ui-btn-left" href="#menu-view" data-icon="arrow-l"
-           data-iconpos="notext"></a>
+           data-iconpos="notext" data-transition="none"></a>
         <h1>Le mini-jeu de quizz</h1>
     </div>
     <!-- END HEADER TITLE -->
     <!-- BEGIN HEADER CATEGORIES TITLE -->
     <div role="main" class="ui-content">
         <br><br>
-        <div align="center">
+        <div class="center-wrapper">
             <h1>Catégories</h1>
         </div>
         <!-- END HEADER CATEGORIES TITLE -->
@@ -67,16 +76,16 @@
         <div class="ui-grid-menu ui-responsive">
             <div class="ui-block-menu">
                 <a id="who-work-whom-button" href="#game-view"
-                   class="ui-btn ui-shadow ui-corner-all" data-role="button">Qui travaille avec qui
+                   class="ui-btn ui-shadow ui-corner-all" data-role="button" data-transition="none">Qui travaille avec qui
                     ?</a>
                 <a id="who-wrote-article-button" href="#game-view"
-                   class="ui-btn ui-shadow ui-corner-all" data-role="button">Qui a écrit l'article
+                   class="ui-btn ui-shadow ui-corner-all" data-role="button" data-transition="none">Qui a écrit l'article
                     ?</a>
                 <a id="who-work-project-button" href="#game-view"
-                   class="ui-btn ui-shadow ui-corner-all" data-role="button">Qui travaille sur ce
+                   class="ui-btn ui-shadow ui-corner-all" data-role="button" data-transition="none">Qui travaille sur ce
                     projet ?</a>
                 <a id="who-did-what-button" href="#game-view" class="ui-btn ui-shadow ui-corner-all"
-                   data-role="button">Qui a fait quoi ?</a>
+                   data-role="button" data-transition="none">Qui a fait quoi ?</a>
             </div>
         </div>
         <!-- END CATEGORIES BUTTONS -->
@@ -95,14 +104,14 @@
     <div data-role="header" data-add-back-btn="true" data-position="fixed" data-theme="a">
         <a id="back-categories-btn-header" class="ui-btn-left" href="index.html#categories-view"
            data-icon="arrow-l"
-           data-iconpos="notext" data-role="button"></a>
+           data-iconpos="notext" data-role="button" data-transition="none"></a>
         <h1>Le mini-jeu de quizz</h1>
     </div>
     <!-- END HEADER TITLE -->
     <!-- BEGIN HEADER CATEGORIES TITLE -->
     <div role="main" class="ui-content">
         <!-- BEGIN HEADER SUBTITLE -->
-        <div align="center">
+        <div class="center-wrapper">
             <h2 id="category-title" class="subtext">Categorie</h2>
         </div>
         <div class="ui-grid-game ui-responsive">
@@ -142,18 +151,13 @@
     <!-- END FIXED FOOTER -->
 </div>
 <!-- END PAGE 3 - GAME -->
-
-
+</div>
+<!------------------------------------------------------------------------------------------------- START SCRIPTS JS -->
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" id="jqm-trans-disable">
-    /* For having a faster transition */
-    $(document).on("mobileinit", function () {
-        $.mobile.defaultPageTransition = "none";
-        $.mobile.defaultDialogTransition = "none";
-    });
-</script>
 <script type="text/javascript" src="js/jquery-1.5.0.mobile.min.js"></script>
 <script type="text/javascript" src="js/my-js.js"></script>
+<!--------------------------------------------------------------------------------------------------- END SCRIPTS JS -->
 </body>
+<!--------------------------------------------------------------------------------------------------------- END BODY -->
 </html>

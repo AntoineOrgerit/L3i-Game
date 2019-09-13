@@ -1,11 +1,35 @@
-$('#game-view').on('pageinit', function () {
+/**
+ * For having a faster transition
+ */
+$(document).on("mobileinit", function () {
+    $.mobile.defaultPageTransition = "none";
+    $.mobile.defaultDialogTransition = "none";
+});
 
+/**
+ * Display loader until the ressources are loaded
+ */
+$(window).load(function () {
+    document.getElementById("content").style.display = "block";
+    document.getElementById("spinner").style.display = "none";
+});
+
+/**
+ * Game init
+ */
+$('#game-view').on('pageinit', function () {
     rejoindre();
 
+    /**
+     * EventListener Click on scan button to call for QRCode scanner
+     */
     $('#scan-res-button').click(function () {
         scan();
     })
 
+    /**
+     * Function for QRCode scanning
+     */
     function scan() {
         console.log("clicked");
         cordova.plugins.barcodeScanner.scan(function (result) {
@@ -29,8 +53,10 @@ $('#game-view').on('pageinit', function () {
         );
     }
 
-    // Fonction lancée au début du jeu : connexion à une partie
-    // Chargement de la question et affichage
+    /**
+     * Function started at the beginning of the game : connection to a play
+     * Load question and display it
+     */
     function rejoindre() {
         if (arguments.callee.done) return;
         arguments.callee.done = true;
@@ -48,6 +74,5 @@ $('#game-view').on('pageinit', function () {
         }
         xmlhttp.open("GET", url, true);
         xmlhttp.send(null);
-
     }
 });
