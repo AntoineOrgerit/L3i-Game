@@ -11,7 +11,7 @@ $(document).on("mobileinit", function () {
  */
 $(window).load(function () {
     document.getElementById("content").style.display = "block";
-    document.getElementById("spinner").style.display = "none";
+    if (document.getElementById("spinner") != null) document.getElementById("spinner").style.display = "none";
 });
 
 /**
