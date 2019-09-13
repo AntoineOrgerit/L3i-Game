@@ -66,16 +66,16 @@
         <!-- BEGIN CATEGORIES BUTTONS -->
         <div class="ui-grid-menu ui-responsive">
             <div class="ui-block-menu">
-                <a id="who-work-whom-button" href="game.html"
+                <a id="who-work-whom-button" href="#game-view"
                    class="ui-btn ui-shadow ui-corner-all" data-role="button">Qui travaille avec qui
                     ?</a>
-                <a id="who-wrote-article-button" href="game.html"
+                <a id="who-wrote-article-button" href="#game-view"
                    class="ui-btn ui-shadow ui-corner-all" data-role="button">Qui a écrit l'article
                     ?</a>
-                <a id="who-work-project-button" href="game.html"
+                <a id="who-work-project-button" href="#game-view"
                    class="ui-btn ui-shadow ui-corner-all" data-role="button">Qui travaille sur ce
                     projet ?</a>
-                <a id="who-did-what-button" href="game.html" class="ui-btn ui-shadow ui-corner-all"
+                <a id="who-did-what-button" href="#game-view" class="ui-btn ui-shadow ui-corner-all"
                    data-role="button">Qui a fait quoi ?</a>
             </div>
         </div>
@@ -89,11 +89,66 @@
 </div>
 <!-- END PAGE 2 - CATEGORIES -->
 
+<!-- START PAGE 3 - GAME -->
+<div data-role="page" id="game-view">
+    <!-- BEGIN HEADER TITLE -->
+    <div data-role="header" data-add-back-btn="true" data-position="fixed" data-theme="a">
+        <a id="back-categories-btn-header" class="ui-btn-left" href="index.html#categories-view"
+           data-icon="arrow-l"
+           data-iconpos="notext" data-role="button"></a>
+        <h1>Le mini-jeu de quizz</h1>
+    </div>
+    <!-- END HEADER TITLE -->
+    <!-- BEGIN HEADER CATEGORIES TITLE -->
+    <div role="main" class="ui-content">
+        <!-- BEGIN HEADER SUBTITLE -->
+        <div align="center">
+            <h2 id="category-title" class="subtext">Categorie</h2>
+        </div>
+        <div class="ui-grid-game ui-responsive">
+            <h3>Question</h3>
+            <br>
+            <br>
+            <div class="center-wrapper">
+                <p id="question" class=""></p>
+            </div>
+            <!-- END HEADER CATEGORIES TITLE -->
+            <br> <br><br><br><br><br><br><br><br><br>
+            <!-- BEGIN GAME BUTTONS -->
+            <div class="ui-block-game">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a"><a class="ui-shadow ui-btn ui-corner-all" data-role="button">Scan info</a>
+                    </div>
+                    <div class="ui-block-b"><a class="ui-shadow ui-btn ui-corner-all" data-role="button">Indices</a>
+                    </div>
+                </div>
+                <div class="ui-grid-solo">
+                    <div class="ui-block-a">
+                        <a id="scan-res-button"
+                           class="ui-shadow ui-btn ui-corner-all">Scanner la réponse</a>
+                    </div>
+                    <br>
+                    <span id="reponse"></span>
+                </div>
+            </div>
+        </div>
+        <!-- END GAME BUTTONS -->
+        <!-- END CATEGORIES BUTTONS -->
+    </div>
+    <!-- BEGIN FIXED FOOTER -->
+    <div data-role="footer" data-position="fixed">
+        <h4>Université de La Rochelle</h4>
+    </div>
+    <!-- END FIXED FOOTER -->
+</div>
+<!-- END PAGE 3 - GAME -->
+
+
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" id="jqm-trans-disable">
     /* For having a faster transition */
-    $(document).on("mobileinit", function() {
+    $(document).on("mobileinit", function () {
         $.mobile.defaultPageTransition = "none";
         $.mobile.defaultDialogTransition = "none";
     });
