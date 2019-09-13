@@ -1,89 +1,125 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<title>TP QUIZZ</title>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <link rel="stylesheet" type="text/css" href="css/index.css" />
-  <link rel="stylesheet" type="text/css" href="css/buttons.css" />
-
-  <script type="text/javascript" src="cordova.js"></script>
-
-  <script type="text/javascript">
-  function scan(){
-    console.log("clicked");
-    cordova.plugins.barcodeScanner.scan(function(result){
-      var url = "questions/reponse.txt";
-      xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 || xmlhttp.readyState == "complete") {
-
-          if (xmlhttp.responseText==result.text){
-            reponse.appendChild(document.createTextNode(result.text));
-            alert("Bonne reponse");
-          }
-          else
-          alert("Mauvaise reponse");
-          alert(result.text);
-        }
-      }
-      xmlhttp.open("GET", url, true);
-      xmlhttp.send(null);
-    },function(error){
-      //error callback
-      alert(JSON.stringify(error));
-    }
-
-  );
-}
-
-
-
-// Fonction lancée au début du jeu : connexion à une partie
-// Chargement de la question et affichage
-function rejoindre() {
-  if (arguments.callee.done) return;
-  arguments.callee.done = true;
-
-  var question = document.getElementById("question");
-  if (window.XMLHttpRequest) {
-    xmlhttp = new XMLHttpRequest();
-  }
-
-  var url = "questions/question.txt";
-  xmlhttp.onreadystatechange = function () {
-    if (xmlhttp.readyState == 4 || xmlhttp.readyState == "complete") {
-      question.appendChild(document.createTextNode(xmlhttp.responseText));
-    }
-  }
-  xmlhttp.open("GET", url, true);
-  xmlhttp.send(null);
-
-}
-</script>
-
-
-<style>
-#reponse {
-  background-color: darkseagreen;
-  color: white;
-  font-weight: bold;
-  font-size: 2em;
-  text-align: center;
-}
-</style>
-
+    <meta charset="utf-8">
+    <!-- jquery mobile CSS -->
+    <link rel="stylesheet" type="text/css" href="js/jquery-1.5.0.mobile.min.css">
+    <!-- custom CSS -->
+    <link rel="stylesheet" type="text/css" href="css/my-style.css">
+    <!-- SCRIPTS -->
+    <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.5.0.mobile.min.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
 </head>
+<body>
+<!-- START PAGE 3 - GAME -->
+<div data-role="page" id="game-view">
+    <!-- BEGIN HEADER TITLE -->
+    <div data-role="header" data-add-back-btn="true" data-position="fixed" data-theme="a">
+        <a id="back-categories-btn-header" class="ui-btn-left" href="index.html#categories-view"
+           data-icon="arrow-l"
+           data-iconpos="notext" data-role="button"></a>
+        <h1>Le mini-jeu de quizz</h1>
+    </div>
+    <!-- END HEADER TITLE -->
+    <!-- BEGIN HEADER CATEGORIES TITLE -->
+    <div role="main" class="ui-content">
+        <!-- BEGIN HEADER SUBTITLE -->
+        <div align="center">
+            <h2 id="category-title" class="subtext">Categorie</h2>
+        </div>
+        <div class="ui-grid-game ui-responsive">
+            <h3>Question</h3>
+            <br>
+            <br>
+            <div class="center-wrapper">
+                <p id="question" class=""></p>
+            </div>
+            <!-- END HEADER CATEGORIES TITLE -->
+            <br> <br><br><br><br><br><br><br><br><br>
+            <!-- BEGIN GAME BUTTONS -->
+            <div class="ui-block-game">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a"><a class="ui-shadow ui-btn ui-corner-all">Scan info</a>
+                    </div>
+                    <div class="ui-block-b"><a class="ui-shadow ui-btn ui-corner-all">Indices</a>
+                    </div>
+                </div>
+                <div class="ui-grid-solo">
+                    <div class="ui-block-a">
+                        <a id="scan-res-button" onclick="scan()"
+                           class="ui-shadow ui-btn ui-corner-all">Scanner la réponse</a>
+                    </div>
+                    <br>
+                    <span id="reponse"></span>
+                </div>
+            </div>
+        </div>
+        <!-- END GAME BUTTONS -->
+        <!-- END CATEGORIES BUTTONS -->
+    </div>
+    <!-- BEGIN FIXED FOOTER -->
+    <div data-role="footer" data-position="fixed">
+        <h4>Université de La Rochelle</h4>
+    </div>
+    <!-- END FIXED FOOTER -->
+</div>
+<!-- END PAGE 3 - GAME -->
+<script type="text/javascript">
+        $(document).on('pageinit', function () {
 
-<body onload="rejoindre()">
-  <div class="question">
-    <p  ></p>
-    <p id="question" class="subtext"></p>
-    <p></p>
-    <p></p>
-    <a onclick="scan()" class="button button-action button-rounded">Scanner la réponse </a>
-    <p></p>
-    <p></p>
-    <span id="reponse"></span>
-  </div>
+            rejoindre();
 
+            $('#scan-res-button').click(function () {
+                scan();
+            })
 
+            function scan() {
+                console.log("clicked");
+                cordova.plugins.barcodeScanner.scan(function (result) {
+                        var url = "questions/reponse.txt";
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState == 4 || xmlhttp.readyState == "complete") {
 
+                                if (xmlhttp.responseText == result.text) {
+                                    reponse.appendChild(document.createTextNode(result.text));
+                                    alert("Bonne reponse");
+                                } else
+                                    alert("Mauvaise reponse");
+                            }
+                        }
+                        xmlhttp.open("GET", url, true);
+                        xmlhttp.send(null);
+                    }, function (error) {
+                        //error callback
+                        alert(JSON.stringify(error));
+                    }
+                );
+            }
+
+            // Fonction lancée au début du jeu : connexion à une partie
+            // Chargement de la question et affichage
+            function rejoindre() {
+                if (arguments.callee.done) return;
+                arguments.callee.done = true;
+
+                var question = document.getElementById("question");
+                if (window.XMLHttpRequest) {
+                    xmlhttp = new XMLHttpRequest();
+                }
+
+                var url = "questions/question.txt";
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState == 4 || xmlhttp.readyState == "complete") {
+                        question.appendChild(document.createTextNode(xmlhttp.responseText));
+                    }
+                }
+                xmlhttp.open("GET", url, true);
+                xmlhttp.send(null);
+
+            }
+        });
+    </script>
+<script type="text/javascript" src="js/my-js.js"></script>
 </body>
 </html>

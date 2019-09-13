@@ -1,25 +1,104 @@
-
-
-
-
 <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <!-- jquery mobile CSS -->
+    <link rel="stylesheet" type="text/css" href="js/jquery-1.5.0.mobile.min.css">
+    <!-- custom CSS -->
+    <link rel="stylesheet" type="text/css" href="css/my-style.css">
+</head>
+<body>
+<!-- START PAGE 1 - MENU -->
+<div data-role="page" id="menu-view">
+    <!-- BEGIN HEADER TITLE -->
+    <div data-role="header" data-theme="a">
+        <h1>Le mini-jeu de quizz</h1>
+    </div>
+    <!-- END HEADER TITLE -->
+    <!-- BEGIN HEADER MENU TITLE -->
+    <div role="main" class="ui-content">
+        <br><br>
+        <div align="center">
+            <h1>Menu</h1>
+        </div>
+        <!-- END HEADER MENU TITLE -->
+        <br><br>
+        <!-- BEGIN MENU BUTTONS -->
+        <div class="ui-grid-menu ui-responsive">
+            <div class="ui-block-menu">
+                <a id="start-button" href="#categories-view" class="ui-btn ui-shadow ui-corner-all"
+                   data-role="button">Commencer</a>
+                <a id="score-button" href="#score-view" class="ui-btn ui-shadow ui-corner-all"
+                   data-role="button">Scores</a>
+                <a id="help-button" href="#help-view" class="ui-btn ui-shadow ui-corner-all"
+                   data-role="button">Aide</a>
+                <a id="exit-button" href="#quit" class="ui-btn ui-shadow ui-corner-all"
+                   data-role="button">Quitter</a>
+            </div>
+        </div>
+        <!-- END MENU BUTTONS -->
+    </div>
+    <!-- BEGIN FIXED FOOTER -->
+    <div data-role="footer" data-position="fixed">
+        <h4>Université de La Rochelle</h4>
+    </div>
+    <!-- END FIXED FOOTER -->
+</div>
+<!-- END PAGE 1 - MENU -->
 
-<html>
-    <head>
-        <meta charset="utf-8" />
+<!-- START PAGE 2 - CATEGORIES-->
+<div data-role="page" id="categories-view">
+    <!-- BEGIN HEADER TITLE -->
+    <div data-role="header" data-theme="a">
+        <a id="back-btn-header" class="ui-btn-left" href="#menu-view" data-icon="arrow-l"
+           data-iconpos="notext"></a>
+        <h1>Le mini-jeu de quizz</h1>
+    </div>
+    <!-- END HEADER TITLE -->
+    <!-- BEGIN HEADER CATEGORIES TITLE -->
+    <div role="main" class="ui-content">
+        <br><br>
+        <div align="center">
+            <h1>Catégories</h1>
+        </div>
+        <!-- END HEADER CATEGORIES TITLE -->
+        <br><br>
+        <!-- BEGIN CATEGORIES BUTTONS -->
+        <div class="ui-grid-menu ui-responsive">
+            <div class="ui-block-menu">
+                <a id="who-work-whom-button" href="game.html"
+                   class="ui-btn ui-shadow ui-corner-all" data-role="button">Qui travaille avec qui
+                    ?</a>
+                <a id="who-wrote-article-button" href="game.html"
+                   class="ui-btn ui-shadow ui-corner-all" data-role="button">Qui a écrit l'article
+                    ?</a>
+                <a id="who-work-project-button" href="game.html"
+                   class="ui-btn ui-shadow ui-corner-all" data-role="button">Qui travaille sur ce
+                    projet ?</a>
+                <a id="who-did-what-button" href="game.html" class="ui-btn ui-shadow ui-corner-all"
+                   data-role="button">Qui a fait quoi ?</a>
+            </div>
+        </div>
+        <!-- END CATEGORIES BUTTONS -->
+    </div>
+    <!-- BEGIN FIXED FOOTER -->
+    <div data-role="footer" data-position="fixed">
+        <h4>Université de La Rochelle</h4>
+    </div>
+    <!-- END FIXED FOOTER -->
+</div>
+<!-- END PAGE 2 - CATEGORIES -->
 
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <link rel="stylesheet" type="text/css" href="css/buttons.css" />
-        <title>Le mini-jeu de quizz</title>
-    </head>
-    <body>
-        <h1>Quizz</h1>
-        <p class="subtext">TP Mobilité et recherche d'information</p>
-        <p class="subtext">Quizz rapide</p>
-
-        <p></p>
-        <a href="game.html" class="button button-action button-rounded">Commencer</a>
-        <script type="text/javascript" src="cordova.js"></script>
-
-    </body>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" id="jqm-trans-disable">
+    /* For having a faster transition */
+    $(document).on("mobileinit", function() {
+        $.mobile.defaultPageTransition = "none";
+        $.mobile.defaultDialogTransition = "none";
+    });
+</script>
+<script type="text/javascript" src="js/jquery-1.5.0.mobile.min.js"></script>
+<script type="text/javascript" src="js/my-js.js"></script>
+</body>
 </html>
