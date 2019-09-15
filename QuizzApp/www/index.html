@@ -5,6 +5,8 @@
     <!-- jquery mobile CSS -->
     <link rel="stylesheet" type="text/css" href="js/jquery-1.5.0.mobile.min.css">
     <!-- custom CSS -->
+    <link rel="stylesheet" href="css/themes/custom-theme.css" />
+    <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
     <link rel="stylesheet" type="text/css" href="css/my-style.css">
     <title>Le mini-jeu de quizz</title>
 </head>
@@ -18,9 +20,9 @@
 
 <div id="content" class="content">
     <!-- START PAGE 1 - MENU -->
-    <div data-role="page" id="menu-view">
+    <div data-role="page" id="menu-view" data-theme="d">
         <!-- BEGIN HEADER TITLE -->
-        <div data-role="header" data-theme="a">
+        <div data-role="header">
             <h1>Le mini-jeu de quizz</h1>
         </div>
         <!-- END HEADER TITLE -->
@@ -56,10 +58,10 @@
     <!-- END PAGE 1 - MENU -->
 
     <!-- START PAGE 2 - CATEGORIES-->
-    <div data-role="page" id="categories-view">
+    <div data-role="page" id="categories-view" data-theme="d">
         <!-- BEGIN HEADER TITLE -->
-        <div data-role="header" data-theme="a">
-            <a id="back-btn-header" class="ui-btn-left" href="#menu-view" data-icon="arrow-l"
+        <div data-role="header">
+            <a id="back-btn-header" class="ui-btn-left ui-icon-arrow-l" href="#menu-view" data-icon="arrow-l"
                data-iconpos="notext" data-transition="none"></a>
             <h1>Le mini-jeu de quizz</h1>
         </div>
@@ -102,9 +104,9 @@
     <!-- END PAGE 2 - CATEGORIES -->
 
     <!-- START PAGE 3 - GAME -->
-    <div data-role="page" id="game-view">
+    <div data-role="page" id="game-view" data-theme="d">
         <!-- BEGIN HEADER TITLE -->
-        <div data-role="header" data-add-back-btn="true" data-position="fixed" data-theme="a">
+        <div data-role="header" data-add-back-btn="true" data-position="fixed">
             <a id="back-categories-btn-header" class="ui-btn-left" href="index.html#categories-view"
                data-icon="arrow-l"
                data-iconpos="notext" data-role="button" data-transition="none"></a>
