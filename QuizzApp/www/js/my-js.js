@@ -1,7 +1,9 @@
 
 /** ----- GENERAL SETTINGS -----  **/
 
-/* Fixing proxy issues */
+/**
+ * Fixing proxy issue
+ */
 (function() {
     var xhr = {};
     xhr.open = XMLHttpRequest.prototype.open;
@@ -61,34 +63,29 @@ function hideLoader() {
  */
 $(document).delegate("#categories-view", "pagebeforecreate", function() {
 	showLoader();
-	var url = "http://192.168.137.1:8000/getCategories.php";
-	console.log(url);
-	$.ajax({
-		dataType: "json",
-		url: url,
-		success: function(result) {
-			console.log(result);
-			$.each(result, function(i, field) {
-				$("#categories-list").append("<a href='#game-view' class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none'>" + field.theme + "</a>");
-			});
-			hideLoader();
-		},
-		error: function() {
-			hideLoader();
-			alert("Erreur lors de l'obtention des catégories de jeu.");
-		}
-	})
-	/*$.getJSON(url, function(result) {
-		console.log(result);
+	var url = appConfig['Server-URL'] + "getCategories.php";
+	$.getJSON(url, function(result) {
 		$.each(result, function(i, field) {
-			$("#categories-list").append("<a href='#game-view' class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none'>" + field.theme + "</a>");
+			$("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-categorie-id='" + field.id + "'>" + field.theme + "</a>");
 		});
+		$('#categories-list a').on('click', loadQuestion)
 		hideLoader();
 	}).error(function() {
 		hideLoader();
 		alert("Erreur lors de l'obtention des catégories de jeu.");
-	});*/
+	});
 });
+
+/**
+ * Question loading.
+ */
+function loadQuestion() {
+	showLoader();
+	var data_categorie_id = $(this).data("categorie-id");
+	console.log(data_categorie_id);
+	$.mobile.navigate("#game-view");
+	hideLoader();
+}
 
 
 
