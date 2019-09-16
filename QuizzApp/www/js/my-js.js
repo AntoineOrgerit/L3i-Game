@@ -1,3 +1,20 @@
+
+/** ----- GENERAL SETTINGS -----  **/
+
+/* Fixing proxy issues */
+(function() {
+    var xhr = {};
+    xhr.open = XMLHttpRequest.prototype.open;
+
+    XMLHttpRequest.prototype.open = function(method, url) {
+        console.log(url);
+        if(url.indexOf('/proxy/') == 0){
+            url = window.decodeURIComponent(url.substr(7));
+        }
+        xhr.open.apply(this, arguments);
+    };
+})(window);
+
 /**
  * For having a faster transition
  */
@@ -6,13 +23,76 @@ $(document).on("mobileinit", function () {
     $.mobile.defaultDialogTransition = "none";
 });
 
+
+
+
+
+/** ----- LOADER SETTINGS -----  **/
+
 /**
  * Display loader until the ressources are loaded
  */
-$(window).load(function () {
-    document.getElementById("content").style.display = "block";
+$(window).load(hideLoader);
+
+/**
+ * Shows the loader.
+ */
+function showLoader() {
+	document.getElementById("content").style.display = "none";
+    if (document.getElementById("spinner") != null) document.getElementById("spinner").style.display = "block";
+}
+
+/**
+ * Hides the loader.
+ */
+function hideLoader() {
+	document.getElementById("content").style.display = "block";
     if (document.getElementById("spinner") != null) document.getElementById("spinner").style.display = "none";
+}
+
+
+
+
+
+/** ----- PAGE CONTENT LOADING FROM SERVER ----- **/
+
+/**
+ * Categories loading.
+ */
+$(document).delegate("#categories-view", "pagebeforecreate", function() {
+	showLoader();
+	var url = "http://192.168.137.1:8000/getCategories.php";
+	console.log(url);
+	$.ajax({
+		dataType: "json",
+		url: url,
+		success: function(result) {
+			console.log(result);
+			$.each(result, function(i, field) {
+				$("#categories-list").append("<a href='#game-view' class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none'>" + field.theme + "</a>");
+			});
+			hideLoader();
+		},
+		error: function() {
+			hideLoader();
+			alert("Erreur lors de l'obtention des catégories de jeu.");
+		}
+	})
+	/*$.getJSON(url, function(result) {
+		console.log(result);
+		$.each(result, function(i, field) {
+			$("#categories-list").append("<a href='#game-view' class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none'>" + field.theme + "</a>");
+		});
+		hideLoader();
+	}).error(function() {
+		hideLoader();
+		alert("Erreur lors de l'obtention des catégories de jeu.");
+	});*/
 });
+
+
+
+
 
 /**
  * Game init
