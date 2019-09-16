@@ -1,3 +1,22 @@
+
+/** ----- GENERAL SETTINGS -----  **/
+
+/**
+ * Fixing proxy issue
+ */
+(function() {
+    var xhr = {};
+    xhr.open = XMLHttpRequest.prototype.open;
+
+    XMLHttpRequest.prototype.open = function(method, url) {
+        console.log(url);
+        if(url.indexOf('/proxy/') == 0){
+            url = window.decodeURIComponent(url.substr(7));
+        }
+        xhr.open.apply(this, arguments);
+    };
+})(window);
+
 /**
  * For having a faster transition
  */
@@ -6,13 +25,71 @@ $(document).on("mobileinit", function () {
     $.mobile.defaultDialogTransition = "none";
 });
 
+
+
+
+
+/** ----- LOADER SETTINGS -----  **/
+
 /**
  * Display loader until the ressources are loaded
  */
-$(window).load(function () {
-    document.getElementById("content").style.display = "block";
+$(window).load(hideLoader);
+
+/**
+ * Shows the loader.
+ */
+function showLoader() {
+	document.getElementById("content").style.display = "none";
+    if (document.getElementById("spinner") != null) document.getElementById("spinner").style.display = "block";
+}
+
+/**
+ * Hides the loader.
+ */
+function hideLoader() {
+	document.getElementById("content").style.display = "block";
     if (document.getElementById("spinner") != null) document.getElementById("spinner").style.display = "none";
+}
+
+
+
+
+
+/** ----- PAGE CONTENT LOADING FROM SERVER ----- **/
+
+/**
+ * Categories loading.
+ */
+$(document).delegate("#categories-view", "pagebeforecreate", function() {
+	showLoader();
+	var url = appConfig['Server-URL'] + "getCategories.php";
+	$.getJSON(url, function(result) {
+		$.each(result, function(i, field) {
+			$("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-categorie-id='" + field.id + "'>" + field.theme + "</a>");
+		});
+		$('#categories-list a').on('click', loadQuestion)
+		hideLoader();
+	}).error(function() {
+		hideLoader();
+		alert("Erreur lors de l'obtention des catégories de jeu.");
+	});
 });
+
+/**
+ * Question loading.
+ */
+function loadQuestion() {
+	showLoader();
+	var data_categorie_id = $(this).data("categorie-id");
+	console.log(data_categorie_id);
+	$.mobile.navigate("#game-view");
+	hideLoader();
+}
+
+
+
+
 
 /**
  * Game init
