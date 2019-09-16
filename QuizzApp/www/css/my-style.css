@@ -209,3 +209,12 @@ body {
     text-align: center;
 }
 /* --------------------------------------------- END STYLE game-view -------------------------------------------------*/
+
+/*
+.ui-page-theme-d .ui-btn{
+    background-color: #3dbbc2;
+}*/
+
+.ui-icon-*{
+    background-color: #3dbbc2;
+}
