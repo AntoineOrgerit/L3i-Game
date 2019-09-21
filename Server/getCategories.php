@@ -6,4 +6,6 @@ while ($row = mysqli_fetch_object($q)) {
     $data[] = $row;
 }
 echo json_encode($data);
+$q->close();
+$con->close();
 ?>
