@@ -59,31 +59,61 @@ function hideLoader() {
 /** ----- PAGE CONTENT LOADING FROM SERVER ----- **/
 
 /**
+ * View specific treatment redirection.
+ */
+$(document).on("pagebeforechange", function(e, data) {
+	switch(data.toPage[0].id) {
+	case "categories-view":
+		loadCategoriesView();
+		break;
+	case "game-view":
+		loadQuestionView(data);
+		break;
+	default:
+		console.log("No redirection found for page " + data.toPage[0].id);
+	}
+});
+
+/**
  * Categories loading.
  */
-$(document).delegate("#categories-view", "pagebeforecreate", function() {
+function loadCategoriesView() {
 	showLoader();
 	var url = appConfig['Server-URL'] + "getCategories.php";
 	$.getJSON(url, function(result) {
 		$.each(result, function(i, field) {
-			$("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-categorie-id='" + field.id + "'>" + field.theme + "</a>");
+			$("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-category-id='" + field.id + "'>" + field.theme + "</a>");
+		});
+		$('#categories-list a').on('click', function(event) {
+			event.preventDefault();
+			showLoader();
+			$.mobile.changePage('#game-view', { category_id: $(this).data("category-id"), transition: "none" });
+		});
+		hideLoader();
+	}).error(function() {
+		hideLoader();
+		alert("Erreur lors de l'obtention des catégories de jeu.");
+	});
+}
+
+/**
+ * Question loading.
+ */
+function loadQuestionView(data) {
+	var category_id = data.options.category_id;
+	console.log(category_id);
+	// to change
+	/*var url = appConfig['Server-URL'] + "getCategories.php";
+	$.getJSON(url, function(result) {
+		$.each(result, function(i, field) {
+			$("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-category-id='" + field.id + "'>" + field.theme + "</a>");
 		});
 		$('#categories-list a').on('click', loadQuestion)
 		hideLoader();
 	}).error(function() {
 		hideLoader();
 		alert("Erreur lors de l'obtention des catégories de jeu.");
-	});
-});
-
-/**
- * Question loading.
- */
-function loadQuestion() {
-	showLoader();
-	var data_categorie_id = $(this).data("categorie-id");
-	console.log(data_categorie_id);
-	$.mobile.navigate("#game-view");
+	});*/
 	hideLoader();
 }
 

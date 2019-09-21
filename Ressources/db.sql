@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `l3igame` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `l3igame`;
 -- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: l3igame
@@ -26,11 +24,11 @@ DROP TABLE IF EXISTS `categorie`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categorie` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `theme` varchar(45) NOT NULL,
+  `theme` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `theme_UNIQUE` (`theme`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,11 +50,11 @@ DROP TABLE IF EXISTS `niveau`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `niveau` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `intitule` varchar(15) NOT NULL,
+  `intitule` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `intitule_UNIQUE` (`intitule`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,15 +78,15 @@ CREATE TABLE `question` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_categorie` int(11) NOT NULL,
   `id_niveau` int(11) NOT NULL,
-  `intitule` text NOT NULL,
-  `image` text,
+  `intitule` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `image` text CHARACTER SET utf8 COLLATE utf8_general_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `id_categorie_fk_idx` (`id_categorie`),
   KEY `id_niveau_fk_idx` (`id_niveau`),
   CONSTRAINT `id_categorie_fk` FOREIGN KEY (`id_categorie`) REFERENCES `categorie` (`id`),
   CONSTRAINT `id_niveau_fk` FOREIGN KEY (`id_niveau`) REFERENCES `niveau` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,6 +95,7 @@ CREATE TABLE `question` (
 
 LOCK TABLES `question` WRITE;
 /*!40000 ALTER TABLE `question` DISABLE KEYS */;
+INSERT INTO `question` VALUES (1,2,2,'Qui a participé à l\'écriture de l\'article : \" Analyse d’Images de Documents Anciens : une Approche Texture\" ?',NULL),(2,3,1,'Qui développe la librairie de manipulation des treillis ?',NULL),(3,1,2,'Qui sont les directeurs de thèse de Damien Mondou ?',NULL),(4,3,1,'Qui est impliqué dans les projets Art et Sciences ?',NULL),(5,2,3,'Qui a participé à l\'écriture de l\'article : \"Une approche ontologique pour la structuration de données spatio-temporelles de trajectoires : Application à l’étude des déplacements de mammifères marins\" ?',NULL),(6,3,2,'Qui travaille sur les scénarios interactifs et la scénarisation adaptive ?',NULL),(7,2,2,'Qui a écrit l\'article \"Reconnaissance de symboles à partir d’une signature structurelle flexible et d’un classifieur de type treillis de Galois.\" ?',NULL),(8,2,3,'Qui a écrit l\'article \"Système générique et omni-langage de navigation dans des bases de documents anciens basé sur de la recherche de mots par composition interactive de requêtes.\" ?',NULL),(9,1,3,'Qui ont été les directeurs de thèse de Jean-François Viaud ?',NULL),(10,3,1,'Qui a effectué une thèse sur le thème des treillis ?',NULL),(11,3,2,'Qui travaille à résoudre les conflits d\'interaction dans les systèmes multi-agents ?',NULL),(12,2,3,'Qui a écrit l\'article \"Genca : un modèle général de négociation de contrats.\" ?',NULL),(13,3,2,'Qui travaile sur l’intégration des traces d’exécution dans les mécanismes de pilotage des applications ?',NULL),(14,2,3,'Qui a écrit l\'article \"Aide à l’analyse des parcours d’apprentissage en IUT par reconnaissance de procédés et recommandations à base de traces\" ?',NULL),(15,3,3,'Qui travaille sur l\'adaptation dynamique des contenus, notamment par scénarisation ?',NULL),(16,2,3,'Qui a écrit l\'article \"Scénarisation et exécution adaptative\" ?',NULL),(17,3,2,'Qui travaille sur les problématiques et techniques liées à l\'indexation ?',NULL);
 /*!40000 ALTER TABLE `question` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,7 +113,7 @@ CREATE TABLE `question_response` (
   KEY `id_reponse_fk_idx` (`id_reponse`),
   CONSTRAINT `id_question_fk` FOREIGN KEY (`id_question`) REFERENCES `question` (`id`),
   CONSTRAINT `id_reponse_fk` FOREIGN KEY (`id_reponse`) REFERENCES `reponse` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,6 +122,7 @@ CREATE TABLE `question_response` (
 
 LOCK TABLES `question_response` WRITE;
 /*!40000 ALTER TABLE `question_response` DISABLE KEYS */;
+INSERT INTO `question_response` VALUES (2,2),(9,2),(5,4),(14,6),(16,6),(7,8),(9,9),(16,11),(1,25),(8,25),(7,26),(16,26),(3,27),(6,27),(15,27),(16,27),(13,28),(14,28),(3,30),(4,30),(11,32),(12,32),(10,33),(7,34),(8,34);
 /*!40000 ALTER TABLE `question_response` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,11 +135,11 @@ DROP TABLE IF EXISTS `reponse`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reponse` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `intitule` varchar(100) NOT NULL,
+  `intitule` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `intitule_UNIQUE` (`intitule`)
-) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,4 +161,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-12 16:48:48
+-- Dump completed on 2019-09-21 11:08:40
