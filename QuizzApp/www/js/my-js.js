@@ -59,31 +59,62 @@ function hideLoader() {
 /** ----- PAGE CONTENT LOADING FROM SERVER ----- **/
 
 /**
+ * View specific treatment redirection.
+ */
+$(document).on("pagebeforechange", function(e, data) {
+	switch(data.toPage[0].id) {
+	case "categories-view":
+		loadCategoriesView();
+		break;
+	case "game-view":
+		loadQuestionView(data);
+		break;
+	default:
+	}
+});
+
+/**
  * Categories loading.
  */
-$(document).delegate("#categories-view", "pagebeforecreate", function() {
+function loadCategoriesView() {
 	showLoader();
 	var url = appConfig['Server-URL'] + "getCategories.php";
 	$.getJSON(url, function(result) {
+		$("#categories-list").empty();
 		$.each(result, function(i, field) {
-			$("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-categorie-id='" + field.id + "'>" + field.theme + "</a>");
+			$("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-category-id='" + field.id + "'>" + field.theme + "</a>");
 		});
-		$('#categories-list a').on('click', loadQuestion)
+		$('#categories-list a').on('click', function(event) {
+			event.preventDefault();
+			showLoader();
+			$.mobile.changePage('#game-view', { category_id: $(this).data("category-id"), transition: "none" });
+		});
 		hideLoader();
 	}).error(function() {
 		hideLoader();
 		alert("Erreur lors de l'obtention des catégories de jeu.");
 	});
-});
+}
 
 /**
  * Question loading.
  */
-function loadQuestion() {
-	showLoader();
-	var data_categorie_id = $(this).data("categorie-id");
-	console.log(data_categorie_id);
-	$.mobile.navigate("#game-view");
+function loadQuestionView(data) {
+	var category_id = data.options.category_id;
+	var url = appConfig['Server-URL'] + "getQuestion.php";
+	$.post(url, {
+			category_id: category_id
+	}, function(result) {
+		var question_data = JSON.parse(result);
+		$("#question").text(question_data.intitule);
+		$('#scan-res-button').unbind().click(function() {
+			scanAnswer(question_data.answers);
+		});
+		hideLoader();
+	}).error(function(err) {
+		hideLoader();
+		alert("Erreur lors de l'obtention de la question.");
+	});
 	hideLoader();
 }
 
@@ -91,65 +122,31 @@ function loadQuestion() {
 
 
 
+/** ----- SCAN INTERACTIONS ----- **/
+
 /**
- * Game init
+ * Answer QRCODE scanning.
  */
-$('#game-view').on('pageinit', function () {
-    rejoindre();
+function scanAnswer(answers) {
+	cordova.plugins.barcodeScanner.scan(function (result) {
+		if(isAnAnswer(result.text, answers)) {
+			alert("Bonne réponse !");
+		} else {
+			alert("Mauvaise réponse...");
+		}
+    }, function (error) {
+        alert(JSON.stringify(error));
+    });
+}
 
-    /**
-     * EventListener Click on scan button to call for QRCode scanner
-     */
-    $('#scan-res-button').click(function () {
-        scan();
-    })
-
-    /**
-     * Function for QRCode scanning
-     */
-    function scan() {
-        console.log("clicked");
-        cordova.plugins.barcodeScanner.scan(function (result) {
-                var url = "questions/reponse.txt";
-                xmlhttp.onreadystatechange = function () {
-                    if (xmlhttp.readyState == 4 || xmlhttp.readyState == "complete") {
-
-                        if (xmlhttp.responseText == result.text) {
-                            reponse.appendChild(document.createTextNode(result.text));
-                            alert("Bonne reponse");
-                        } else
-                            alert("Mauvaise reponse");
-                    }
-                }
-                xmlhttp.open("GET", url, true);
-                xmlhttp.send(null);
-            }, function (error) {
-                //error callback
-                alert(JSON.stringify(error));
-            }
-        );
-    }
-
-    /**
-     * Function started at the beginning of the game : connection to a play
-     * Load question and display it
-     */
-    function rejoindre() {
-        if (arguments.callee.done) return;
-        arguments.callee.done = true;
-
-        var question = document.getElementById("question");
-        if (window.XMLHttpRequest) {
-            xmlhttp = new XMLHttpRequest();
-        }
-
-        var url = "questions/question.txt";
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4 || xmlhttp.readyState == "complete") {
-                question.appendChild(document.createTextNode(xmlhttp.responseText));
-            }
-        }
-        xmlhttp.open("GET", url, true);
-        xmlhttp.send(null);
-    }
-});
+/**
+ * Proposition verifying.
+ */
+function isAnAnswer(proposition, answers) {
+	for(var i=0; i<answers.length; i++) {
+		if(answers[i].intitule == proposition) {
+			return true;
+		}
+	}
+	return false;
+}
