@@ -100,13 +100,13 @@ INSERT INTO `question` VALUES (1,2,2,'Qui a participé à l\'écriture de l\'art
 UNLOCK TABLES;
 
 --
--- Table structure for table `question_response`
+-- Table structure for table `question_reponse`
 --
 
-DROP TABLE IF EXISTS `question_response`;
+DROP TABLE IF EXISTS `question_reponse`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `question_response` (
+CREATE TABLE `question_reponse` (
   `id_question` int(11) NOT NULL,
   `id_reponse` int(11) NOT NULL,
   PRIMARY KEY (`id_question`,`id_reponse`),
@@ -117,13 +117,13 @@ CREATE TABLE `question_response` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `question_response`
+-- Dumping data for table `question_reponse`
 --
 
-LOCK TABLES `question_response` WRITE;
-/*!40000 ALTER TABLE `question_response` DISABLE KEYS */;
-INSERT INTO `question_response` VALUES (2,2),(9,2),(20,2),(23,2),(24,2),(28,3),(5,4),(24,4),(30,4),(20,5),(21,5),(14,6),(16,6),(29,6),(22,7),(25,7),(7,8),(21,8),(24,8),(9,9),(23,9),(27,9),(16,11),(25,11),(26,13),(21,16),(22,16),(19,19),(24,19),(1,25),(8,25),(26,25),(7,26),(16,26),(18,26),(20,26),(21,26),(22,26),(26,26),(3,27),(6,27),(15,27),(16,27),(25,27),(13,28),(14,28),(3,30),(4,30),(20,30),(11,32),(12,32),(10,33),(7,34),(8,34);
-/*!40000 ALTER TABLE `question_response` ENABLE KEYS */;
+LOCK TABLES `question_reponse` WRITE;
+/*!40000 ALTER TABLE `question_reponse` DISABLE KEYS */;
+INSERT INTO `question_reponse` VALUES (2,2),(9,2),(20,2),(23,2),(24,2),(28,3),(5,4),(24,4),(30,4),(20,5),(21,5),(14,6),(16,6),(29,6),(22,7),(25,7),(7,8),(21,8),(24,8),(9,9),(23,9),(27,9),(16,11),(25,11),(26,13),(21,16),(22,16),(19,19),(24,19),(1,25),(8,25),(26,25),(7,26),(16,26),(18,26),(20,26),(21,26),(22,26),(26,26),(3,27),(6,27),(15,27),(16,27),(25,27),(13,28),(14,28),(3,30),(4,30),(20,30),(11,32),(12,32),(10,33),(7,34),(8,34);
+/*!40000 ALTER TABLE `question_reponse` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -161,4 +161,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-21 18:53:58
+-- Dump completed on 2019-09-23 11:44:13

@@ -13,7 +13,7 @@ $data->intitule = $row->intitule;
 $data->answers = array();
 
 // getting possible answers
-$stmt = $con->prepare("select id_reponse from `question_response` where id_question=?;");
+$stmt = $con->prepare("select id_reponse from `question_reponse` where id_question=?;");
 $stmt->bind_param('i', $data->id);
 $stmt->execute();
 $result = $stmt->get_result();
