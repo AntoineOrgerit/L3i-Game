@@ -10,7 +10,7 @@
   "phonegap-plugin-barcodescanner": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-barcodescanner-browser-support@^7.1.22"
+      "id": "phonegap-plugin-barcodescanner@8.1.0"
     },
     "is_top_level": true,
     "variables": {}
