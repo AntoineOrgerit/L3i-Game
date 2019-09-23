@@ -128,9 +128,7 @@ function loadQuestionView(data) {
  * Answer QRCODE scanning.
  */
 function scanAnswer(answers) {
-	console.log(answers);
 	cordova.plugins.barcodeScanner.scan(function (result) {
-		console.log(isAnAnswer(result.text, answers));
 		if(isAnAnswer(result.text, answers)) {
 			alert("Bonne réponse !");
 		} else {
