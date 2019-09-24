@@ -19,7 +19,6 @@ for ($i = 0; $i < count($ids_to_exclude); $i++) {
     }
 }
 $query = $query . ") order by rand() limit 1;";
-var_dump($query);
 $stmt = $con->prepare($query);
 $stmt->bind_param('ii', $_REQUEST["category_id"], $_REQUEST["niveau_id"]);
 $stmt->execute();
