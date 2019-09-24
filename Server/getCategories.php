@@ -12,20 +12,21 @@ while ($row = mysqli_fetch_object($q)) {
 }
 $q->close();
 
+if(isset($_REQUEST["answered"])) {
 // checking if categories are accessible
-$stmt = $con->prepare("select id_categorie, count(*) as count from `question` where id_niveau=? group by id_categorie;");
-$stmt->bind_param('i', $_REQUEST["niveau_id"]);
-$stmt->execute();
-$result = $stmt->get_result();
-while ($row = $result->fetch_object()) {
-    foreach ($_REQUEST["answered"] as &$value) {
-        $answered = json_decode($value);
-        if($answered->niveau == $_REQUEST["niveau_id"] && $answered->categorie == $row->id_categorie && count($answered->ids) == $row->count) {
-               $data->blocked[] = $answered->categorie;
+    $stmt = $con->prepare("select id_categorie, count(*) as count from `question` where id_niveau=? group by id_categorie;");
+    $stmt->bind_param('i', $_REQUEST["niveau_id"]);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_object()) {
+        foreach ($_REQUEST["answered"] as &$answered) {
+            if ($answered["niveau"] == $_REQUEST["niveau_id"] && $answered["categorie"] == $row->id_categorie && count($answered["ids"]) == $row->count) {
+                $data->blocked[] = $answered["categorie"];
+            }
         }
     }
+    $stmt->close();
 }
-$stmt->close();
 
 echo json_encode($data);
 

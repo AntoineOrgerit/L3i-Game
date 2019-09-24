@@ -76,9 +76,13 @@ $(document).on("pagebeforechange", function (e, data) {
 function loadCategoriesView() {
     showLoader();
     var url = appConfig['Server-URL'] + "getCategories.php";
-    $.getJSON(url, function (result) {
+    $.post(url, {
+        niveau_id: nextLevel,
+        answered: answered
+    }, function (result) {
+        var resultJSON = JSON.parse(result);
         $("#categories-list").empty();
-        $.each(result, function (i, field) {
+        $.each(resultJSON.categories, function (i, field) {
             $("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-category-id='" + field.id + "'>" + field.theme + "</a>");
         });
         $('#categories-list a').on('click', function (event) {
@@ -94,18 +98,18 @@ function loadCategoriesView() {
 }
 
 
-
 /**
  * Question loading.
  */
 function loadQuestionView(data) {
     var category_id = data.options.category_id;
-    var niveau_id = 1;
     var url = appConfig['Server-URL'] + "getQuestion.php";
     $.post(url, {
             category_id: category_id,
-            //niveau_id: niveau_id
+            niveau_id: nextLevel,
+            answered: answered
         }, function (result) {
+            console.log(result);
             var question_data = JSON.parse(result);
             console.log(question_data);
             var lineMem = null;
@@ -122,7 +126,7 @@ function loadQuestionView(data) {
             if (!flag) {
                 lineMem = {
                     categorie: category_id,
-                    niveau: niveau_id,
+                    niveau: nextLevel,
                     id: [question_data.id],
                 };
                 answered.push(lineMem);
@@ -146,7 +150,7 @@ function loadQuestionView(data) {
                     //console.log(value);
                     lineTrace.id = question_data.id;
                     lineTrace.categorie = category_id;
-                    lineTrace.niveau = niveau_id;
+                    lineTrace.niveau = nextLevel;
                     lineTrace.state = value;
                     //console.log(lineTrace);
                     trace.push(lineTrace);
