@@ -1,9 +1,27 @@
 <?php
 include "db.php";
 
-// random question by category, only one
-$stmt = $con->prepare("select id, intitule from `question` where id_categorie=? order by rand() limit 1;");
-$stmt->bind_param('i', $_REQUEST["category_id"]);
+// getting ids of questions to exclude
+$ids_to_exclude = array();
+foreach ($_REQUEST["answered"] as &$value) {
+    $answered = json_decode($value);
+    if($answered->niveau == $_REQUEST["niveau_id"] && $answered->categorie == $_REQUEST["category_id"]) {
+        $ids_to_exclude = $answered->ids;
+    }
+}
+
+// random question by category, only one, and not selecting same ids
+$query = "select id, intitule from `question` where id_categorie=? and id_niveau=? and id not in (";
+for ($i = 0; $i < count($ids_to_exclude); $i++) {
+    $query = $query . $ids_to_exclude[$i];
+    if ($i != count($ids_to_exclude) - 1) {
+        $query = $query . ", ";
+    }
+}
+$query = $query . ") order by rand() limit 1;";
+var_dump($query);
+$stmt = $con->prepare($query);
+$stmt->bind_param('ii', $_REQUEST["category_id"], $_REQUEST["niveau_id"]);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = new stdClass();

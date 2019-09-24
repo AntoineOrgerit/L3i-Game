@@ -18,7 +18,6 @@ $stmt->bind_param('i', $_REQUEST["niveau_id"]);
 $stmt->execute();
 $result = $stmt->get_result();
 while ($row = $result->fetch_object()) {
-    var_dump($row);
     foreach ($_REQUEST["answered"] as &$value) {
         $answered = json_decode($value);
         if($answered->niveau == $_REQUEST["niveau_id"] && $answered->categorie == $row->id_categorie && count($answered->ids) == $row->count) {
