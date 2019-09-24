@@ -76,13 +76,13 @@ $(document).on("pagebeforechange", function (e, data) {
 function loadCategoriesView() {
     showLoader();
     var url = appConfig['Server-URL'] + "getCategories.php";
-    $.post(url, {
+    var data = {
         niveau_id: nextLevel,
         answered: answered
-    }, function (result) {
-        var resultJSON = JSON.parse(result);
+    };
+    $.post(url, JSON.stringify(data), function (result) {
         $("#categories-list").empty();
-        $.each(resultJSON.categories, function (i, field) {
+        $.each(result.categories, function (i, field) {
             $("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-category-id='" + field.id + "'>" + field.theme + "</a>");
         });
         $('#categories-list a').on('click', function (event) {
@@ -91,7 +91,7 @@ function loadCategoriesView() {
             $.mobile.changePage('#game-view', {category_id: $(this).data("category-id"), transition: "none"});
         });
         hideLoader();
-    }).error(function () {
+    }, "json").error(function (err) {
         hideLoader();
         alert("Erreur lors de l'obtention des catégories de jeu.");
     });
@@ -104,20 +104,18 @@ function loadCategoriesView() {
 function loadQuestionView(data) {
     var category_id = data.options.category_id;
     var url = appConfig['Server-URL'] + "getQuestion.php";
-    $.post(url, {
-            category_id: category_id,
-            niveau_id: nextLevel,
-            answered: answered
-        }, function (result) {
-            console.log(result);
-            var question_data = JSON.parse(result);
-            console.log(question_data);
+    var data = {
+        categorie_id: category_id,
+        niveau_id: nextLevel,
+        answered: answered
+    };
+    $.post(url, JSON.stringify(data), function (result) {
             var lineMem = null;
 
             if (answered.length !== 0) {
                 answered.forEach((item, index) => {
-                    if (item.categorie === category_id && item.niveau === niveau_id) {
-                        item.id.push(question_data.id);
+                    if (item.categorie === category_id && item.niveau === nextLevel) {
+                        item.id.push(result.id);
                         flag = true;
                     }
                 });
@@ -127,19 +125,19 @@ function loadQuestionView(data) {
                 lineMem = {
                     categorie: category_id,
                     niveau: nextLevel,
-                    id: [question_data.id],
+                    id: [result.id],
                 };
                 answered.push(lineMem);
             }
             flag = false;
             console.log(answered);
 
-            $("#question").text(question_data.intitule);
+            $("#question").text(result.intitule);
             $('#scan-info-button').unbind().click(function () {
                 scanInfo();
             });
             $('#scan-res-button').unbind().click(function () {
-                var promise = scanAnswer(question_data.answers);
+                var promise = scanAnswer(result.answers);
                 promise.then(function (value) {
                     var lineTrace = {
                         id: null,
@@ -148,7 +146,7 @@ function loadQuestionView(data) {
                         state: null
                     };
                     //console.log(value);
-                    lineTrace.id = question_data.id;
+                    lineTrace.id = result.id;
                     lineTrace.categorie = category_id;
                     lineTrace.niveau = nextLevel;
                     lineTrace.state = value;
@@ -168,8 +166,8 @@ function loadQuestionView(data) {
                 });
             });
             hideLoader();
-        }
-    ).error(function (err) {
+    }, "json").error(function (err) {
+    	console.log(err);
         hideLoader();
         alert("Erreur lors de l'obtention de la question.");
     });

@@ -1,30 +1,31 @@
 <?php
 include "db.php";
 
-if(isset($_REQUEST["answered"])) {
+$json = json_decode(file_get_contents('php://input'), false);
+
+if(count($json->answered) != 0) {
 // getting ids of questions to exclude
     $ids_to_exclude = array();
-    foreach ($_REQUEST["answered"] as &$answered) {
-        if ($answered["niveau"] == $_REQUEST["niveau_id"] && $answered["categorie"] == $_REQUEST["category_id"]) {
-            $ids_to_exclude = $answered["id"];
+    foreach ($json->answered as &$answered) {
+        if ($answered->niveau == $json->niveau_id && $answered->categorie == $json->categorie_id) {
+            $ids_to_exclude = $answered->id;
         }
     }
 
 // random question by category, only one, and not selecting same ids
-    $query = "select id, intitule from `question` where id_categorie=? and id_niveau=? and id not in (";
+    $query = "select id, intitule from `question` where id_categorie=? and id_niveau=? and id not in ('";
     for ($i = 0; $i < count($ids_to_exclude); $i++) {
         $query = $query . $ids_to_exclude[$i];
         if ($i != count($ids_to_exclude) - 1) {
-            $query = $query . ", ";
+            $query = $query . "', '";
         }
     }
-    $query = $query . ") order by rand() limit 1;";
-    var_dump($query);
+    $query = $query . "') order by rand() limit 1;";
 } else {
     $query = "select id, intitule from `question` where id_categorie=? and id_niveau=? order by rand() limit 1;";
 }
 $stmt = $con->prepare($query);
-$stmt->bind_param('ii', $_REQUEST["category_id"], $_REQUEST["niveau_id"]);
+$stmt->bind_param('ii', $json->categorie_id, $json->niveau_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = new stdClass();
