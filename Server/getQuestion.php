@@ -7,7 +7,7 @@ if(count($json->answered) != 0) {
 // getting ids of questions to exclude
     $ids_to_exclude = array();
     foreach ($json->answered as &$answered) {
-        if ($answered->niveau == $json->niveau_id && $answered->categorie == $json->categorie_id) {
+        if ($answered->level == $json->level_id && $answered->category == $json->category_id) {
             $ids_to_exclude = $answered->id;
         }
     }
@@ -25,13 +25,13 @@ if(count($json->answered) != 0) {
     $query = "select id, intitule from `question` where id_categorie=? and id_niveau=? order by rand() limit 1;";
 }
 $stmt = $con->prepare($query);
-$stmt->bind_param('ii', $json->categorie_id, $json->niveau_id);
+$stmt->bind_param('ii', $json->category_id, $json->level_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $data = new stdClass();
 $row = $result->fetch_object();
 $data->id = $row->id;
-$data->intitule = $row->intitule;
+$data->question = $row->intitule;
 $data->answers = array();
 
 // getting possible answers

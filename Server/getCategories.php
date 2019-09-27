@@ -17,13 +17,13 @@ $q->close();
 if (count($json->answered) != 0) {
     // checking if categories are accessible
     $stmt = $con->prepare("select id_categorie, count(*) as count from `question` where id_niveau=? group by id_categorie;");
-    $stmt->bind_param('i', $json->niveau_id);
+    $stmt->bind_param('i', $json->level_id);
     $stmt->execute();
     $result = $stmt->get_result();
     while ($row = $result->fetch_object()) {
         foreach ($json->answered as &$answered) {
-            if ($answered->niveau == $json->niveau_id && $answered->categorie == $row->id_categorie && count($answered->ids) == $row->count) {
-                $data->blocked[] = $answered->categorie;
+            if ($answered->level == $json->level_id && $answered->category == $row->id_categorie && count($answered->id) == $row->count) {
+                $data->blocked[] = $answered->category;
             }
         }
     }

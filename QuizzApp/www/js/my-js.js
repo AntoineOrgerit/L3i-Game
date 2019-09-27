@@ -28,9 +28,27 @@ $(document).on("mobileinit", function () {
 /** ----- LOADER SETTINGS -----  **/
 
 /**
- * Display loader until the ressources are loaded
+ * Display loader until the resources are loaded, or exit the app if no connection to the server.
  */
-$(window).load(hideLoader);
+$(window).load(function() {
+	$.ajax({url: appConfig['Server-URL'] + "db.php",
+	    type: "HEAD",
+	    timeout: 3000,
+	    statusCode: {
+	        200: function () {
+	            hideLoader();
+	        },
+	        400: function () {
+	            alert("Impossible de se connecter au serveur de l'application.\nVous allez quitter l'application.");
+	            navigator.app.exitApp();
+	        },
+	        0: function () {
+	            alert("Impossible de se connecter au serveur de l'application.\nVous allez quitter l'application.");
+	            navigator.app.exitApp();
+	        }              
+	    }
+	});
+});
 
 /**
  * Shows the loader.
@@ -77,13 +95,16 @@ function loadCategoriesView() {
     showLoader();
     var url = appConfig['Server-URL'] + "getCategories.php";
     var data = {
-        niveau_id: nextLevel,
+        level_id: nextLevel,
         answered: answered
     };
     $.post(url, JSON.stringify(data), function (result) {
         $("#categories-list").empty();
         $.each(result.categories, function (i, field) {
             $("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-category-id='" + field.id + "'>" + field.theme + "</a>");
+        });
+        $.each(result.blocked, function(i, id) {
+        	$("#categories-list a[data-category-id='" + id + "']").addClass("ui-state-disabled");
         });
         $('#categories-list a').on('click', function (event) {
             event.preventDefault();
@@ -93,6 +114,7 @@ function loadCategoriesView() {
         hideLoader();
     }, "json").error(function (err) {
         hideLoader();
+        console.log(err);
         alert("Erreur lors de l'obtention des catégories de jeu.");
     });
 }
@@ -105,8 +127,8 @@ function loadQuestionView(data) {
     var category_id = data.options.category_id;
     var url = appConfig['Server-URL'] + "getQuestion.php";
     var data = {
-        categorie_id: category_id,
-        niveau_id: nextLevel,
+        category_id: category_id,
+        level_id: nextLevel,
         answered: answered
     };
     $.post(url, JSON.stringify(data), function (result) {
@@ -114,7 +136,7 @@ function loadQuestionView(data) {
 
             if (answered.length !== 0) {
                 answered.forEach((item, index) => {
-                    if (item.categorie === category_id && item.niveau === nextLevel) {
+                    if (item.category === category_id && item.level === nextLevel) {
                         item.id.push(result.id);
                         flag = true;
                     }
@@ -123,8 +145,8 @@ function loadQuestionView(data) {
 
             if (!flag) {
                 lineMem = {
-                    categorie: category_id,
-                    niveau: nextLevel,
+                    category: category_id,
+                    level: nextLevel,
                     id: [result.id],
                 };
                 answered.push(lineMem);
@@ -132,7 +154,7 @@ function loadQuestionView(data) {
             flag = false;
             console.log(answered);
 
-            $("#question").text(result.intitule);
+            $("#question").text(result.question);
             $('#scan-info-button').unbind().click(function () {
                 scanInfo();
             });
@@ -147,8 +169,8 @@ function loadQuestionView(data) {
                     };
                     //console.log(value);
                     lineTrace.id = result.id;
-                    lineTrace.categorie = category_id;
-                    lineTrace.niveau = nextLevel;
+                    lineTrace.category = category_id;
+                    lineTrace.level = nextLevel;
                     lineTrace.state = value;
                     //console.log(lineTrace);
                     trace.push(lineTrace);
@@ -181,33 +203,33 @@ function loadQuestionView(data) {
 function findNextLevel(trace) {
     var nbStateZero = 0;
     var nbStateOne = 0;
-    var nbAbandon = 0;
+    var nbStateTwo = 0;
     var idQuestion = trace[trace.length - 1].id;
-    var niveauQuestion = trace[trace.length - 1].niveau;
+    var levelQuestion = trace[trace.length - 1].level;
     for (var i = trace.length - 1; i >= 0; --i) {
         /*  console.log(trace[i].id);
-          console.log(trace[i].categorie);
-          console.log(trace[i].niveau);
+          console.log(trace[i].category);
+          console.log(trace[i].level);
           console.log(trace[i].state);*/
         if (idQuestion === trace[i].id) {
             if (trace[i].state === 0) nbStateZero++;
             if (trace[i].state === 1) nbStateOne++;
-            if (trace[i].state === 2) nbAbandon++;
+            if (trace[i].state === 2) nbStateTwo++;
         }
         console.log("nombre succes " + nbStateOne);
         console.log("nombre echec " + nbStateZero);
-        console.log("nombre abandon " + nbAbandon);
+        console.log("nombre abandon " + nbStateTwo);
     }
     // if(nbStateZero%2===0) //to do donner indice
-    if ((nbStateZero > 4 || nbAbandon === 1) && niveauQuestion > 1) {
+    if ((nbStateZero > 4 || nbStateTwo === 1) && levelQuestion > 1) {
         // level down
-        --niveauQuestion;
+        --levelQuestion;
     }
-    if ((nbStateZero < 2 && nbStateOne === 1) && niveauQuestion < 3) {
+    if ((nbStateZero < 2 && nbStateOne === 1) && levelQuestion < 3) {
         // level up
-        ++niveauQuestion;
+        ++levelQuestion;
     }
-    nextLevel = niveauQuestion;
+    nextLevel = levelQuestion;
 }
 
 
