@@ -1,101 +1,130 @@
 /* ----------------------------------------- Portrait layout (default)  ----------------------------------------------*/
 .app {
-    background: url(../img/logo.png) no-repeat center top; /* 170px x 200px */
-    position: absolute; /* position in the center of the screen */
-    left: 50%;
-    top: 50%;
-    height: 50px; /* text area height */
-    width: 225px; /* text area width */
-    text-align: center;
-    padding: 180px 0px 0px 0px; /* image height is 200px (bottom 20px are overlapped with text) */
-    margin: -115px 0px 0px -112px; /* offset vertical: half of image height and text area height */
-    /* offset horizontal: half of text area width */
+	background: url(../img/logo.png) no-repeat center top;
+	/* 170px x 200px */
+	position: absolute; /* position in the center of the screen */
+	left: 50%;
+	top: 50%;
+	height: 50px; /* text area height */
+	width: 225px; /* text area width */
+	text-align: center;
+	padding: 180px 0px 0px 0px;
+	/* image height is 200px (bottom 20px are overlapped with text) */
+	margin: -115px 0px 0px -112px;
+	/* offset vertical: half of image height and text area height */
+	/* offset horizontal: half of text area width */
 }
 /* ----------------------------------------- End Portrait layout (default)  ------------------------------------------*/
 
 /* ------------------------------------- Landscape layout (with min-width) -------------------------------------------*/
 @media screen and (min-aspect-ratio: 1/1) and (min-width: 400px) {
-    .app {
-        background-position: left center;
-        padding: 75px 0px 75px 170px; /* padding-top + padding-bottom + text area = image height */
-        margin: -90px 0px 0px -198px; /* offset vertical: half of image height */
-        /* offset horizontal: half of image width and text area width */
-    }
+	.app {
+		background-position: left center;
+		padding: 75px 0px 75px 170px;
+		/* padding-top + padding-bottom + text area = image height */
+		margin: -90px 0px 0px -198px;
+		/* offset vertical: half of image height */
+		/* offset horizontal: half of image width and text area width */
+	}
 }
 
 .event {
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    color: #FFFFFF;
-    font-size: 12px;
-    margin: 0px 30px;
-    padding: 2px 0px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	color: #FFFFFF;
+	font-size: 12px;
+	margin: 0px 30px;
+	padding: 2px 0px;
 }
 
 .event.listening {
-    background-color: #333333;
-    display: block;
+	background-color: #333333;
+	display: block;
 }
 
 .event.received {
-    background-color: #4B946A;
-    display: none;
+	background-color: #4B946A;
+	display: none;
 }
 
-@keyframes fade {
-    from {
-        opacity: 1.0;
-    }
-    50% {
-        opacity: 0.4;
-    }
-    to {
-        opacity: 1.0;
-    }
+@
+keyframes fade {from { opacity:1.0;
+	
 }
 
-@-webkit-keyframes fade {
-    from {
-        opacity: 1.0;
-    }
-    50% {
-        opacity: 0.4;
-    }
-    to {
-        opacity: 1.0;
-    }
+50%
+{
+opacity
+
+
+:
+
+ 
+
+0
+.4
+
+
+;
+}
+to {
+	opacity: 1.0;
 }
 
+}
+@
+-webkit-keyframes fade {from { opacity:1.0;
+	
+}
+
+50%
+{
+opacity
+
+
+:
+
+ 
+
+0
+.4
+
+
+;
+}
+to {
+	opacity: 1.0;
+}
+
+}
 .blink {
-    animation: fade 3000ms infinite;
-    -webkit-animation: fade 3000ms infinite;
+	animation: fade 3000ms infinite;
+	-webkit-animation: fade 3000ms infinite;
 }
 
 /* ------------------------------------- End Landscape layout (with min-width) ---------------------------------------*/
 
-
 /* ----------------------------------------------- STYLE PAGES -------------------------------------------------------*/
 /* For avoiding title truncation in wp8 */
 .ui-header .ui-title {
-    overflow: visible !important;
+	overflow: visible !important;
 }
 
 /* For fixing the absolute position issue for the default cordova gen page*/
 #cjp-accordion1 .app {
-    left: 5px !important;
-    margin: 5px !important;
-    position: relative !important;
+	left: 5px !important;
+	margin: 5px !important;
+	position: relative !important;
 }
 
 /*center button on page menu*/
 .center-wrapper {
-    text-align: center;
-
+	text-align: center;
 }
 
 .center-wrapper * {
-    width: 100%;
-    margin: 0 auto;
+	width: 100%;
+	margin: 0 auto;
 }
 
 /*! @license
@@ -104,13 +133,15 @@
 * Copyright 2012-2014 Alex Wolfe and Rob Levin
 *
 */
-
 body {
-    -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
-    -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
-    -webkit-user-select: none; /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color: #FFFFFF;
-    /* background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+	-webkit-touch-callout: none;
+	/* prevent callout to copy image, etc when tap to hold */
+	-webkit-text-size-adjust: none;
+	/* prevent webkit from resizing text to fit */
+	-webkit-user-select: none;
+	/* prevent copy paste, to allow, change 'none' to 'text' */
+	background-color: #FFFFFF;
+	/* background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
     background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
     background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
     background-image:-webkit-gradient(
@@ -120,93 +151,154 @@ body {
         color-stop(0, #A7A7A7),
         color-stop(0.51, #E4E4E4)
     );*/
-    background-attachment: fixed;
-    font-family: 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
-    font-size: 12px;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    text-transform: uppercase; 
-    width: 100%;
+	background-attachment: fixed;
+	font-family: 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial,
+		sans-serif;
+	font-size: 12px;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	text-transform: uppercase;
+	width: 100%;
 }
 
 /* hide content if ressources not loaded */
 .content {
-    display: none;
+	display: none;
 }
 
 /* custom header */
 .ui-header .ui-title, .ui-title {
-    font-size: 1.5em;
-    min-height: 1.1em;
-    text-align: center;
-    text-shadow: none;
-    margin: 0;
-    padding: 0.5em 0;
+	font-size: 1.5em;
+	min-height: 1.1em;
+	text-align: center;
+	text-shadow: none;
+	margin: 0;
+	padding: 0.5em 0;
 }
 /* ----------------------------------------------- END STYLE PAGES ---------------------------------------------------*/
 
 /* ----------------------------------------------- STYLE menu-view --------------------------------------------------------*/
 /* ANIMATION FOR LOADER SPINNER https://tobiasahlin.com/spinkit/ */
 .ui-mobile, .ui-mobile body {
-    height: unset;
+	height: unset;
 }
 
 .spinner {
-    width: 60px;
-    height: 60px;
-    position: relative;
-    margin: 250px auto;
-    background: #FFFFFF;
+	width: 60px;
+	height: 60px;
+	position: relative;
+	margin: 250px auto;
+	background: #FFFFFF;
 }
 
 .double-bounce1, .double-bounce2 {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: #3dbbc2;
-    opacity: 0.6;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
-    animation: sk-bounce 2.0s infinite ease-in-out;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background-color: #3dbbc2;
+	opacity: 0.6;
+	position: absolute;
+	top: 0;
+	left: 0;
+	-webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+	animation: sk-bounce 2.0s infinite ease-in-out;
 }
 
 .double-bounce2 {
-    -webkit-animation-delay: -1.0s;
-    animation-delay: -1.0s;
+	-webkit-animation-delay: -1.0s;
+	animation-delay: -1.0s;
 }
 
-@-webkit-keyframes sk-bounce {
-    0%, 100% {
-        -webkit-transform: scale(0.0)
-    }
-    50% {
-        -webkit-transform: scale(1.0)
-    }
+@
+-webkit-keyframes sk-bounce { 0%, 100% {
+	-webkit-transform: scale(0.0)
 }
 
-@keyframes sk-bounce {
-    0%, 100% {
-        transform: scale(0.0);
-        -webkit-transform: scale(0.0);
-    }
-    50% {
-        transform: scale(1.0);
-        -webkit-transform: scale(1.0);
-    }
+50%
+{
+-webkit-transform
+
+
+:
+
+ 
+
+scale
+
+
+(1
+.0
+
+
+)
+}
+}
+@
+keyframes sk-bounce { 0%, 100% {
+	transform: scale(0.0);
+	-webkit-transform: scale(0.0);
+}
+
+50%
+{
+transform
+
+
+:
+
+ 
+
+scale
+
+
+(1
+.0
+
+
+);
+-webkit-transform
+
+
+:
+
+ 
+
+scale
+
+
+(1
+.0
+
+
+);
+}
 }
 /* ----------------------------------------------- END STYLE menu-view -----------------------------------------------*/
 
 /* ----------------------------------------------- STYLE game-view ---------------------------------------------------*/
+#game-category {
+	margin-bottom: 20px;
+}
+
 #reponse {
-    background-color: darkseagreen;
-    color: white;
-    font-weight: bold;
-    font-size: 2em;
-    text-align: center;
+	background-color: darkseagreen;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+}
+
+#game-question {
+	margin-bottom: 20px;
+}
+
+#question {
+	text-transform: none;
+    font-size: 18px;
+}
+
+#game-buttons {
+	margin-top: 40px;
 }
 /* --------------------------------------------- END STYLE game-view -------------------------------------------------*/
 
@@ -214,7 +306,10 @@ body {
 .ui-page-theme-d .ui-btn{
     background-color: #3dbbc2;
 }*/
+.ui-icon-* {
+	background-color: #3dbbc2;
+}
 
-.ui-icon-*{
-    background-color: #3dbbc2;
+.ui-btn-icon-left:after, .ui-btn-icon-right:after, .ui-btn-icon-top:after, .ui-btn-icon-bottom:after, .ui-btn-icon-notext:after {
+	background-color: #49789F;
 }

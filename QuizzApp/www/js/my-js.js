@@ -24,6 +24,22 @@ $(document).on("mobileinit", function () {
     $.mobile.defaultDialogTransition = "none";
 });
 
+/**
+ * Closes the app.
+ */
+function closeApp() {
+	if (navigator.app) {
+	    navigator.app.exitApp();
+	} else if (navigator.device) {
+	    navigator.device.exitApp();
+	} else {
+		// can't exit app in browser
+		$.mobile.back();
+	}
+}
+
+
+
 
 /** ----- LOADER SETTINGS -----  **/
 
@@ -34,18 +50,14 @@ $(window).load(function() {
 	$.ajax({url: appConfig['Server-URL'] + "db.php",
 	    type: "HEAD",
 	    timeout: 3000,
-	    statusCode: {
-	        200: function () {
-	            hideLoader();
-	        },
-	        400: function () {
-	            alert("Impossible de se connecter au serveur de l'application.\nVous allez quitter l'application.");
-	            navigator.app.exitApp();
-	        },
-	        0: function () {
-	            alert("Impossible de se connecter au serveur de l'application.\nVous allez quitter l'application.");
-	            navigator.app.exitApp();
-	        }              
+	    success: function() {
+	    	hideLoader();
+	    },
+	    error: function(response) {
+	    	navigator.notification.alert("Une erreur de connexion avec le serveur est survenue.\nCode de status : " + response.status,
+	    			closeApp(),
+	    			"Erreur de connexion",
+	    			"Fermer l'application");
 	    }
 	});
 });
@@ -54,17 +66,19 @@ $(window).load(function() {
  * Shows the loader.
  */
 function showLoader() {
-    document.getElementById("content").style.display = "none";
-    if (document.getElementById("spinner") != null) document.getElementById("spinner").style.display = "block";
+	$("#content").hide();
+	$("#spinner").show();
 }
 
 /**
  * Hides the loader.
  */
 function hideLoader() {
-    document.getElementById("content").style.display = "block";
-    if (document.getElementById("spinner") != null) document.getElementById("spinner").style.display = "none";
+	$("#content").show();
+	$("#spinner").hide();
 }
+
+
 
 
 /** ----- PAGE CONTENT LOADING FROM SERVER ----- **/
@@ -113,9 +127,10 @@ function loadCategoriesView() {
         });
         hideLoader();
     }, "json").error(function (err) {
-        hideLoader();
-        console.log(err);
-        alert("Erreur lors de l'obtention des catégories de jeu.");
+    	navigator.notification.alert("Une erreur est survenue lors de l'obtention des catégories de jeu.\nCode de status : " + err.status,
+    			closeApp(),
+    			"Erreur technique",
+    			"Fermer l'application");
     });
 }
 
@@ -155,6 +170,7 @@ function loadQuestionView(data) {
             console.log(answered);
 
             $("#question").text(result.question);
+            $('#question-content').css('margin-top',($(window).height() - $('[data-role=header]').height() - $('[data-role=footer]').height() - $('#question-content').outerHeight() - 100)/2);
             $('#scan-info-button').unbind().click(function () {
                 scanInfo();
             });
@@ -189,16 +205,16 @@ function loadQuestionView(data) {
             });
             hideLoader();
     }, "json").error(function (err) {
-    	console.log(err);
-        hideLoader();
-        alert("Erreur lors de l'obtention de la question.");
+    	navigator.notification.alert("Une erreur est survenue lors de l'obtention d'une question de jeu.\nCode de status : " + err.status,
+    			closeApp(),
+    			"Erreur technique",
+    			"Fermer l'application");
     });
     hideLoader();
 }
 
 /**
  * Progression
- * @param trace
  */
 function findNextLevel(trace) {
     var nbStateZero = 0;
@@ -233,6 +249,8 @@ function findNextLevel(trace) {
 }
 
 
+
+
 /** ----- SCAN INTERACTIONS ----- **/
 
 function scanInfo() {
@@ -254,8 +272,11 @@ function scanAnswer(answers) {
                     alert("Bonne réponse");
                     resolve(1);
                 } else {
-                    alert("Mauvaise réponse");
-                    resolve(0);
+                	resolve(0);
+                	// small timeout to prevent UI issue
+                	setTimeout(function() {
+                        $("#question-content").effect("shake");
+                	}, 200);
                 }
                 reject(3);
             }, function (error) {
