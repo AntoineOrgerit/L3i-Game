@@ -81,6 +81,15 @@ function hideLoader() {
 
 
 
+/** ----- STYLING ----- **/
+
+function centerQuestion() {
+	$('#question-content').css('margin-top',($(window).height() - $('[data-role=header]').height() - $('[data-role=footer]').height() - $('#question-content').outerHeight() - 100)/2);
+}
+
+
+
+
 /** ----- PAGE CONTENT LOADING FROM SERVER ----- **/
 var trace = [];
 var answered = [];
@@ -170,7 +179,7 @@ function loadQuestionView(data) {
             console.log(answered);
 
             $("#question").text(result.question);
-            $('#question-content').css('margin-top',($(window).height() - $('[data-role=header]').height() - $('[data-role=footer]').height() - $('#question-content').outerHeight() - 100)/2);
+            centerQuestion();
             $('#scan-info-button').unbind().click(function () {
                 scanInfo();
             });
@@ -272,11 +281,16 @@ function scanAnswer(answers) {
                     alert("Bonne réponse");
                     resolve(1);
                 } else {
+                	$("#wrong-answer").show();
+                	centerQuestion();
                 	resolve(0);
                 	// small timeout to prevent UI issue
                 	setTimeout(function() {
                         $("#question-content").effect("shake");
                 	}, 200);
+                	setTimeout(function() {
+                		$("#wrong-answer").fadeOut(1000, centerQuestion);
+                	}, 3000);
                 }
                 reject(3);
             }, function (error) {

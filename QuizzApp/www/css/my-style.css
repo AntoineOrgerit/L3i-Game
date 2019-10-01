@@ -297,6 +297,11 @@ scale
     font-size: 18px;
 }
 
+#wrong-answer {
+	display: none;
+	color: red;
+}
+
 #game-buttons {
 	margin-top: 40px;
 }
