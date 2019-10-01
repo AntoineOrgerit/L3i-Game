@@ -81,11 +81,80 @@ function hideLoader() {
 
 
 
-/** ----- STYLING ----- **/
+/** ----- STYLING CONTENT ----- **/
 
 function centerQuestion() {
 	$('#question-content').css('margin-top',($(window).height() - $('[data-role=header]').height() - $('[data-role=footer]').height() - $('#question-content').outerHeight() - 100)/2);
 }
+
+
+
+
+/** ----- USER GAME INTERACTIONS ----- **/
+
+$("#categories-back-dialog").dialog({
+	autoOpen: false,
+	dialogClass: "no-close",
+	modal: true,
+	buttons: {
+		"Oui": function(event) {
+			event.preventDefault();
+			$("#categories-back-dialog").dialog("close");
+			$.mobile.changePage('#menu-view');
+		},
+		"Non": function(event) {
+			event.preventDefault();
+			$("#categories-back-dialog").dialog("close");
+		}
+	}
+});
+
+$("#back-menu-btn-header").click(function(event) {
+	event.preventDefault();
+	$("#categories-back-dialog").dialog("open");
+});
+
+$("#game-back-dialog").dialog({
+	autoOpen: false,
+	dialogClass: "no-close",
+	modal: true,
+	buttons: {
+		"Oui": function(event) {
+			event.preventDefault();
+			$("#game-back-dialog").dialog("close");
+			$.mobile.changePage('#menu-view');
+		},
+		"Non": function(event) {
+			event.preventDefault();
+			$("#game-back-dialog").dialog("close");
+		}
+	}
+});
+
+$("#back-categories-btn-header").click(function(event) {
+	event.preventDefault();
+	$("#game-back-dialog").dialog("open");
+});
+
+
+
+
+/** ----- ANDROID BACK BUTTON OVERRIDE ----- **/
+document.addEventListener("backbutton", function(event) {
+	event.preventDefault();
+	switch($.mobile.activePage.attr("id")) {
+	case "menu-view":
+		closeApp();
+		break;
+	case "game-view":
+		$("#game-back-dialog").dialog("open");
+		break;
+	case "categories-view":
+		$("#categories-back-dialog").dialog("open");
+		break;
+	default:
+	}
+}, false);
 
 
 

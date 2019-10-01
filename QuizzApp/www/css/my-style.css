@@ -241,6 +241,24 @@ scale
 }
 /* ----------------------------------------------- END STYLE menu-view -----------------------------------------------*/
 
+/* ----------------------------------------------- STYLE dialogs ---------------------------------------------------*/
+
+.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.no-close.ui-dialog-buttons.ui-draggable.ui-resizable {
+	border: 1px solid #49789F;
+	background-color: white !important;
+}
+
+.ui-dialog-titlebar.ui-corner-all.ui-widget-header.ui-helper-clearfix.ui-draggable-handle {
+	background-color: #49789F;
+    color: white;
+}
+
+.ui-button.ui-corner-all.ui-widget.ui-button-icon-only.ui-dialog-titlebar-close {
+    display: none;
+}
+
+/* ----------------------------------------------- END STYLE dialogs -----------------------------------------------*/
+
 /* ----------------------------------------------- STYLE game-view ---------------------------------------------------*/
 #game-category {
 	margin-bottom: 20px;
