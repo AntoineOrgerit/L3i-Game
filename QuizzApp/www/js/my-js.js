@@ -90,21 +90,46 @@ var trace = [];
 var answered = [];
 var nextLevel = 1;
 var flag = false;
-var timer = 0;
+var timer = 3600;
 var timerActive = false;
+var timeInterval;
 
+/* --------------------------------------------------TIMER------------------------------------------------ */
+
+/**
+ * Function to trigger the global timer
+ */
 function globalTimer() {
     timerActive = true;
-
-    function pad(val) {
-        return val > 9 ? val : "0" + val;
-    }
-
-    setInterval(function () {
-        $("#seconds").html(pad(++timer % 60));
-        $("#minutes").html(pad(parseInt(timer / 60, 10)));
-    }, 1000);
+    timeInterval = setInterval(updateTimer, 1000);
 }
+
+/**
+ * Function to set the value with 2 numbers
+ * @param val
+ * @returns {string}
+ */
+function pad(val) {
+    return val > 9 ? val : "0" + val;
+}
+
+/**
+ * Function to update the global timer, decrement time, display alert message if time is up
+ */
+function updateTimer() {
+    console.log(timer);
+    $("#seconds").html(pad(--timer % 60));
+    $("#minutes").html(pad(parseInt(timer / 60, 10)));
+    $("#hours").html(pad(parseInt(timer / 3600)));
+    if (timer <= 0) {
+        setTimeout(function () { // this to refresh before alert
+            alert('Time is up!');
+        }, 10);
+        clearInterval(timeInterval);
+    }
+}
+
+/* --------------------------------------------------END TIMER------------------------------------------------ */
 
 /**
  * View specific treatment redirection.
@@ -113,7 +138,8 @@ $(document).on("pagebeforechange", function (e, data) {
     switch (data.toPage[0].id) {
         case "categories-view":
             loadCategoriesView();
-            if(!timerActive){
+            // if the timer is already triggered - should not call the function
+            if (!timerActive) {
                 globalTimer();
             }
             break;
@@ -156,6 +182,8 @@ function loadCategoriesView() {
     });
 }
 
+var timerLocal = 0;
+var timerLocalActive = false;
 
 /**
  * Question loading.
