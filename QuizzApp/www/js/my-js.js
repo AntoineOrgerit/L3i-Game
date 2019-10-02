@@ -90,7 +90,7 @@ var trace = [];
 var answered = [];
 var nextLevel = 1;
 var flag = false;
-var timer = 3600;
+var timer = 10;
 var timerActive = false;
 var timeInterval;
 
@@ -118,12 +118,18 @@ function pad(val) {
  */
 function updateTimer() {
     console.log(timer);
+    var timerSelector = $('#timer');
+    if (timerSelector.css('display') === 'none') {
+        timerSelector.css('display', 'block');
+    }
     $("#seconds").html(pad(--timer % 60));
     $("#minutes").html(pad(parseInt(timer / 60, 10)));
     $("#hours").html(pad(parseInt(timer / 3600)));
+
     if (timer <= 0) {
         setTimeout(function () { // this to refresh before alert
             alert('Time is up!');
+            $.mobile.changePage('#menu-view');
         }, 10);
         clearInterval(timeInterval);
     }
@@ -138,8 +144,10 @@ $(document).on("pagebeforechange", function (e, data) {
     switch (data.toPage[0].id) {
         case "categories-view":
             loadCategoriesView();
+
             // if the timer is already triggered - should not call the function
             if (!timerActive) {
+
                 globalTimer();
             }
             break;
