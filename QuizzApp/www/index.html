@@ -1,162 +1,178 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <!-- jquery mobile CSS -->
-    <link rel="stylesheet" type="text/css" href="js/jquery-1.5.0.mobile.min.css">
-    <!-- custom CSS -->
-    <link rel="stylesheet" href="css/themes/custom-theme.css"/>
-    <link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/my-style.css">
-    <title>Le mini-jeu de quizz</title>
+<meta charset="utf-8">
+<!-- jquery mobile CSS -->
+<link rel="stylesheet" type="text/css"
+	href="js/jquery-1.5.0.mobile.min.css">
+<!-- custom CSS -->
+<link rel="stylesheet" href="css/themes/custom-theme.css" />
+<link rel="stylesheet" href="css/themes/jquery-ui.min.css" />
+<link rel="stylesheet" href="css/themes/jquery.mobile.icons.min.css" />
+<link rel="stylesheet" type="text/css" href="css/my-style.css">
+<title>Le mini-jeu de quizz</title>
 </head>
 <!------------------------------------------------------------------------------------------------------- START BODY -->
 <body>
-<!-- LOADER -->
-<div class="spinner">
-    <div class="double-bounce1"></div>
-    <div class="double-bounce2"></div>
-</div>
+	<!-- LOADER -->
+	<div class="spinner">
+		<div class="double-bounce1"></div>
+		<div class="double-bounce2"></div>
+	</div>
 
-<div id="content" class="content">
-    <!-- START PAGE 1 - MENU -->
-    <div data-role="page" id="menu-view" data-theme="d">
-        <!-- BEGIN HEADER TITLE -->
-        <div data-role="header">
-            <h1>Le mini-jeu de quizz</h1>
-        </div>
-        <!-- END HEADER TITLE -->
-        <!-- BEGIN HEADER MENU TITLE -->
-        <div role="main" class="ui-content">
-            <br><br>
-            <div class="center-wrapper">
-                <h1>Menu</h1>
-            </div>
-            <!-- END HEADER MENU TITLE -->
-            <br><br>
-            <!-- BEGIN MENU BUTTONS -->
-            <div class="ui-grid-menu ui-responsive">
-                <div class="ui-block-menu">
-                    <a id="start-button" href="#categories-view" class="ui-btn ui-shadow ui-corner-all"
-                       data-role="button" data-transition="none">Commencer</a>
-                    <a id="score-button" href="#score-view" class="ui-btn ui-shadow ui-corner-all"
-                       data-role="button" data-transition="none">Scores</a>
-                    <a id="help-button" href="#help-view" class="ui-btn ui-shadow ui-corner-all"
-                       data-role="button">Aide</a>
-                    <a id="exit-button" href="#quit" class="ui-btn ui-shadow ui-corner-all"
-                       data-role="button" data-transition="none">Quitter</a>
-                </div>
-            </div>
-            <!-- END MENU BUTTONS -->
-        </div>
-        <!-- BEGIN FIXED FOOTER -->
-        <div data-role="footer" data-position="fixed">
-            <h4>Université de La Rochelle</h4>
-        </div>
-        <!-- END FIXED FOOTER -->
-    </div>
-    <!-- END PAGE 1 - MENU -->
+	<!-- BEGIN DIALOG BACK BUTTONS -->
+	<div id="categories-back-dialog" title="Fin de partie">
+		<p>Êtes-vous sûr de vouloir quitter la partie en cours ?</p>
+	</div>
+	<div id="game-back-dialog" title="Abandonner la question">
+		<p>Êtes-vous sûr de vouloir abandonner la question en cours ?</p>
+	</div>
+	<!-- END DIALOG BACK BUTTONS -->
 
-    <!-- START PAGE 2 - CATEGORIES-->
-    <div data-role="page" id="categories-view" data-theme="d">
-        <!-- BEGIN HEADER TITLE -->
-        <div data-role="header">
-            <a id="back-btn-header" class="ui-btn-left ui-icon-arrow-l" href="#menu-view" data-icon="arrow-l"
-               data-iconpos="notext" data-transition="none"></a>
-            <h1>Le mini-jeu de quizz</h1>
-        </div>
-        <!-- END HEADER TITLE -->
-        <!-- BEGIN HEADER CATEGORIES TITLE -->
-        <div role="main" class="ui-content">
-            <br><br>
-            <div class="center-wrapper">
-                <h1>Catégories</h1>
-            </div>
-            <!-- END HEADER CATEGORIES TITLE -->
-            <br><br>
-            <!-- BEGIN CATEGORIES BUTTONS -->
-            <div class="ui-grid-menu ui-responsive">
-                <div id="categories-list" class="ui-block-menu">
-                </div>
-            </div>
-            <!-- END CATEGORIES BUTTONS -->
-        </div>
-        <!-- BEGIN FIXED FOOTER -->
-        <div data-role="footer" data-position="fixed">
-            <h4>Université de La Rochelle</h4>
-        </div>
-        <!-- END FIXED FOOTER -->
-    </div>
-    <!-- END PAGE 2 - CATEGORIES -->
+	<div id="content" class="content">
+		<!-- START PAGE 1 - MENU -->
+		<div data-role="page" id="menu-view" data-theme="d">
+			<!-- BEGIN HEADER TITLE -->
+			<div data-role="header">
+				<h1>Le mini-jeu de quizz</h1>
+			</div>
+			<!-- END HEADER TITLE -->
+			<!-- BEGIN HEADER MENU TITLE -->
+			<div role="main" class="ui-content">
+				<br> <br>
+				<div class="center-wrapper">
+					<h1>Menu</h1>
+				</div>
+				<!-- END HEADER MENU TITLE -->
+				<br> <br>
+				<!-- BEGIN MENU BUTTONS -->
+				<div class="ui-grid-menu ui-responsive">
+					<div class="ui-block-menu">
+						<a id="start-button" href="#categories-view"
+							class="ui-btn ui-shadow ui-corner-all" data-role="button"
+							data-transition="none">Commencer</a> <a id="score-button"
+							href="#score-view" class="ui-btn ui-shadow ui-corner-all"
+							data-role="button" data-transition="none">Scores</a> <a
+							id="help-button" href="#help-view"
+							class="ui-btn ui-shadow ui-corner-all" data-role="button">Aide</a>
+						<a id="exit-button" href="#quit"
+							class="ui-btn ui-shadow ui-corner-all" data-role="button"
+							data-transition="none">Quitter</a>
+					</div>
+				</div>
+				<!-- END MENU BUTTONS -->
+			</div>
+			<!-- BEGIN FIXED FOOTER -->
+			<div data-role="footer" data-position="fixed">
+				<h4>L3i - La Rochelle Université</h4>
+			</div>
+			<!-- END FIXED FOOTER -->
+		</div>
+		<!-- END PAGE 1 - MENU -->
 
-    <!-- START PAGE 3 - GAME -->
-    <div data-role="page" id="game-view" data-theme="d">
-        <!-- BEGIN HEADER TITLE -->
-        <div data-role="header" data-add-back-btn="true" data-position="fixed">
-            <a id="back-categories-btn-header" class="ui-btn-left" href="index.html#categories-view"
-               data-icon="arrow-l"
-               data-iconpos="notext" data-role="button" data-transition="none"></a>
-            <h1>Le mini-jeu de quizz</h1>
-        </div>
-        <!-- END HEADER TITLE -->
-        <!-- BEGIN HEADER CATEGORIES TITLE -->
-        <div role="main" class="ui-content">
-            <!-- BEGIN HEADER SUBTITLE -->
-            <div class="center-wrapper">
-                <h2 id="category-title" class="subtext">Categorie</h2>
-            </div>
-            <div class="">
-                <h3>Question</h3>
-                <br>
-                <br>
-                <div class="center-wrapper">
-                    <p id="question" class=""></p>
-                </div>
-                <!-- END HEADER CATEGORIES TITLE -->
-                <br> <br><br><br><br><br><br><br>
-                <!-- BEGIN GAME BUTTONS -->
-                <div class="ui-block-game">
-                    <div class="ui-grid-a">
-                        <div class="ui-block-a">
-                            <a id="scan-info-button" class="ui-shadow ui-btn ui-corner-all" data-role="button">Scan info</a>
-                        </div>
-                        <div class="ui-block-b">
-                            <a class="ui-shadow ui-btn ui-corner-all" data-role="button">Indices</a>
-                        </div>
-                    </div>
-                    <div class="ui-grid-a ui-responsive">
-                        <div class="ui-block-a">
-                            <a id="scan-res-button" class="ui-shadow ui-btn ui-corner-all">Scanner la réponse</a>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="ui-block-a">
-                            <a id="skip-button" href="#"
-                               class="ui-shadow ui-btn ui-corner-all ui-btn ui-icon-carat-r ui-btn-icon-right"
-                               data-role="button" data-transition="none">Passer la question</a>
-                        </div>
-                    </div>
-                    <span id="reponse"></span>
-                </div>
-            </div>
-            <!-- END GAME BUTTONS -->
-            <!-- END CATEGORIES BUTTONS -->
-        </div>
-        <!-- BEGIN FIXED FOOTER -->
-        <div data-role="footer" data-position="fixed">
-            <h4>Université de La Rochelle</h4>
-        </div>
-        <!-- END FIXED FOOTER -->
-    </div>
-    <!-- END PAGE 3 - GAME -->
-</div>
-<!------------------------------------------------------------------------------------------------- START SCRIPTS JS -->
-<script type="text/javascript" src="cordova.js"></script>
-<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="js/jquery-1.5.0.mobile.min.js"></script>
-<script type="text/javascript" src="js/config.js"></script>
-<script type="text/javascript" src="js/my-js.js"></script>
-<!--------------------------------------------------------------------------------------------------- END SCRIPTS JS -->
+		<!-- START PAGE 2 - CATEGORIES-->
+		<div data-role="page" id="categories-view" data-theme="d">
+			<!-- BEGIN HEADER TITLE -->
+			<div data-role="header">
+				<a id="back-menu-btn-header" class="ui-btn-left ui-icon-arrow-l"
+					href="#" data-icon="arrow-l" data-iconpos="notext"
+					data-transition="none"></a>
+				<h1>Le mini-jeu de quizz</h1>
+			</div>
+			<!-- END HEADER TITLE -->
+			<!-- BEGIN HEADER CATEGORIES TITLE -->
+			<div role="main" class="ui-content">
+				<br> <br>
+				<div class="center-wrapper">
+					<h1>Catégories</h1>
+				</div>
+				<!-- END HEADER CATEGORIES TITLE -->
+				<br> <br>
+				<!-- BEGIN CATEGORIES BUTTONS -->
+				<div class="ui-grid-menu ui-responsive">
+					<div id="categories-list" class="ui-block-menu"></div>
+				</div>
+				<!-- END CATEGORIES BUTTONS -->
+			</div>
+			<!-- BEGIN FIXED FOOTER -->
+			<div data-role="footer" data-position="fixed">
+				<h4>L3i - La Rochelle Université</h4>
+			</div>
+			<!-- END FIXED FOOTER -->
+		</div>
+		<!-- END PAGE 2 - CATEGORIES -->
+
+		<!-- START PAGE 3 - GAME -->
+		<div data-role="page" id="game-view" data-theme="d">
+			<!-- BEGIN HEADER TITLE -->
+			<div data-role="header" data-add-back-btn="true"
+				data-position="fixed">
+				<a id="back-categories-btn-header" class="ui-btn-left"
+					href="#categories-view" data-icon="arrow-l" data-iconpos="notext"
+					data-role="button" data-transition="none"></a>
+				<h1>Le mini-jeu de quizz</h1>
+			</div>
+			<!-- END HEADER TITLE -->
+			<!-- BEGIN GAME TITLE -->
+			<div id="question-content" role="main" class="ui-content">
+				<!-- BEGIN HEADER SUBTITLE -->
+				<div id="game-category" class="center-wrapper">
+					<h3 id="category-title" class="subtext">Categorie</h3>
+				</div>
+				<div class="">
+					<div id="game-question" class="center-wrapper">
+						<p id="question" class=""></p>
+					</div>
+					<!-- END HEADER CATEGORIES TITLE -->
+					<div id="wrong-answer" class="center-wrapper">
+						<p id="wrong-answer-message">Mauvaise réponse</p>
+					</div>
+					<!-- BEGIN GAME BUTTONS -->
+					<div id="game-buttons" class="ui-block-game">
+						<div class="ui-grid-a">
+							<div class="ui-block-a">
+								<a id="scan-info-button" class="ui-shadow ui-btn ui-corner-all"
+									data-role="button">Scan info</a>
+							</div>
+							<div class="ui-block-b">
+								<a class="ui-shadow ui-btn ui-corner-all" data-role="button">Indices</a>
+							</div>
+						</div>
+						<div class="ui-grid-a ui-responsive">
+							<div class="ui-block-a">
+								<a id="scan-res-button" class="ui-shadow ui-btn ui-corner-all">Scanner
+									la réponse</a>
+							</div>
+							<br> <br>
+							<div class="ui-block-a">
+								<a id="skip-button" href="#"
+									class="ui-shadow ui-btn ui-corner-all ui-btn ui-icon-carat-r ui-btn-icon-right"
+									data-role="button" data-transition="none">Passer la
+									question</a>
+							</div>
+						</div>
+						<span id="reponse"></span>
+					</div>
+				</div>
+				<!-- END GAME BUTTONS -->
+				<!-- END CATEGORIES BUTTONS -->
+			</div>
+			<!-- BEGIN FIXED FOOTER -->
+			<div data-role="footer" data-position="fixed">
+				<h4>L3i - La Rochelle Université</h4>
+			</div>
+			<!-- END FIXED FOOTER -->
+		</div>
+		<!-- END PAGE 3 - GAME -->
+	</div>
+	<!------------------------------------------------------------------------------------------------- START SCRIPTS JS -->
+	<script type="text/javascript" src="cordova.js"></script>
+	<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="js/jquery-1.5.0.mobile.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="js/config.js"></script>
+	<script type="text/javascript" src="js/my-js.js"></script>
+	<!--------------------------------------------------------------------------------------------------- END SCRIPTS JS -->
 </body>
 <!--------------------------------------------------------------------------------------------------------- END BODY -->
 </html>

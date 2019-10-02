@@ -12,6 +12,9 @@
     },
     "phonegap-plugin-barcodescanner": {
       "PACKAGE_NAME": "com.phonegappro.tpQuizz"
+    },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "com.phonegappro.tpQuizz"
     }
   },
   "dependent_plugins": {}
