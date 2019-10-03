@@ -1,24 +1,30 @@
 /* ----------------------------------------- Portrait layout (default)  ----------------------------------------------*/
 .app {
-    background: url(../img/logo.png) no-repeat center top; /* 170px x 200px */
+    background: url(../img/logo.png) no-repeat center top;
+    /* 170px x 200px */
     position: absolute; /* position in the center of the screen */
     left: 50%;
     top: 50%;
     height: 50px; /* text area height */
     width: 225px; /* text area width */
     text-align: center;
-    padding: 180px 0px 0px 0px; /* image height is 200px (bottom 20px are overlapped with text) */
-    margin: -115px 0px 0px -112px; /* offset vertical: half of image height and text area height */
+    padding: 180px 0px 0px 0px;
+    /* image height is 200px (bottom 20px are overlapped with text) */
+    margin: -115px 0px 0px -112px;
+    /* offset vertical: half of image height and text area height */
     /* offset horizontal: half of text area width */
 }
+
 /* ----------------------------------------- End Portrait layout (default)  ------------------------------------------*/
 
 /* ------------------------------------- Landscape layout (with min-width) -------------------------------------------*/
 @media screen and (min-aspect-ratio: 1/1) and (min-width: 400px) {
     .app {
         background-position: left center;
-        padding: 75px 0px 75px 170px; /* padding-top + padding-bottom + text area = image height */
-        margin: -90px 0px 0px -198px; /* offset vertical: half of image height */
+        padding: 75px 0px 75px 170px;
+        /* padding-top + padding-bottom + text area = image height */
+        margin: -90px 0px 0px -198px;
+        /* offset vertical: half of image height */
         /* offset horizontal: half of image width and text area width */
     }
 }
@@ -73,7 +79,6 @@
 
 /* ------------------------------------- End Landscape layout (with min-width) ---------------------------------------*/
 
-
 /* ----------------------------------------------- STYLE PAGES -------------------------------------------------------*/
 /* For avoiding title truncation in wp8 */
 .ui-header .ui-title {
@@ -90,7 +95,6 @@
 /*center button on page menu*/
 .center-wrapper {
     text-align: center;
-
 }
 
 .center-wrapper * {
@@ -104,11 +108,13 @@
 * Copyright 2012-2014 Alex Wolfe and Rob Levin
 *
 */
-
 body {
-    -webkit-touch-callout: none; /* prevent callout to copy image, etc when tap to hold */
-    -webkit-text-size-adjust: none; /* prevent webkit from resizing text to fit */
-    -webkit-user-select: none; /* prevent copy paste, to allow, change 'none' to 'text' */
+    -webkit-touch-callout: none;
+    /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;
+    /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;
+    /* prevent copy paste, to allow, change 'none' to 'text' */
     background-color: #FFFFFF;
     /* background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
     background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
@@ -121,12 +127,13 @@ body {
         color-stop(0.51, #E4E4E4)
     );*/
     background-attachment: fixed;
-    font-family: 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    font-family: 'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial,
+    sans-serif;
     font-size: 12px;
     height: 100%;
     margin: 0px;
     padding: 0px;
-    text-transform: uppercase; 
+    text-transform: uppercase;
     width: 100%;
 }
 
@@ -144,6 +151,7 @@ body {
     margin: 0;
     padding: 0.5em 0;
 }
+
 /* ----------------------------------------------- END STYLE PAGES ---------------------------------------------------*/
 
 /* ----------------------------------------------- STYLE menu-view --------------------------------------------------------*/
@@ -169,7 +177,6 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-
     -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
     animation: sk-bounce 2.0s infinite ease-in-out;
 }
@@ -194,27 +201,64 @@ body {
         -webkit-transform: scale(0.0);
     }
     50% {
-        transform: scale(1.0);
-        -webkit-transform: scale(1.0);
+        transform: scale(1.0
+        );
+        -webkit-transform: scale(1 .0
+        );
     }
 }
+
 /* ----------------------------------------------- END STYLE menu-view -----------------------------------------------*/
 
 /* ----------------------------------------------- STYLE game-view ---------------------------------------------------*/
+#game-category {
+    margin-bottom: 20px;
+}
+
 #reponse {
     background-color: darkseagreen;
     color: white;
     font-weight: bold;
-    font-size: 2em;
     text-align: center;
 }
+
+#game-question {
+    margin-bottom: 20px;
+}
+
+#question {
+    text-transform: none;
+    font-size: 18px;
+}
+
+#wrong-answer {
+    display: none;
+    color: red;
+}
+
+#game-buttons {
+    margin-top: 40px;
+}
+
 /* --------------------------------------------- END STYLE game-view -------------------------------------------------*/
 
 /*
 .ui-page-theme-d .ui-btn{
     background-color: #3dbbc2;
 }*/
-
-.ui-icon-*{
+.ui-icon- * {
     background-color: #3dbbc2;
+}
+
+.ui-btn-icon-left:after, .ui-btn-icon-right:after, .ui-btn-icon-top:after, .ui-btn-icon-bottom:after, .ui-btn-icon-notext:after {
+    background-color: #49789F;
+}
+
+/* --------------------------------------------- START STYLE timer -------------------------------------------------*/
+.timer-style {
+    font-size: large;
+}
+
+#timer {
+    display: none;
 }

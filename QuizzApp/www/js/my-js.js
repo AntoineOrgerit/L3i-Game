@@ -24,32 +24,118 @@ $(document).on("mobileinit", function () {
     $.mobile.defaultDialogTransition = "none";
 });
 
+/**
+ * Closes the app.
+ */
+function closeApp() {
+    if (navigator.app) {
+        navigator.app.exitApp();
+    } else if (navigator.device) {
+        navigator.device.exitApp();
+    } else {
+        // can't exit app in browser
+        $.mobile.back();
+    }
+}
+
 
 /** ----- LOADER SETTINGS -----  **/
 
 /**
- * Display loader until the ressources are loaded
+ * Display loader until the resources are loaded, or exit the app if no connection to the server.
  */
-$(window).load(hideLoader);
+$(window).load(function () {
+    $.ajax({
+        url: appConfig['Server-URL'] + "db.php",
+        type: "HEAD",
+        timeout: 3000,
+        success: function () {
+            hideLoader();
+        },
+        error: function (response) {
+            navigator.notification.alert("Une erreur de connexion avec le serveur est survenue.\nCode de status : " + response.status,
+                closeApp(),
+                "Erreur de connexion",
+                "Fermer l'application");
+        }
+    });
+});
 
 /**
  * Shows the loader.
  */
 function showLoader() {
-    document.getElementById("content").style.display = "none";
-    if (document.getElementById("spinner") != null) document.getElementById("spinner").style.display = "block";
+    $("#content").hide();
+    $("#spinner").show();
 }
 
 /**
  * Hides the loader.
  */
 function hideLoader() {
-    document.getElementById("content").style.display = "block";
-    if (document.getElementById("spinner") != null) document.getElementById("spinner").style.display = "none";
+    $("#content").show();
+    $("#spinner").hide();
+}
+
+
+/** ----- STYLING ----- **/
+
+function centerQuestion() {
+    $('#question-content').css('margin-top', ($(window).height() - $('[data-role=header]').height() - $('[data-role=footer]').height() - $('#question-content').outerHeight() - 100) / 2);
 }
 
 
 /** ----- PAGE CONTENT LOADING FROM SERVER ----- **/
+var trace = [];
+var answered = [];
+var nextLevel = 1;
+var flag = false;
+var timer = 10;
+var timerActive = false;
+var timeInterval;
+
+/* --------------------------------------------------TIMER------------------------------------------------ */
+
+/**
+ * Function to trigger the global timer
+ */
+function globalTimer() {
+    timerActive = true;
+    timeInterval = setInterval(updateTimer, 1000);
+}
+
+/**
+ * Function to set the value with 2 numbers
+ * @param val
+ * @returns {string}
+ */
+function pad(val) {
+    return val > 9 ? val : "0" + val;
+}
+
+/**
+ * Function to update the global timer, decrement time, display alert message if time is up
+ */
+function updateTimer() {
+    console.log(timer);
+    var timerSelector = $('#timer');
+    if (timerSelector.css('display') === 'none') {
+        timerSelector.css('display', 'block');
+    }
+    $("#seconds").html(pad(--timer % 60));
+    $("#minutes").html(pad(parseInt(timer / 60, 10)));
+    $("#hours").html(pad(parseInt(timer / 3600)));
+
+    if (timer <= 0) {
+        setTimeout(function () { // this to refresh before alert
+            alert('Time is up!');
+            $.mobile.changePage('#menu-view');
+        }, 10);
+        clearInterval(timeInterval);
+    }
+}
+
+/* --------------------------------------------------END TIMER------------------------------------------------ */
 
 /**
  * View specific treatment redirection.
@@ -58,6 +144,12 @@ $(document).on("pagebeforechange", function (e, data) {
     switch (data.toPage[0].id) {
         case "categories-view":
             loadCategoriesView();
+
+            // if the timer is already triggered - should not call the function
+            if (!timerActive) {
+
+                globalTimer();
+            }
             break;
         case "game-view":
             loadQuestionView(data);
@@ -72,10 +164,17 @@ $(document).on("pagebeforechange", function (e, data) {
 function loadCategoriesView() {
     showLoader();
     var url = appConfig['Server-URL'] + "getCategories.php";
-    $.getJSON(url, function (result) {
+    var data = {
+        level_id: nextLevel,
+        answered: answered
+    };
+    $.post(url, JSON.stringify(data), function (result) {
         $("#categories-list").empty();
-        $.each(result, function (i, field) {
+        $.each(result.categories, function (i, field) {
             $("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-category-id='" + field.id + "'>" + field.theme + "</a>");
+        });
+        $.each(result.blocked, function (i, id) {
+            $("#categories-list a[data-category-id='" + id + "']").addClass("ui-state-disabled");
         });
         $('#categories-list a').on('click', function (event) {
             event.preventDefault();
@@ -83,11 +182,16 @@ function loadCategoriesView() {
             $.mobile.changePage('#game-view', {category_id: $(this).data("category-id"), transition: "none"});
         });
         hideLoader();
-    }).error(function () {
-        hideLoader();
-        alert("Erreur lors de l'obtention des catégories de jeu.");
+    }, "json").error(function (err) {
+        navigator.notification.alert("Une erreur est survenue lors de l'obtention des catégories de jeu.\nCode de status : " + err.status,
+            closeApp(),
+            "Erreur technique",
+            "Fermer l'application");
     });
 }
+
+var timerLocal = 0;
+var timerLocalActive = false;
 
 /**
  * Question loading.
@@ -95,23 +199,111 @@ function loadCategoriesView() {
 function loadQuestionView(data) {
     var category_id = data.options.category_id;
     var url = appConfig['Server-URL'] + "getQuestion.php";
-    $.post(url, {
-        category_id: category_id
-    }, function (result) {
-        var question_data = JSON.parse(result);
-        $("#question").text(question_data.intitule);
-		$('#scan-info-button').unbind().click(function () {
-			scanInfo();
-		});
+    var data = {
+        category_id: category_id,
+        level_id: nextLevel,
+        answered: answered
+    };
+    $.post(url, JSON.stringify(data), function (result) {
+        var lineMem = null;
+
+        if (answered.length !== 0) {
+            answered.forEach((item, index) => {
+                if (item.category === category_id && item.level === nextLevel) {
+                    item.id.push(result.id);
+                    flag = true;
+                }
+            });
+        }
+
+        if (!flag) {
+            lineMem = {
+                category: category_id,
+                level: nextLevel,
+                id: [result.id],
+            };
+            answered.push(lineMem);
+        }
+        flag = false;
+        console.log(answered);
+
+        $("#question").text(result.question);
+        centerQuestion();
+        $('#scan-info-button').unbind().click(function () {
+            scanInfo();
+        });
         $('#scan-res-button').unbind().click(function () {
-            scanAnswer(question_data.answers);
+            var promise = scanAnswer(result.answers);
+            promise.then(function (value) {
+                var lineTrace = {
+                    id: null,
+                    categorie: null,
+                    niveau: null,
+                    state: null
+                };
+                //console.log(value);
+                lineTrace.id = result.id;
+                lineTrace.category = category_id;
+                lineTrace.level = nextLevel;
+                lineTrace.state = value;
+                //console.log(lineTrace);
+                trace.push(lineTrace);
+                // console.log(trace);
+                //console.log(trace);
+                if (trace.length !== 0) {
+                    findNextLevel(trace);
+                    console.log("prochain niveau " + nextLevel);
+                }
+                // redirection si state diff de 0
+                console.log(trace[trace.length - 1].state);
+                if (trace[trace.length - 1].state !== 0) {
+                    $.mobile.changePage('#categories-view');
+                }
+            });
         });
         hideLoader();
-    }).error(function (err) {
-        hideLoader();
-        alert("Erreur lors de l'obtention de la question.");
+    }, "json").error(function (err) {
+        navigator.notification.alert("Une erreur est survenue lors de l'obtention d'une question de jeu.\nCode de status : " + err.status,
+            closeApp(),
+            "Erreur technique",
+            "Fermer l'application");
     });
     hideLoader();
+}
+
+/**
+ * Progression
+ */
+function findNextLevel(trace) {
+    var nbStateZero = 0;
+    var nbStateOne = 0;
+    var nbStateTwo = 0;
+    var idQuestion = trace[trace.length - 1].id;
+    var levelQuestion = trace[trace.length - 1].level;
+    for (var i = trace.length - 1; i >= 0; --i) {
+        /*  console.log(trace[i].id);
+          console.log(trace[i].category);
+          console.log(trace[i].level);
+          console.log(trace[i].state);*/
+        if (idQuestion === trace[i].id) {
+            if (trace[i].state === 0) nbStateZero++;
+            if (trace[i].state === 1) nbStateOne++;
+            if (trace[i].state === 2) nbStateTwo++;
+        }
+        console.log("nombre succes " + nbStateOne);
+        console.log("nombre echec " + nbStateZero);
+        console.log("nombre abandon " + nbStateTwo);
+    }
+    // if(nbStateZero%2===0) //to do donner indice
+    if ((nbStateZero > 4 || nbStateTwo === 1) && levelQuestion > 1) {
+        // level down
+        --levelQuestion;
+    }
+    if ((nbStateZero < 2 && nbStateOne === 1) && levelQuestion < 3) {
+        // level up
+        ++levelQuestion;
+    }
+    nextLevel = levelQuestion;
 }
 
 
@@ -130,14 +322,28 @@ function scanInfo() {
  * Answer QRCODE scanning.
  */
 function scanAnswer(answers) {
-    cordova.plugins.barcodeScanner.scan(function (result) {
-        if (isAnAnswer(result.text, answers)) {
-            alert("Bonne réponse !");
-        } else {
-            alert("Mauvaise réponse...");
-        }
-    }, function (error) {
-        alert(JSON.stringify(error));
+    return new Promise((resolve, reject) => {
+        cordova.plugins.barcodeScanner.scan(function (result) {
+                if (isAnAnswer(result.text, answers)) {
+                    alert("Bonne réponse");
+                    resolve(1);
+                } else {
+                    $("#wrong-answer").show();
+                    centerQuestion();
+                    resolve(0);
+                    // small timeout to prevent UI issue
+                    setTimeout(function () {
+                        $("#question-content").effect("shake");
+                    }, 200);
+                    setTimeout(function () {
+                        $("#wrong-answer").fadeOut(1000, centerQuestion);
+                    }, 3000);
+                }
+                reject(3);
+            }, function (error) {
+                alert(JSON.stringify(error));
+            }
+        );
     });
 }
 
