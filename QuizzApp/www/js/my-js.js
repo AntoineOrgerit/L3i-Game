@@ -122,7 +122,7 @@ $("#game-back-dialog").dialog({
 		"Oui": function(event) {
 			event.preventDefault();
 			$("#game-back-dialog").dialog("close");
-			$.mobile.changePage('#menu-view');
+			$.mobile.changePage('#categories-view');
 		},
 		"Non": function(event) {
 			event.preventDefault();
@@ -164,7 +164,7 @@ var trace = [];
 var answered = [];
 var nextLevel = 1;
 var flag = false;
-var timer = 10;
+var timer = 30;
 var timerActive = false;
 var timeInterval;
 

@@ -23,8 +23,14 @@ $result = $stmt->get_result();
 while ($row = $result->fetch_object()) {
     if (count($json->answered) != 0) {
         foreach ($json->answered as &$answered) {
-            if ($answered->level == $json->level_id && $answered->category == $row->id_categorie && count($answered->id) != $row->count && in_array($answered->id, $data->blocked)) {
-                array_splice($data->blocked, array_search($answered->id, $data->blocked), 1);
+            if ($answered->level == $json->level_id && $answered->category == $row->id_categorie) {
+                if(count($answered->id) != $row->count && in_array($row->id_categorie, $data->blocked)) {
+                    array_splice($data->blocked, array_search($row->id_categorie, $data->blocked), 1);
+                }
+            } else {
+                if (in_array($row->id_categorie, $data->blocked)) {
+                    array_splice($data->blocked, array_search($row->id_categorie, $data->blocked), 1);
+                }
             }
         }
     } else {
