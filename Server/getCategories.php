@@ -11,24 +11,30 @@ $data->blocked = array();
 $q = mysqli_query($con, "select * from `categorie` order by id asc;");
 while ($row = mysqli_fetch_object($q)) {
     $data->categories[] = $row;
+    $data->blocked[] = $row->id;
 }
 $q->close();
 
-if (count($json->answered) != 0) {
-    // checking if categories are accessible
-    $stmt = $con->prepare("select id_categorie, count(*) as count from `question` where id_niveau=? group by id_categorie;");
-    $stmt->bind_param('i', $json->level_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    while ($row = $result->fetch_object()) {
+// checking if categories are accessible
+$stmt = $con->prepare("select id_categorie, count(*) as count from `question` where id_niveau=? group by id_categorie;");
+$stmt->bind_param('i', $json->level_id);
+$stmt->execute();
+$result = $stmt->get_result();
+while ($row = $result->fetch_object()) {
+    var_dump($data->blocked);
+    if (count($json->answered) != 0) {
         foreach ($json->answered as &$answered) {
-            if ($answered->level == $json->level_id && $answered->category == $row->id_categorie && count($answered->id) == $row->count) {
-                $data->blocked[] = $answered->category;
+            if ($answered->level == $json->level_id && $answered->category == $row->id_categorie && count($answered->id) != $row->count && in_array($answered->id, $data->blocked)) {
+                array_splice($data->blocked, array_search($answered->id, $data->blocked), 1);
             }
         }
+    } else {
+        if (in_array($row->id_categorie, $data->blocked)) {
+            array_splice($data->blocked, array_search($row->id_categorie, $data->blocked), 1);
+        }
     }
-    $stmt->close();
 }
+$stmt->close();
 
 echo json_encode($data);
 
