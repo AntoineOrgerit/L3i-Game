@@ -21,7 +21,6 @@ $stmt->bind_param('i', $json->level_id);
 $stmt->execute();
 $result = $stmt->get_result();
 while ($row = $result->fetch_object()) {
-    var_dump($data->blocked);
     if (count($json->answered) != 0) {
         foreach ($json->answered as &$answered) {
             if ($answered->level == $json->level_id && $answered->category == $row->id_categorie && count($answered->id) != $row->count && in_array($answered->id, $data->blocked)) {
