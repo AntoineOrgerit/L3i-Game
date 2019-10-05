@@ -39,12 +39,11 @@ function closeApp() {
 }
 
 
-
-
-/** ----- LOADER SETTINGS -----  **/
+/** ----- LOADER SETTINGS ----- * */
 
 /**
- * Display loader until the resources are loaded, or exit the app if no connection to the server.
+ * Display loader until the resources are loaded, or exit the app if no
+ * connection to the server.
  */
 $(window).load(function() {
 	$.ajax({url: appConfig['Server-URL'] + "db.php",
@@ -79,18 +78,14 @@ function hideLoader() {
 }
 
 
-
-
-/** ----- STYLING ----- **/
+/** ----- STYLING ----- * */
 
 function centerQuestion() {
 	$('#question-content').css('margin-top',($(window).height() - $('[data-role=header]').height() - $('[data-role=footer]').height() - $('#question-content').outerHeight() - 100)/2);
 }
 
 
-
-
-/** ----- USER GAME INTERACTIONS ----- **/
+/** ----- USER GAME INTERACTIONS ----- * */
 
 $("#categories-back-dialog").dialog({
 	autoOpen: false,
@@ -137,9 +132,7 @@ $("#back-categories-btn-header").click(function(event) {
 });
 
 
-
-
-/** ----- ANDROID BACK BUTTON OVERRIDE ----- **/
+/** ----- ANDROID BACK BUTTON OVERRIDE ----- * */
 document.addEventListener("backbutton", function(event) {
 	event.preventDefault();
 	switch($.mobile.activePage.attr("id")) {
@@ -157,76 +150,129 @@ document.addEventListener("backbutton", function(event) {
 }, false);
 
 
-
-
-/** ----- PAGE CONTENT LOADING FROM SERVER ----- **/
+/** ----- PAGE CONTENT LOADING FROM SERVER ----- * */
 var trace = [];
 var answered = [];
 var nextLevel = 1;
 var flag = false;
-var timer = 30;
-var timerActive = false;
-var timeInterval;
+var timer;
+var timerLocal;
+let initTime = 0.3 * 60;
 
 /* --------------------------------------------------TIMER------------------------------------------------ */
-
-/**
- * Function to trigger the global timer
- */
-function globalTimer() {
-    timerActive = true;
-    timeInterval = setInterval(updateTimer, 1000);
-}
-
-/**
- * Function to set the value with 2 numbers
- * @param val
- * @returns {string}
- */
-function pad(val) {
-    return val > 9 ? val : "0" + val;
-}
-
-/**
- * Function to update the global timer, decrement time, display alert message if time is up
- */
-function updateTimer() {
-    console.log(timer);
-    var timerSelector = $('#timer');
-    if (timerSelector.css('display') === 'none') {
-        timerSelector.css('display', 'block');
+function startTimer(type, seconds, container, oncomplete) {
+    var startTime, timer, obj, ms = seconds * 1000, isEnded,
+        display = document.getElementById(container);
+    var now;
+    obj = {};
+    obj.resume = function () {
+    	isEnded = false;
+        startTime = new Date().getTime();
+        timer = setInterval(obj.step, 250); // adjust this number to affect
+											// granularity
+        // lower numbers are more accurate, but more CPU-expensive
+    };
+    obj.pause = function () {
+        ms = obj.step();
+        clearInterval(timer);
+    };
+    obj.reset = function () {
+        ms = seconds * 1000;
+    };
+    obj.isEnded = function () {
+    	return isEnded;
     }
-    $("#seconds").html(pad(--timer % 60));
-    $("#minutes").html(pad(parseInt(timer / 60, 10)));
-    $("#hours").html(pad(parseInt(timer / 3600)));
+    obj.step = function () {
+        if (type === "increment") {
+            now = Math.max(0, ms + (new Date().getTime() - startTime));
+            var m = Math.floor(now / 60000), s = Math.floor(now / 1000) % 60;
+            console.log("timer local :" + now);
+        } else if (type === "decrement") {
+            now = Math.max(0, ms - (new Date().getTime() - startTime));
+            var m = Math.floor(now / 60000), s = Math.floor(now / 1000) % 60;
+            console.log("timer :" + now);
 
-    if (timer <= 0) {
-        setTimeout(function () { // this to refresh before alert
-            alert('Time is up!');
-            $.mobile.changePage('#menu-view');
-        }, 10);
-        clearInterval(timeInterval);
-    }
+        }
+        s = (s < 10 ? "0" : "") + s;
+        display.innerHTML = m + ":" + s;
+        if (now === 0) {
+        	isEnded = true;
+            clearInterval(timer);
+            obj.resume = function () {
+            };
+            if (oncomplete) {
+            	oncomplete();
+            }
+        }
+        return now;
+    };
+    obj.resume();
+    obj.result = function () {
+        if (type === "decrement") {
+            if (now === 0) {
+                return initTime;
+            } else {
+                return (initTime - now / 1000);
+            }
+        } else if (type === "increment") {
+            return (now / 1000);
+        }
+    };
+    return obj;
 }
 
-/* --------------------------------------------------END TIMER------------------------------------------------ */
+/*
+ * --------------------------------------------------END
+ * TIMER------------------------------------------------
+ */
 
 /**
  * View specific treatment redirection.
  */
 $(document).on("pagebeforechange", function (e, data) {
     switch (data.toPage[0].id) {
-        case "categories-view":
-            loadCategoriesView();
-
-            // if the timer is already triggered - should not call the function
-            if (!timerActive) {
-
-                globalTimer();
+        case "menu-view":
+            // si le timer est initialisé on le stop car la partie est finie
+            if (timer !== undefined) {
+            	if(timer.isEnded()) {
+            		console.log("temps global " + timer.result());
+                    timer.reset();
+            	} else {
+                    timer.pause();
+                    // console.log(timer.result());
+                    // stockage en session - test
+                    sessionStorage.setItem('globalTime', timer.result());
+                    var data = sessionStorage.getItem('globalTime');
+                    console.log("temps global " + data);
+                    timer.reset();
+            	}
             }
+            break;
+        case "categories-view":
+            if (timerLocal !== undefined) {
+                timerLocal.pause();
+                // stockage en session du temps local
+                sessionStorage.setItem('localTime', timerLocal.result());
+                var data = sessionStorage.getItem('localTime');
+                console.log("temps local " + data);
+                // mise a jour du score apres calcul
+                // to do
+                // remise a zero du timer local
+                timerLocal.reset();
+            }
+            loadCategoriesView();
+            // lancement du timer global qui decremente
+            timer = startTimer("decrement", initTime, "timer", function () {
+            	alert("Jeu terminé!");
+            	$.mobile.changePage('#menu-view');
+            });
             break;
         case "game-view":
             loadQuestionView(data);
+            // lancement du timer local qui incremente
+            timerLocal = startTimer("increment", 0, "timerLocal", function () {
+            });
+            console.log(timerLocal);
             break;
         default:
     }
@@ -313,15 +359,15 @@ function loadQuestionView(data) {
                         niveau: null,
                         state: null
                     };
-                    //console.log(value);
+                    // console.log(value);
                     lineTrace.id = result.id;
                     lineTrace.category = category_id;
                     lineTrace.level = nextLevel;
                     lineTrace.state = value;
-                    //console.log(lineTrace);
+                    // console.log(lineTrace);
                     trace.push(lineTrace);
                     // console.log(trace);
-                    //console.log(trace);
+                    // console.log(trace);
                     if (trace.length !== 0) {
                         findNextLevel(trace);
                         console.log("prochain niveau " + nextLevel);
@@ -353,10 +399,10 @@ function findNextLevel(trace) {
     var idQuestion = trace[trace.length - 1].id;
     var levelQuestion = trace[trace.length - 1].level;
     for (var i = trace.length - 1; i >= 0; --i) {
-        /*  console.log(trace[i].id);
-          console.log(trace[i].category);
-          console.log(trace[i].level);
-          console.log(trace[i].state);*/
+        /*
+		 * console.log(trace[i].id); console.log(trace[i].category);
+		 * console.log(trace[i].level); console.log(trace[i].state);
+		 */
         if (idQuestion === trace[i].id) {
             if (trace[i].state === 0) nbStateZero++;
             if (trace[i].state === 1) nbStateOne++;
@@ -379,9 +425,7 @@ function findNextLevel(trace) {
 }
 
 
-
-
-/** ----- SCAN INTERACTIONS ----- **/
+/** ----- SCAN INTERACTIONS ----- * */
 
 function scanInfo() {
     cordova.plugins.barcodeScanner.scan(function (result) {
