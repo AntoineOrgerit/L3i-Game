@@ -39,10 +39,11 @@ function closeApp() {
 }
 
 
-/** ----- LOADER SETTINGS -----  **/
+/** ----- LOADER SETTINGS ----- * */
 
 /**
- * Display loader until the resources are loaded, or exit the app if no connection to the server.
+ * Display loader until the resources are loaded, or exit the app if no
+ * connection to the server.
  */
 $(window).load(function() {
 	$.ajax({url: appConfig['Server-URL'] + "db.php",
@@ -77,14 +78,14 @@ function hideLoader() {
 }
 
 
-/** ----- STYLING ----- **/
+/** ----- STYLING ----- * */
 
 function centerQuestion() {
 	$('#question-content').css('margin-top',($(window).height() - $('[data-role=header]').height() - $('[data-role=footer]').height() - $('#question-content').outerHeight() - 100)/2);
 }
 
 
-/** ----- USER GAME INTERACTIONS ----- **/
+/** ----- USER GAME INTERACTIONS ----- * */
 
 $("#categories-back-dialog").dialog({
 	autoOpen: false,
@@ -131,7 +132,7 @@ $("#back-categories-btn-header").click(function(event) {
 });
 
 
-/** ----- ANDROID BACK BUTTON OVERRIDE ----- **/
+/** ----- ANDROID BACK BUTTON OVERRIDE ----- * */
 document.addEventListener("backbutton", function(event) {
 	event.preventDefault();
 	switch($.mobile.activePage.attr("id")) {
@@ -149,7 +150,7 @@ document.addEventListener("backbutton", function(event) {
 }, false);
 
 
-/** ----- PAGE CONTENT LOADING FROM SERVER ----- **/
+/** ----- PAGE CONTENT LOADING FROM SERVER ----- * */
 var trace = [];
 var answered = [];
 var nextLevel = 1;
@@ -160,13 +161,15 @@ let initTime = 0.3 * 60;
 
 /* --------------------------------------------------TIMER------------------------------------------------ */
 function startTimer(type, seconds, container, oncomplete) {
-    var startTime, timer, obj, ms = seconds * 1000,
+    var startTime, timer, obj, ms = seconds * 1000, isEnded,
         display = document.getElementById(container);
     var now;
     obj = {};
     obj.resume = function () {
+    	isEnded = false;
         startTime = new Date().getTime();
-        timer = setInterval(obj.step, 250); // adjust this number to affect granularity
+        timer = setInterval(obj.step, 250); // adjust this number to affect
+											// granularity
         // lower numbers are more accurate, but more CPU-expensive
     };
     obj.pause = function () {
@@ -176,6 +179,9 @@ function startTimer(type, seconds, container, oncomplete) {
     obj.reset = function () {
         ms = seconds * 1000;
     };
+    obj.isEnded = function () {
+    	return isEnded;
+    }
     obj.step = function () {
         if (type === "increment") {
             now = Math.max(0, ms + (new Date().getTime() - startTime));
@@ -190,10 +196,13 @@ function startTimer(type, seconds, container, oncomplete) {
         s = (s < 10 ? "0" : "") + s;
         display.innerHTML = m + ":" + s;
         if (now === 0) {
+        	isEnded = true;
             clearInterval(timer);
             obj.resume = function () {
             };
-            if (oncomplete) oncomplete();
+            if (oncomplete) {
+            	oncomplete();
+            }
         }
         return now;
     };
@@ -212,7 +221,10 @@ function startTimer(type, seconds, container, oncomplete) {
     return obj;
 }
 
-/* --------------------------------------------------END TIMER------------------------------------------------ */
+/*
+ * --------------------------------------------------END
+ * TIMER------------------------------------------------
+ */
 
 /**
  * View specific treatment redirection.
@@ -222,13 +234,18 @@ $(document).on("pagebeforechange", function (e, data) {
         case "menu-view":
             // si le timer est initialisé on le stop car la partie est finie
             if (timer !== undefined) {
-                timer.pause();
-                //console.log(timer.result());
-                // stockage en session - test
-                sessionStorage.setItem('globalTime', timer.result());
-                var data = sessionStorage.getItem('globalTime');
-                console.log("temps global " + data);
-                timer.reset();
+            	if(timer.isEnded()) {
+            		console.log("temps global " + timer.result());
+                    timer.reset();
+            	} else {
+                    timer.pause();
+                    // console.log(timer.result());
+                    // stockage en session - test
+                    sessionStorage.setItem('globalTime', timer.result());
+                    var data = sessionStorage.getItem('globalTime');
+                    console.log("temps global " + data);
+                    timer.reset();
+            	}
             }
             break;
         case "categories-view":
@@ -238,7 +255,7 @@ $(document).on("pagebeforechange", function (e, data) {
                 sessionStorage.setItem('localTime', timerLocal.result());
                 var data = sessionStorage.getItem('localTime');
                 console.log("temps local " + data);
-                //mise a jour du score apres calcul
+                // mise a jour du score apres calcul
                 // to do
                 // remise a zero du timer local
                 timerLocal.reset();
@@ -246,8 +263,8 @@ $(document).on("pagebeforechange", function (e, data) {
             loadCategoriesView();
             // lancement du timer global qui decremente
             timer = startTimer("decrement", initTime, "timer", function () {
-              /*  $.mobile.changePage('#menu-view');
-                alert("Jeu terminé!");*/
+            	alert("Jeu terminé!");
+            	$.mobile.changePage('#menu-view');
             });
             break;
         case "game-view":
@@ -342,15 +359,15 @@ function loadQuestionView(data) {
                         niveau: null,
                         state: null
                     };
-                    //console.log(value);
+                    // console.log(value);
                     lineTrace.id = result.id;
                     lineTrace.category = category_id;
                     lineTrace.level = nextLevel;
                     lineTrace.state = value;
-                    //console.log(lineTrace);
+                    // console.log(lineTrace);
                     trace.push(lineTrace);
                     // console.log(trace);
-                    //console.log(trace);
+                    // console.log(trace);
                     if (trace.length !== 0) {
                         findNextLevel(trace);
                         console.log("prochain niveau " + nextLevel);
@@ -382,10 +399,10 @@ function findNextLevel(trace) {
     var idQuestion = trace[trace.length - 1].id;
     var levelQuestion = trace[trace.length - 1].level;
     for (var i = trace.length - 1; i >= 0; --i) {
-        /*  console.log(trace[i].id);
-          console.log(trace[i].category);
-          console.log(trace[i].level);
-          console.log(trace[i].state);*/
+        /*
+		 * console.log(trace[i].id); console.log(trace[i].category);
+		 * console.log(trace[i].level); console.log(trace[i].state);
+		 */
         if (idQuestion === trace[i].id) {
             if (trace[i].state === 0) nbStateZero++;
             if (trace[i].state === 1) nbStateOne++;
@@ -408,7 +425,7 @@ function findNextLevel(trace) {
 }
 
 
-/** ----- SCAN INTERACTIONS ----- **/
+/** ----- SCAN INTERACTIONS ----- * */
 
 function scanInfo() {
     cordova.plugins.barcodeScanner.scan(function (result) {
