@@ -157,11 +157,13 @@ var nextLevel = 1;
 var flag = false;
 var timer;
 var timerLocal;
+let initTime = 0.3 * 60;
 
 /* --------------------------------------------------TIMER------------------------------------------------ */
 function startTimer(type, seconds, container, oncomplete) {
     var startTime, timer, obj, ms = seconds * 1000,
         display = document.getElementById(container);
+    var now;
     obj = {};
     obj.resume = function () {
         startTime = new Date().getTime();
@@ -169,26 +171,26 @@ function startTimer(type, seconds, container, oncomplete) {
         // lower numbers are more accurate, but more CPU-expensive
     };
     obj.pause = function () {
-        ms = obj.step(type);
+        ms = obj.step();
         clearInterval(timer);
     };
     obj.reset = function () {
         ms = seconds * 1000;
-    }
+    };
     obj.step = function () {
         if (type === "increment") {
-            var now = Math.max(0, ms + (new Date().getTime() - startTime)),
-                m = Math.floor(now / 60000), s = Math.floor(now / 1000) % 60;
+            now = Math.max(0, ms + (new Date().getTime() - startTime));
+            var m = Math.floor(now / 60000), s = Math.floor(now / 1000) % 60;
             console.log("timer local :" + now);
         } else if (type === "decrement") {
-            var now = Math.max(0, ms - (new Date().getTime() - startTime)),
-                m = Math.floor(now / 60000), s = Math.floor(now / 1000) % 60;
+            now = Math.max(0, ms - (new Date().getTime() - startTime));
+            var m = Math.floor(now / 60000), s = Math.floor(now / 1000) % 60;
             console.log("timer :" + now);
 
         }
         s = (s < 10 ? "0" : "") + s;
         display.innerHTML = m + ":" + s;
-        if (now == 0) {
+        if (now === 0) {
             clearInterval(timer);
             obj.resume = function () {
             };
@@ -197,6 +199,17 @@ function startTimer(type, seconds, container, oncomplete) {
         return now;
     };
     obj.resume();
+    obj.result = function () {
+        if (type === "decrement") {
+            if (now === 0) {
+                return initTime;
+            } else {
+                return (initTime - now / 1000);
+            }
+        } else if (type === "increment") {
+            return (now / 1000);
+        }
+    };
     return obj;
 }
 
@@ -211,12 +224,21 @@ $(document).on("pagebeforechange", function (e, data) {
             // si le timer est initialisé on le stop car la partie est finie
             if (timer !== undefined) {
                 timer.pause();
+                //console.log(timer.result());
+                // stockage en session - test
+                sessionStorage.setItem('globalTime', timer.result());
+                var data = sessionStorage.getItem('globalTime');
+                console.log("temps global " + data);
                 timer.reset();
             }
             break;
         case "categories-view":
             if (timerLocal !== undefined) {
                 timerLocal.pause();
+                // stockage en session du temps local
+                sessionStorage.setItem('localTime', timerLocal.result());
+                var data = sessionStorage.getItem('localTime');
+                console.log("temps local " + data);
                 //mise a jour du score apres calcul
                 // to do
                 // remise a zero du timer local
@@ -224,9 +246,9 @@ $(document).on("pagebeforechange", function (e, data) {
             }
             loadCategoriesView();
             // lancement du timer global qui decremente
-            timer = startTimer("decrement", 0.3 * 60, "timer", function () {
-                alert("Jeu terminé!");
-                $.mobile.changePage('#menu-view');
+            timer = startTimer("decrement", initTime, "timer", function () {
+              /*  $.mobile.changePage('#menu-view');
+                alert("Jeu terminé!");*/
             });
             break;
         case "game-view":
