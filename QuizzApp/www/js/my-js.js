@@ -1,7 +1,7 @@
 /** ----- GENERAL SETTINGS -----  **/
 
 /**
- * Fixing proxy issue
+ * Allows to fix proxy redirection issues.
  */
 (function () {
     var xhr = {};
@@ -14,10 +14,10 @@
         }
         xhr.open.apply(this, arguments);
     };
-})(window);
+})();
 
 /**
- * For having a faster transition
+ * Allows to have faster transitions with the loader rather than existing ones.
  */
 $(document).on("mobileinit", function () {
     $.mobile.defaultPageTransition = "none";
@@ -25,7 +25,9 @@ $(document).on("mobileinit", function () {
 });
 
 /**
- * Closes the app.
+ * Allows to close the application. A special case is defined for the browser
+ * mode, where it is impossible in modern browser to close a tab if it has not
+ * been opened programmatically.
  */
 function closeApp() {
 	if (navigator.app) {
@@ -33,25 +35,25 @@ function closeApp() {
 	} else if (navigator.device) {
 	    navigator.device.exitApp();
 	} else {
-		// can't exit app in browser
+		// can't exit application in browser
 		$.mobile.back();
 	}
 }
 
 
+
+
+
 /** ----- LOADER SETTINGS ----- * */
 
 /**
- * Display loader until the resources are loaded, or exit the app if no
- * connection to the server.
+ * Displays the loader until the resources are loaded, or exit the application
+ * if no connection to the server.
  */
 $(window).load(function() {
 	$.ajax({url: appConfig['Server-URL'] + "db.php",
 	    type: "HEAD",
 	    timeout: 3000,
-	    success: function() {
-	    	hideLoader();
-	    },
 	    error: function(response) {
 	    	navigator.notification.alert("Une erreur de connexion avec le serveur est survenue.\nCode de status : " + response.status,
 	    			closeApp(),
@@ -62,7 +64,7 @@ $(window).load(function() {
 });
 
 /**
- * Shows the loader.
+ * Allows to display the loader on the application.
  */
 function showLoader() {
 	$("#content").hide();
@@ -70,7 +72,7 @@ function showLoader() {
 }
 
 /**
- * Hides the loader.
+ * Allows to hide the loader on the application.
  */
 function hideLoader() {
 	$("#content").show();
@@ -78,15 +80,34 @@ function hideLoader() {
 }
 
 
+
+
+
 /** ----- STYLING ----- * */
 
+/**
+ * Allows to center the question information on the question view.
+ */
 function centerQuestion() {
-	$('#question-content').css('margin-top',($(window).height() - $('[data-role=header]').height() - $('[data-role=footer]').height() - $('#question-content').outerHeight() - 100)/2);
+	$('#question-content').css('margin-top',($("#game-view").height() - $('#question-content').outerHeight())/2);
 }
+
+/**
+ * Allows to center the score information on the score view.
+ */
+function centerScore() {
+	$('#score-content').css('margin-top',($("#score-view").height() - $('#score-content').outerHeight() - $("#score-view div[data-role='header']").outerHeight())/2);
+}
+
+
+
 
 
 /** ----- USER GAME INTERACTIONS ----- * */
 
+/**
+ * Defines the HTML object as the dialog to exit categories.
+ */
 $("#categories-back-dialog").dialog({
 	autoOpen: false,
 	dialogClass: "no-close",
@@ -104,11 +125,17 @@ $("#categories-back-dialog").dialog({
 	}
 });
 
+/**
+ * Handles the back button action on the categories view.
+ */
 $("#back-menu-btn-header").click(function(event) {
 	event.preventDefault();
 	$("#categories-back-dialog").dialog("open");
 });
 
+/**
+ * Defines the HTML object as the dialog to exit a question.
+ */
 $("#game-back-dialog").dialog({
 	autoOpen: false,
 	dialogClass: "no-close",
@@ -126,13 +153,36 @@ $("#game-back-dialog").dialog({
 	}
 });
 
+/**
+ * Handles the back button action on the game view.
+ */
 $("#back-categories-btn-header").click(function(event) {
 	event.preventDefault();
 	$("#game-back-dialog").dialog("open");
 });
 
+/**
+ * Handles the exit button on the menu view.
+ */
+$("#exit-button").click(function(event) {
+	event.preventDefault();
+	closeApp();
+});
+
+/**
+ * Handles informations scan for questions action.
+ */
+$('#scan-info-button').unbind().click(scanInfo);
+
+
+
+
 
 /** ----- ANDROID BACK BUTTON OVERRIDE ----- * */
+
+/**
+ * Overrides the Android system back button action.
+ */
 document.addEventListener("backbutton", function(event) {
 	event.preventDefault();
 	switch($.mobile.activePage.attr("id")) {
@@ -150,159 +200,110 @@ document.addEventListener("backbutton", function(event) {
 }, false);
 
 
-/** ----- PAGE CONTENT LOADING FROM SERVER ----- * */
-var trace = [];
-var answered = [];
-var nextLevel = 1;
-var flag = false;
-var timer;
-var timerLocal;
-let initTime = 0.3 * 60;
 
-/* --------------------------------------------------TIMER------------------------------------------------ */
-function startTimer(type, seconds, container, oncomplete) {
-    var startTime, timer, obj, ms = seconds * 1000, isEnded,
-        display = document.getElementById(container);
-    var now;
-    obj = {};
-    obj.resume = function () {
-    	isEnded = false;
-        startTime = new Date().getTime();
-        timer = setInterval(obj.step, 250); // adjust this number to affect
-											// granularity
-        // lower numbers are more accurate, but more CPU-expensive
-    };
-    obj.pause = function () {
-        ms = obj.step();
-        clearInterval(timer);
-    };
-    obj.reset = function () {
-        ms = seconds * 1000;
-    };
-    obj.isEnded = function () {
-    	return isEnded;
-    }
-    obj.step = function () {
-        if (type === "increment") {
-            now = Math.max(0, ms + (new Date().getTime() - startTime));
-            var m = Math.floor(now / 60000), s = Math.floor(now / 1000) % 60;
-            console.log("timer local :" + now);
-        } else if (type === "decrement") {
-            now = Math.max(0, ms - (new Date().getTime() - startTime));
-            var m = Math.floor(now / 60000), s = Math.floor(now / 1000) % 60;
-            console.log("timer :" + now);
 
-        }
-        s = (s < 10 ? "0" : "") + s;
-        display.innerHTML = m + ":" + s;
-        if (now === 0) {
-        	isEnded = true;
-            clearInterval(timer);
-            obj.resume = function () {
-            };
-            if (oncomplete) {
-            	oncomplete();
-            }
-        }
-        return now;
-    };
-    obj.resume();
-    obj.result = function () {
-        if (type === "decrement") {
-            if (now === 0) {
-                return initTime;
-            } else {
-                return (initTime - now / 1000);
-            }
-        } else if (type === "increment") {
-            return (now / 1000);
-        }
-    };
-    return obj;
-}
 
-/*
- * --------------------------------------------------END
- * TIMER------------------------------------------------
- */
+/** ----- GENERAL ROUTING ACTIONS FOR THE GAME ----- * */
+
+var initTime = 0.3 * 60;
+var gameSession = null;
 
 /**
- * View specific treatment redirection.
+ * Allows to route the different page loading to specific actions.
  */
 $(document).on("pagebeforechange", function (e, data) {
+	showLoader();
+	// switching on destination page ID to do specific actions
     switch (data.toPage[0].id) {
         case "menu-view":
-            // si le timer est initialisé on le stop car la partie est finie
-            if (timer !== undefined) {
-            	if(timer.isEnded()) {
-            		console.log("temps global " + timer.result());
-                    timer.reset();
+            if (gameSession !== null) {
+            	// destroying game session if finished, or pausing it if saved
+				// in memory
+            	if(gameSession.hasEnded()) {
+                    gameSession = null;
             	} else {
-                    timer.pause();
-                    // console.log(timer.result());
-                    // stockage en session - test
-                    sessionStorage.setItem('globalTime', timer.result());
-                    var data = sessionStorage.getItem('globalTime');
-                    console.log("temps global " + data);
-                    timer.reset();
+            		gameSession.pause();
             	}
             }
+            loadMenuView();
             break;
         case "categories-view":
-            if (timerLocal !== undefined) {
-                timerLocal.pause();
-                // stockage en session du temps local
-                sessionStorage.setItem('localTime', timerLocal.result());
-                var data = sessionStorage.getItem('localTime');
-                console.log("temps local " + data);
-                // mise a jour du score apres calcul
-                // to do
-                // remise a zero du timer local
-                timerLocal.reset();
+        	// creating game session if it does not exist
+        	if(gameSession == null) {
+        		gameSession = new GameSession(new Timer("decrement", initTime, "#timer", function () {
+                    $.mobile.changePage('#score-view');
+                }), new Timer("increment", 0), 1);
+        	}
+        	// if it was previously paused or just created, resume it
+        	if(!gameSession.isRunning()) {
+        		gameSession.resume();
+        	}
+        	// if a question has been aborted by a "back" action, abort it in
+			// the game session, or reset the question timer
+            if (gameSession.isQuestionRunning()) {
+                gameSession.abortQuestion();
+            } else {
+            	gameSession.resetQuestion();
             }
             loadCategoriesView();
-            // lancement du timer global qui decremente
-            timer = startTimer("decrement", initTime, "timer", function () {
-            	alert("Jeu terminé!");
-            	$.mobile.changePage('#menu-view');
-            });
             break;
         case "game-view":
+        	// launch timer for question in the game session
+        	gameSession.startQuestion();
             loadQuestionView(data);
-            // lancement du timer local qui incremente
-            timerLocal = startTimer("increment", 0, "timerLocal", function () {
-            });
-            console.log(timerLocal);
             break;
+        case "score-view":
+        	loadScoreView();
+        	break;
         default:
     }
 });
 
+
+
+
+
+/** ----- PAGE CONTENT LOADING ----- * */
+
 /**
- * Categories loading.
+ * Loads the menu view and adapt the main action button.
+ */
+function loadMenuView() {
+	if(gameSession == null) {
+		$("#start-button").text("Commencer");
+	} else {
+		$("#start-button").text("Continuer");
+	}
+	hideLoader();
+}
+
+/**
+ * Loads the categories view by retrieving the categories from the server.
  */
 function loadCategoriesView() {
-    showLoader();
     var url = appConfig['Server-URL'] + "getCategories.php";
     var data = {
-        level_id: nextLevel,
-        answered: answered
+        level_id: gameSession.getNextQuestionLevel(),
+        answered: gameSession.getAnsweredQuestions()
     };
     $.post(url, JSON.stringify(data), function (result) {
         $("#categories-list").empty();
         $.each(result.categories, function (i, field) {
             $("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-category-id='" + field.id + "'>" + field.theme + "</a>");
         });
+        // if not question available for a category, blocking it
         $.each(result.blocked, function(i, id) {
         	$("#categories-list a[data-category-id='" + id + "']").addClass("ui-state-disabled");
         });
+        // overriding click action of the categories to send information about
+		// it
         $('#categories-list a').on('click', function (event) {
             event.preventDefault();
-            showLoader();
-            $.mobile.changePage('#game-view', {category_id: $(this).data("category-id"), transition: "none"});
+            $.mobile.changePage('#game-view', {category_id: $(this).data("category-id"), category_title: $(this).text(), transition: "none"});
         });
         hideLoader();
     }, "json").error(function (err) {
+    	// handling server error
     	navigator.notification.alert("Une erreur est survenue lors de l'obtention des catégories de jeu.\nCode de status : " + err.status,
     			closeApp(),
     			"Erreur technique",
@@ -312,121 +313,63 @@ function loadCategoriesView() {
 
 
 /**
- * Question loading.
+ * Loads the question view by retrieving the information about it from the
+ * server.
  */
-function loadQuestionView(data) {
-    var category_id = data.options.category_id;
+function loadQuestionView(loadViewData) {
+    var category_id = loadViewData.options.category_id;
     var url = appConfig['Server-URL'] + "getQuestion.php";
     var data = {
         category_id: category_id,
-        level_id: nextLevel,
-        answered: answered
+        level_id: gameSession.getNextQuestionLevel(),
+        answered: gameSession.getAnsweredQuestions()
     };
     $.post(url, JSON.stringify(data), function (result) {
-            var lineMem = null;
-
-            if (answered.length !== 0) {
-                answered.forEach((item, index) => {
-                    if (item.category === category_id && item.level === nextLevel) {
-                        item.id.push(result.id);
-                        flag = true;
-                    }
-                });
-            }
-
-            if (!flag) {
-                lineMem = {
-                    category: category_id,
-                    level: nextLevel,
-                    id: [result.id],
-                };
-                answered.push(lineMem);
-            }
-            flag = false;
-            console.log(answered);
-
-            $("#question").text(result.question);
-            centerQuestion();
-            $('#scan-info-button').unbind().click(function () {
-                scanInfo();
+    	gameSession.logQuestion(result);
+    	$("#category-title").text(loadViewData.options.category_title);
+        $("#question").text(result.question);
+        // override previous response proposition button action with specific
+		// question data
+        $('#scan-res-button').unbind().click(function () {
+            var promise = scanAnswer(result.answers);
+            promise.then(function (value) {
+            	var shouldGiveClue = gameSession.logOutcome(value, function () {
+            		$.mobile.changePage('#categories-view');
+            	});
+            	if(shouldGiveClue) {
+            		// to do: give clue here
+            	}
             });
-            $('#scan-res-button').unbind().click(function () {
-                var promise = scanAnswer(result.answers);
-                promise.then(function (value) {
-                    var lineTrace = {
-                        id: null,
-                        categorie: null,
-                        niveau: null,
-                        state: null
-                    };
-                    // console.log(value);
-                    lineTrace.id = result.id;
-                    lineTrace.category = category_id;
-                    lineTrace.level = nextLevel;
-                    lineTrace.state = value;
-                    // console.log(lineTrace);
-                    trace.push(lineTrace);
-                    // console.log(trace);
-                    // console.log(trace);
-                    if (trace.length !== 0) {
-                        findNextLevel(trace);
-                        console.log("prochain niveau " + nextLevel);
-                    }
-                    // redirection si state diff de 0
-                    console.log(trace[trace.length - 1].state);
-                    if (trace[trace.length - 1].state !== 0) {
-                        $.mobile.changePage('#categories-view');
-                    }
-                });
-            });
-            hideLoader();
+        });
+        hideLoader();
+        centerQuestion();
     }, "json").error(function (err) {
+    	// handling server error
     	navigator.notification.alert("Une erreur est survenue lors de l'obtention d'une question de jeu.\nCode de status : " + err.status,
     			closeApp(),
     			"Erreur technique",
     			"Fermer l'application");
     });
-    hideLoader();
 }
 
 /**
- * Progression
+ * Loads the score view.
  */
-function findNextLevel(trace) {
-    var nbStateZero = 0;
-    var nbStateOne = 0;
-    var nbStateTwo = 0;
-    var idQuestion = trace[trace.length - 1].id;
-    var levelQuestion = trace[trace.length - 1].level;
-    for (var i = trace.length - 1; i >= 0; --i) {
-        /*
-		 * console.log(trace[i].id); console.log(trace[i].category);
-		 * console.log(trace[i].level); console.log(trace[i].state);
-		 */
-        if (idQuestion === trace[i].id) {
-            if (trace[i].state === 0) nbStateZero++;
-            if (trace[i].state === 1) nbStateOne++;
-            if (trace[i].state === 2) nbStateTwo++;
-        }
-        console.log("nombre succes " + nbStateOne);
-        console.log("nombre echec " + nbStateZero);
-        console.log("nombre abandon " + nbStateTwo);
-    }
-    // if(nbStateZero%2===0) //to do donner indice
-    if ((nbStateZero > 4 || nbStateTwo === 1) && levelQuestion > 1) {
-        // level down
-        --levelQuestion;
-    }
-    if ((nbStateZero < 2 && nbStateOne === 1) && levelQuestion < 3) {
-        // level up
-        ++levelQuestion;
-    }
-    nextLevel = levelQuestion;
+function loadScoreView() {
+	$("#score-container").text(gameSession.getScore());
+	hideLoader();
+	centerScore();
 }
+
+
+
 
 
 /** ----- SCAN INTERACTIONS ----- * */
 
+/**
+ * Allows to handle scan information action.
+ */
 function scanInfo() {
     cordova.plugins.barcodeScanner.scan(function (result) {
             alert(result.text);
@@ -443,12 +386,11 @@ function scanAnswer(answers) {
     return new Promise((resolve, reject) => {
         cordova.plugins.barcodeScanner.scan(function (result) {
                 if (isAnAnswer(result.text, answers)) {
-                    alert("Bonne réponse");
-                    resolve(1);
+                    resolve(gameSession.RIGHT_ANSWER);
                 } else {
                 	$("#wrong-answer").show();
                 	centerQuestion();
-                	resolve(0);
+                	resolve(gameSession.WRONG_ANSWER);
                 	// small timeout to prevent UI issue
                 	setTimeout(function() {
                         $("#question-content").effect("shake");
@@ -457,16 +399,16 @@ function scanAnswer(answers) {
                 		$("#wrong-answer").fadeOut(1000, centerQuestion);
                 	}, 3000);
                 }
-                reject(3);
             }, function (error) {
                 alert(JSON.stringify(error));
+                reject(3);
             }
         );
     });
 }
 
 /**
- * Proposition verifying.
+ * Allows to verify if the given answer is one of the right answers.
  */
 function isAnAnswer(proposition, answers) {
     for (var i = 0; i < answers.length; i++) {

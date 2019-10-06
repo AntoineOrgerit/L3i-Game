@@ -223,7 +223,30 @@ body {
     display: none;
 }
 
+.interaction-dialogs {
+	display: none;
+}
+
+.interaction-dialogs > .dialogs-infos {
+	font-style: italic;
+    text-transform: none;
+}
+
 /* ----------------------------------------------- END STYLE dialogs -----------------------------------------------*/
+
+/* ----------------------------------------------- STYLE categories-view ---------------------------------------------------*/
+
+#timer-container {
+	margin-top: 60px;
+	color: #49789F;
+}
+
+#timer {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+/* ----------------------------------------------- END STYLE categories-view -----------------------------------------------*/
 
 /* ----------------------------------------------- STYLE game-view ---------------------------------------------------*/
 #game-category {
@@ -257,6 +280,26 @@ body {
 
 /* --------------------------------------------- END STYLE game-view -------------------------------------------------*/
 
+/* --------------------------------------------- START STYLE timer -------------------------------------------------*/
+.timer-style {
+    font-size: large;
+}
+/* --------------------------------------------- END STYLE timer -------------------------------------------------*/
+
+/* --------------------------------------------- START STYLE score-view -------------------------------------------------*/
+#score-title {
+	margin-bottom: 40px;
+	font-size: 20px;
+	color: #49789F;
+}
+
+#score-container {
+	font-size: 50px;
+	font-weight: bold;
+	color: #49789F;
+}
+/* --------------------------------------------- END STYLE score-view -------------------------------------------------*/
+
 /*
 .ui-page-theme-d .ui-btn{
     background-color: #3dbbc2;
@@ -267,9 +310,4 @@ body {
 
 .ui-btn-icon-left:after, .ui-btn-icon-right:after, .ui-btn-icon-top:after, .ui-btn-icon-bottom:after, .ui-btn-icon-notext:after {
 	background-color: #49789F;
-}
-
-/* --------------------------------------------- START STYLE timer -------------------------------------------------*/
-.timer-style {
-    font-size: large;
 }

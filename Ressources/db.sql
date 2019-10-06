@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `l3igame` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `l3igame`;
 -- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: l3igame
@@ -51,6 +53,12 @@ DROP TABLE IF EXISTS `niveau`;
 CREATE TABLE `niveau` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `intitule` varchar(15) NOT NULL,
+  `points` int(11) NOT NULL,
+  `penalite_mauvaise_reponse` int(11) NOT NULL,
+  `temps_basse_limite` int(11) NOT NULL,
+  `temps_haute_limite` int(11) NOT NULL,
+  `coefficient_temps_basse_limite` float(4,2) NOT NULL,
+  `coefficient_temps_haute_limite` float(4,2) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   UNIQUE KEY `intitule_UNIQUE` (`intitule`)
@@ -63,7 +71,7 @@ CREATE TABLE `niveau` (
 
 LOCK TABLES `niveau` WRITE;
 /*!40000 ALTER TABLE `niveau` DISABLE KEYS */;
-INSERT INTO `niveau` VALUES (3,'Difficile'),(1,'Facile'),(2,'Moyen');
+INSERT INTO `niveau` VALUES (1,'Facile',100,5,210,300,1.10,0.90),(2,'Moyen',200,15,300,420,1.25,0.80),(3,'Difficile',300,22,420,540,1.35,0.70);
 /*!40000 ALTER TABLE `niveau` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,4 +169,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-09-23 11:44:13
+-- Dump completed on 2019-10-06 14:15:59
