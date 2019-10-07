@@ -29,6 +29,12 @@
 	<p class="dialogs-infos">Vous ne serez pas pénalisé, mais cette question ne vous rapportera pas de points.</p>
 </div>
 <!-- END DIALOG BACK BUTTONS -->
+<!-- BEGIN DIALOG SCORE LOG ISSUE -->
+<div id="score-log-error-dialog" class="interaction-dialogs" title="Erreur de communication">
+	<p>Une erreur de communication est survenue lors de l'envoi de votre score.</p>
+	<p class="dialogs-infos">Votre score ne sera pas comptabilisé au tableau des scores. Merci d'informer un responsable de cette erreur.</p>
+</div>
+<!-- END DIALOG SCORE LOG ISSUE -->
 	<div id="content" class="content">
 		<!-- START PAGE 1 - MENU -->
 		<div data-role="page" id="menu-view" data-theme="d">
@@ -51,7 +57,7 @@
 						<a id="start-button" href="#categories-view"
 							class="ui-btn ui-shadow ui-corner-all" data-role="button"
 							data-transition="none"></a>
-						<a id="score-button" href="#score-view" class="ui-btn ui-shadow ui-corner-all"
+						<a id="score-button" href="#leaderboard-view" class="ui-btn ui-shadow ui-corner-all"
 							data-role="button" data-transition="none">Scores</a>
 						<a id="help-button" href="#help-view"
 							class="ui-btn ui-shadow ui-corner-all" data-role="button">Aide</a>
@@ -73,7 +79,7 @@
     <div data-role="page" id="categories-view" data-theme="d">
         <!-- BEGIN HEADER TITLE -->
         <div data-role="header">
-            <a id="back-menu-btn-header" class="ui-btn-left ui-icon-arrow-l"
+            <a id="back-menu-from-categories-btn-header" class="ui-btn-left ui-icon-arrow-l"
                href="#" data-icon="arrow-l" data-iconpos="notext"
                data-transition="none"></a>
             <h1>Le mini-jeu de quizz</h1>
@@ -168,12 +174,12 @@
     </div>
     <!-- END PAGE 3 - GAME -->
     
-    <!-- START PAGE 4 - SCORE -->
+    <!-- START PAGE 4 - SCORE RESULT -->
     <div data-role="page" id="score-view" data-theme="d">
         <!-- BEGIN HEADER TITLE -->
         <div data-role="header" data-add-back-btn="true"
              data-position="fixed">
-            <a id="back-categories-btn-header" class="ui-btn-left"
+            <a id="back-menu-from-score-btn-header" class="ui-btn-left"
                href="#" data-icon="arrow-l" data-iconpos="notext"
                data-role="button" data-transition="none"></a>
             <h1>Le mini-jeu de quizz</h1>
@@ -209,7 +215,45 @@
         </div>
         <!-- END FIXED FOOTER -->
     </div>
-    <!-- END PAGE 4 - SCORE -->
+    <!-- END PAGE 4 - SCORE RESULT -->
+    
+    <!-- START PAGE 5 - SCORE LEADERBOARD -->
+    <div data-role="page" id="leaderboard-view" data-theme="d">
+        <!-- BEGIN HEADER TITLE -->
+        <div data-role="header" data-add-back-btn="true"
+             data-position="fixed">
+            <a id="back-menu-from-leaderboard-btn-header" class="ui-btn-left"
+               href="#" data-icon="arrow-l" data-iconpos="notext"
+               data-role="button" data-transition="none"></a>
+            <h1>Le mini-jeu de quizz</h1>
+        </div>
+        <!-- END HEADER TITLE -->
+        <div role="main" class="ui-content" >
+        	<br><br>
+        	<div class="center-wrapper">
+        		<h2 id="leaderboard-title">Tableau des meilleurs scores :</h2>
+        	</div>
+        	<br><br><br>
+      		<div class="">
+	        	<table id="leaderboard-table">
+	        		<thead>
+	        			<tr>
+	        				<th data-priority="persist">Rang</th>
+	        				<th data-priority="persist">Score</th>
+	        			</tr>
+	        		</thead>
+	        		<tbody id="leaderboard-scores">
+	        		</tbody>
+	        	</table>
+	        </div>
+        </div>
+        <!-- BEGIN FIXED FOOTER -->
+        <div data-role="footer" data-position="fixed">
+            <h4>L3i - La Rochelle Université</h4>
+        </div>
+        <!-- END FIXED FOOTER -->
+    </div>
+    <!-- END PAGE 5 - SCORE LEADERBOARD -->
 </div>
 <!------------------------------------------------------------------------------------------------- START SCRIPTS JS -->
 <script type="text/javascript" src="cordova.js"></script>

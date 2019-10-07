@@ -159,6 +159,31 @@ LOCK TABLES `reponse` WRITE;
 INSERT INTO `reponse` VALUES (103,'Adyson Magalhães Maia'),(119,'Ahmed Hamdi'),(4,'Alain Bouju'),(14,'Alain Gaugue'),(126,'Anh Thu Phan Ho'),(10,'Antoine Doucet'),(27,'Armelle Prigent'),(30,'Arnaud Revel'),(121,'Axel Jean-Caurent'),(113,'Bah Hui Tran'),(109,'Cécilia Ostertag'),(9,'Christophe Demko'),(127,'Christophe Rigaud'),(12,'Cyril Faucher'),(38,'Damien Mondou'),(102,'Duc Hung Luong'),(35,'El-Hadi Zahzah'),(36,'Elhadi Belghache'),(93,'Esteban Frossard'),(1,'Farid Ammar-Boudjelal'),(100,'Florian Lardeux'),(3,'Frédéric Bertrand'),(19,'Georges Louis'),(116,'Hamza Ben Ammar'),(98,'Hanen Khlif'),(40,'Hicham Slimani'),(120,'Hoang Nam Ho'),(37,'Ismaël Bennis'),(24,'Jacques Morcos'),(18,'Jamal Khamlichi'),(20,'Jamal Malki'),(5,'Jean-Christophe Burie'),(33,'Jean-François Viaud'),(17,'Jean-Loup Guillaume'),(26,'Jean-Marc Ogier'),(92,'Jordan Drapeau'),(114,'Joris Voerman'),(104,'Julien Maitre'),(128,'Kais Rouis'),(2,'Karell Bertet'),(87,'Lady Viviana Beltrán Beltrán'),(122,'Louisa Kessi'),(97,'Made Windu Antara Kesiman'),(117,'Marie Neige Chapel'),(32,'Marie-Hélène Verrons Baudoux'),(95,'Marwa Hamdi'),(31,'Matthieu Robert'),(22,'Michel Ménard'),(8,'Mickaël Coustaty'),(15,'Mohamed Yacine Ghamri-Doudane'),(106,'Mohammad Nasiruddin'),(28,'Mourad Rabah'),(34,'Muriel Visani'),(124,'Nhu Khoa Nguyen'),(125,'Nhu Van Nguyen'),(39,'Nicolas Sidere'),(112,'Nicolas Texier'),(96,'Noudehouenou Lionel Jaderne Houssou'),(94,'Nour Haidar'),(129,'Nouredine Tamani'),(11,'Pascal Estraillier'),(29,'Patrice Raveneau'),(13,'Patrick Franco'),(16,'Petra Gomez-Krämer'),(118,'Quoc Bao Dang'),(25,'Rémy Mullot'),(6,'Ronan Champagnat'),(115,'Sabrine Aroua'),(88,'Salah Eddine Boukhetta'),(89,'Soraya Chachoua'),(21,'Sylvain Marchand'),(23,'Sylvain Michelin'),(101,'Than Nam Le'),(107,'Thanh Khoa Nguyen'),(108,'Thi Tuyet Hai Nguyen'),(91,'Thierry Deschamps-De-Paillette'),(110,'Valentin Owczarek'),(7,'Vincent Courboulay'),(105,'Vincent Merelle'),(111,'Vincent Poulain D\'andecy'),(90,'Vinh Loc Cu'),(99,'Wafa Khlif'),(85,'Zied Aouini'),(123,'Zuheng Ming');
 /*!40000 ALTER TABLE `reponse` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `score`
+--
+
+DROP TABLE IF EXISTS `score`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `score` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `value` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `score`
+--
+
+LOCK TABLES `score` WRITE;
+/*!40000 ALTER TABLE `score` DISABLE KEYS */;
+INSERT INTO `score` VALUES (1,110),(2,110),(3,10),(4,150),(5,600),(6,635),(7,815),(8,30),(9,565),(10,280),(11,320),(12,110);
+/*!40000 ALTER TABLE `score` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -169,4 +194,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-06 14:15:59
+-- Dump completed on 2019-10-07 19:09:16

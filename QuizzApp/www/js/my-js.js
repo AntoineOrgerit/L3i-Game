@@ -128,7 +128,7 @@ $("#categories-back-dialog").dialog({
 /**
  * Handles the back button action on the categories view.
  */
-$("#back-menu-btn-header").click(function(event) {
+$("#back-menu-from-categories-btn-header").click(function(event) {
 	event.preventDefault();
 	$("#categories-back-dialog").dialog("open");
 });
@@ -159,6 +159,37 @@ $("#game-back-dialog").dialog({
 $("#back-categories-btn-header").click(function(event) {
 	event.preventDefault();
 	$("#game-back-dialog").dialog("open");
+});
+
+/**
+ * Defines the HTML object as the dialog for score logging issue.
+ */
+$("#score-log-error-dialog").dialog({
+	autoOpen: false,
+	dialogClass: "no-close",
+	modal: true,
+	buttons: {
+		"OK": function(event) {
+			event.preventDefault();
+			$("#game-back-dialog").dialog("close");
+		}
+	}
+});
+
+/**
+ * Handles the back button action on the score view.
+ */
+$("#back-menu-from-score-btn-header").click(function(event) {
+	event.preventDefault();
+	$.mobile.changePage('#menu-view');
+});
+
+/**
+ * Handles the back button action on the leaderboard view.
+ */
+$("#back-menu-from-leaderboard-btn-header").click(function(event) {
+	event.preventDefault();
+	$.mobile.changePage('#menu-view');
 });
 
 /**
@@ -231,7 +262,8 @@ $(document).on("pagebeforechange", function (e, data) {
         	// creating game session if it does not exist
         	if(gameSession == null) {
         		gameSession = new GameSession(new Timer("decrement", initTime, "#timer", function () {
-                    $.mobile.changePage('#score-view');
+        			logScoreInDatabase(gameSession.getScore());
+        			$.mobile.changePage('#score-view');
                 }), new Timer("increment", 0), 1);
         	}
         	// if it was previously paused or just created, resume it
@@ -255,9 +287,25 @@ $(document).on("pagebeforechange", function (e, data) {
         case "score-view":
         	loadScoreView();
         	break;
+        case "leaderboard-view":
+        	loadLeaderboardView();
+        	break;
         default:
     }
 });
+
+/**
+ * Allows to log a score value to the online database.
+ */
+function logScoreInDatabase(score) {
+	var url = appConfig['Server-URL'] + "addScore.php";
+    var data = {
+        score: score
+    };
+	$.post(url, JSON.stringify(data), function(result) {
+		// if we have a result, an error occured
+	});
+}
 
 
 
@@ -359,6 +407,26 @@ function loadScoreView() {
 	$("#score-container").text(gameSession.getScore());
 	hideLoader();
 	centerScore();
+}
+
+/**
+ * Loads the leaderboard view by retrieving the top 10 scores from the server.
+ */
+function loadLeaderboardView() {
+	var url = appConfig['Server-URL'] + "getLeaderboard.php";
+	$.get(url, function(result) {
+		result.leaderboard.forEach(function(item, index) {
+			$("#leaderboard-scores").append("<tr><td>" + (index + 1) + "</td><td>" + item + "</td></tr>");
+		});
+		hideLoader();
+	}).error(function (err) {
+		// to do
+    	// handling server error
+    	/*navigator.notification.alert("Une erreur est survenue lors de l'obtention d'une question de jeu.\nCode de status : " + err.status,
+    			closeApp(),
+    			"Erreur technique",
+    			"Fermer l'application");*/
+    });
 }
 
 

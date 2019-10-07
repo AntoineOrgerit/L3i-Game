@@ -287,6 +287,7 @@ body {
 /* --------------------------------------------- END STYLE timer -------------------------------------------------*/
 
 /* --------------------------------------------- START STYLE score-view -------------------------------------------------*/
+
 #score-title {
 	margin-bottom: 40px;
 	font-size: 20px;
@@ -298,7 +299,42 @@ body {
 	font-weight: bold;
 	color: #49789F;
 }
+
 /* --------------------------------------------- END STYLE score-view -------------------------------------------------*/
+
+/* --------------------------------------------- START STYLE leaderboard-view -------------------------------------------------*/
+
+#leaderboard-table {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-collapse: collapse;
+}
+
+#leaderboard-table th {
+	text-align: center;
+}
+
+#leaderboard-table td {
+	text-align: center;
+}
+
+#leaderboard-table td:last-child {
+	font-weight: bold;
+	color: #49789F;
+}
+
+#leaderboard-scores tr {
+	font-size: 20px;
+	height: 40px;
+	border-bottom: 1px solid #49789F;
+}
+
+#leaderboard-scores tr:last-child {
+	border-bottom: none;
+}
+
+/* --------------------------------------------- END STYLE leaderboard-view -------------------------------------------------*/
 
 /*
 .ui-page-theme-d .ui-btn{
