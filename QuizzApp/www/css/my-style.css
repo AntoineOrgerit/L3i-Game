@@ -232,6 +232,27 @@ body {
     text-transform: none;
 }
 
+#right-answer-dialog {
+	background-color: #34c924 !important;
+}
+
+.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.no-close.ui-dialog-buttons.ui-draggable.ui-resizable[aria-describedby="right-answer-dialog"] {
+	background-color: #34c924 !important;
+}
+
+.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.no-close.ui-dialog-buttons.ui-draggable.ui-resizable[aria-describedby="right-answer-dialog"] .ui-dialog-titlebar.ui-corner-all.ui-widget-header.ui-helper-clearfix.ui-draggable-handle {
+	background-color: #34c924;
+	border: none;
+	color: black;
+	margin-top: 7px;
+}
+
+.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.no-close.ui-dialog-buttons.ui-draggable.ui-resizable[aria-describedby="right-answer-dialog"] .ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix {
+	background-color: #34c924;
+    border: none;
+    margin-top: 0;
+}
+
 /* ----------------------------------------------- END STYLE dialogs -----------------------------------------------*/
 
 /* ----------------------------------------------- STYLE categories-view ---------------------------------------------------*/

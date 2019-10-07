@@ -103,7 +103,9 @@ function centerScore() {
 
 
 
-/** ----- USER GAME INTERACTIONS ----- * */
+/** ----- USER GAME INTERACTIONS ----- **/
+
+var rightAnswerRedirectionTimeout;
 
 /**
  * Defines the HTML object as the dialog to exit categories.
@@ -154,6 +156,39 @@ $("#game-back-dialog").dialog({
 });
 
 /**
+ * Defines the HTML object as the right answer dialog.
+ */
+$("#info-scan-dialog").dialog({
+	autoOpen: false,
+	dialogClass: "no-close",
+	width: $(window).width() * 0.8,
+	modal: true,
+	buttons: {
+		"Fermer": function(event) {
+			event.preventDefault();
+			$("#info-scan-dialog").dialog("close");
+		}
+	}
+});
+
+/**
+ * Defines the HTML object as the right answer dialog.
+ */
+$("#right-answer-dialog").dialog({
+	autoOpen: false,
+	dialogClass: "no-close",
+	modal: true,
+	buttons: {
+		"Question suivante": function(event) {
+			event.preventDefault();
+			clearTimeout(rightAnswerRedirectionTimeout);
+			$("#right-answer-dialog").dialog("close");
+			$.mobile.changePage('#categories-view');
+		}
+	}
+});
+
+/**
  * Handles the back button action on the game view.
  */
 $("#back-categories-btn-header").click(function(event) {
@@ -171,7 +206,7 @@ $("#score-log-error-dialog").dialog({
 	buttons: {
 		"OK": function(event) {
 			event.preventDefault();
-			$("#game-back-dialog").dialog("close");
+			$("#score-log-error-dialog").dialog("close");
 		}
 	}
 });
@@ -191,6 +226,17 @@ $("#back-menu-from-leaderboard-btn-header").click(function(event) {
 	event.preventDefault();
 	$.mobile.changePage('#menu-view');
 });
+
+/**
+ * Allows to close all dialogs objects.
+ */
+function closeAllDialogs() {
+	$("#categories-back-dialog").dialog("close");
+	$("#game-back-dialog").dialog("close");
+	$("info-scan-dialog").dialog("close");
+	$("#right-answer-dialog").dialog("close");
+	$("#score-log-error-dialog").dialog("close");
+}
 
 /**
  * Handles the exit button on the menu view.
@@ -236,7 +282,8 @@ document.addEventListener("backbutton", function(event) {
 
 /** ----- GENERAL ROUTING ACTIONS FOR THE GAME ----- * */
 
-var initTime = 0.3 * 60;
+//var initTime = 0.3 * 60;
+var initTime = 4 * 60;
 var gameSession = null;
 
 /**
@@ -262,6 +309,7 @@ $(document).on("pagebeforechange", function (e, data) {
         	// creating game session if it does not exist
         	if(gameSession == null) {
         		gameSession = new GameSession(new Timer("decrement", initTime, "#timer", function () {
+        			closeAllDialogs();
         			logScoreInDatabase(gameSession.getScore());
         			$.mobile.changePage('#score-view');
                 }), new Timer("increment", 0), 1);
@@ -382,7 +430,11 @@ function loadQuestionView(loadViewData) {
             var promise = scanAnswer(result.answers);
             promise.then(function (value) {
             	var shouldGiveClue = gameSession.logOutcome(value, function () {
-            		$.mobile.changePage('#categories-view');
+            		$("#right-answer-dialog").dialog("open");
+            		rightAnswerRedirectionTimeout = setTimeout(function() {
+            			$("#right-answer-dialog").dialog("close");
+            			$.mobile.changePage('#categories-view');
+            		}, 2000);
             	});
             	if(shouldGiveClue) {
             		// to do: give clue here
@@ -420,12 +472,7 @@ function loadLeaderboardView() {
 		});
 		hideLoader();
 	}).error(function (err) {
-		// to do
-    	// handling server error
-    	/*navigator.notification.alert("Une erreur est survenue lors de l'obtention d'une question de jeu.\nCode de status : " + err.status,
-    			closeApp(),
-    			"Erreur technique",
-    			"Fermer l'application");*/
+		$("#score-log-error-dialog").dialog("open");
     });
 }
 
@@ -440,9 +487,11 @@ function loadLeaderboardView() {
  */
 function scanInfo() {
     cordova.plugins.barcodeScanner.scan(function (result) {
-            alert(result.text);
+    		$("#info-scan-content").text(result.text);
+    		$("#info-scan-dialog").dialog("open");
         }, function (error) {
-            alert(JSON.stringify(error));
+        	$("#info-scan-content").text(error);
+    		$("#info-scan-dialog").dialog("open");
         }
     )
 }
@@ -468,7 +517,8 @@ function scanAnswer(answers) {
                 	}, 3000);
                 }
             }, function (error) {
-                alert(JSON.stringify(error));
+            	$("#info-scan-content").text(error);
+        		$("#info-scan-dialog").dialog("open");
                 reject(3);
             }
         );
