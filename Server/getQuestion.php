@@ -31,6 +31,7 @@ $result = $stmt->get_result();
 $data = new stdClass();
 $row = $result->fetch_object();
 $data->id = $row->id;
+$data->category_id = $json->category_id;
 $data->question = $row->intitule;
 $data->answers = array();
 
@@ -50,6 +51,19 @@ while($row = $result->fetch_object()) {
     $answer->intitule = $row_answer->intitule;
     $data->answers[] = $answer;
 }
+
+// getting scoring information
+$stmt = $con->prepare("select * from `niveau` where id=?;");
+$stmt->bind_param('i', $json->level_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_object();
+$data->points = $row->points;
+$data->wrong_answer_penalty = $row->penalite_mauvaise_reponse;
+$data->lower_time_bound = $row->temps_basse_limite;
+$data->higher_time_bound = $row->temps_haute_limite;
+$data->lower_bound_multiplier = $row->coefficient_temps_basse_limite;
+$data->higher_bound_multiplier = $row->coefficient_temps_haute_limite;
 
 echo json_encode($data);
 

@@ -223,7 +223,51 @@ body {
     display: none;
 }
 
+.interaction-dialogs {
+	display: none;
+}
+
+.interaction-dialogs > .dialogs-infos {
+	font-style: italic;
+    text-transform: none;
+}
+
+#right-answer-dialog {
+	background-color: #34c924 !important;
+}
+
+.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.no-close.ui-dialog-buttons.ui-draggable.ui-resizable[aria-describedby="right-answer-dialog"] {
+	background-color: #34c924 !important;
+}
+
+.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.no-close.ui-dialog-buttons.ui-draggable.ui-resizable[aria-describedby="right-answer-dialog"] .ui-dialog-titlebar.ui-corner-all.ui-widget-header.ui-helper-clearfix.ui-draggable-handle {
+	background-color: #34c924;
+	border: none;
+	color: black;
+	margin-top: 7px;
+}
+
+.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.no-close.ui-dialog-buttons.ui-draggable.ui-resizable[aria-describedby="right-answer-dialog"] .ui-dialog-buttonpane.ui-widget-content.ui-helper-clearfix {
+	background-color: #34c924;
+    border: none;
+    margin-top: 0;
+}
+
 /* ----------------------------------------------- END STYLE dialogs -----------------------------------------------*/
+
+/* ----------------------------------------------- STYLE categories-view ---------------------------------------------------*/
+
+#timer-container {
+	margin-top: 60px;
+	color: #49789F;
+}
+
+#timer {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+/* ----------------------------------------------- END STYLE categories-view -----------------------------------------------*/
 
 /* ----------------------------------------------- STYLE game-view ---------------------------------------------------*/
 #game-category {
@@ -257,6 +301,62 @@ body {
 
 /* --------------------------------------------- END STYLE game-view -------------------------------------------------*/
 
+/* --------------------------------------------- START STYLE timer -------------------------------------------------*/
+.timer-style {
+    font-size: large;
+}
+/* --------------------------------------------- END STYLE timer -------------------------------------------------*/
+
+/* --------------------------------------------- START STYLE score-view -------------------------------------------------*/
+
+#score-title {
+	margin-bottom: 40px;
+	font-size: 20px;
+	color: #49789F;
+}
+
+#score-container {
+	font-size: 50px;
+	font-weight: bold;
+	color: #49789F;
+}
+
+/* --------------------------------------------- END STYLE score-view -------------------------------------------------*/
+
+/* --------------------------------------------- START STYLE leaderboard-view -------------------------------------------------*/
+
+#leaderboard-table {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-collapse: collapse;
+}
+
+#leaderboard-table th {
+	text-align: center;
+}
+
+#leaderboard-table td {
+	text-align: center;
+}
+
+#leaderboard-table td:last-child {
+	font-weight: bold;
+	color: #49789F;
+}
+
+#leaderboard-scores tr {
+	font-size: 20px;
+	height: 40px;
+	border-bottom: 1px solid #49789F;
+}
+
+#leaderboard-scores tr:last-child {
+	border-bottom: none;
+}
+
+/* --------------------------------------------- END STYLE leaderboard-view -------------------------------------------------*/
+
 /*
 .ui-page-theme-d .ui-btn{
     background-color: #3dbbc2;
@@ -267,9 +367,4 @@ body {
 
 .ui-btn-icon-left:after, .ui-btn-icon-right:after, .ui-btn-icon-top:after, .ui-btn-icon-bottom:after, .ui-btn-icon-notext:after {
 	background-color: #49789F;
-}
-
-/* --------------------------------------------- START STYLE timer -------------------------------------------------*/
-.timer-style {
-    font-size: large;
 }
