@@ -13,6 +13,9 @@ function GameSession(globalTimer, questionTimer, initLevel) {
 	var score = 0;
 	var currentQuestionScoringSystem = null;
 	
+	/** ----- HINTS INFORMATION ----- * */
+	var currentHintSystem = null;
+	
 	/** ----- STATIC VARIABLES ----- * */
 	this.WRONG_ANSWER = 0;
 	this.RIGHT_ANSWER = 1;
@@ -150,8 +153,10 @@ function GameSession(globalTimer, questionTimer, initLevel) {
                 id: [question.id]
 			});
         }
-		currentQuestionScoringSystem = question;
+		currentQuestionScoringSystem = question.scoring_system;
+		currentQuestionScoringSystem.id = question.id;
 		currentQuestionScoringSystem.number_wrong_answers = 0;
+		currentHintSystem = question.hints;
 	}
 	
 	/**
@@ -172,17 +177,26 @@ function GameSession(globalTimer, questionTimer, initLevel) {
 				level: nextLevel,
 				state: state
 			});
-			var shouldGiveClue = findNextLevel();
+			var shouldGiveHint = findNextLevel();
 			if(state === this.RIGHT_ANSWER) {
+				currentHintSystem = null;
 				updateScore();
 			} else if (state === this.ABORT_QUESTION) {
 				currentQuestionScoringSystem = null;
+				currentHintSystem = null;
 			}
 			if(state === this.RIGHT_ANSWER && onRightAnswer !== undefined) {
 				onRightAnswer();
 			}
-			return shouldGiveClue;
+			return shouldGiveHint;
 		}
+	}
+	
+	/**
+	 * Allows to retrieve the next to offer.
+	 */
+	this.getNextHint = function () {
+		return currentHintSystem.shift();
 	}
 	
 	/**

@@ -106,6 +106,7 @@ function centerScore() {
 /** ----- USER GAME INTERACTIONS ----- **/
 
 var rightAnswerRedirectionTimeout;
+var hintButtonAnimationInterval;
 
 /**
  * Defines the HTML object as the dialog to exit categories.
@@ -172,6 +173,22 @@ $("#info-scan-dialog").dialog({
 });
 
 /**
+ * Defines the HTML object as the hints dialog.
+ */
+$("#hints-dialog").dialog({
+	autoOpen: false,
+	dialogClass: "no-close",
+	width: $(window).width() * 0.8,
+	modal: true,
+	buttons: {
+		"Fermer": function(event) {
+			event.preventDefault();
+			$("#hints-dialog").dialog("close");
+		}
+	}
+});
+
+/**
  * Defines the HTML object as the right answer dialog.
  */
 $("#right-answer-dialog").dialog({
@@ -192,6 +209,14 @@ $("#right-answer-dialog").dialog({
  * Handles the back button action on the game view.
  */
 $("#back-categories-btn-header").click(function(event) {
+	event.preventDefault();
+	$("#game-back-dialog").dialog("open");
+});
+
+/**
+ * Handles the skip button action on the game view.
+ */
+$("#skip-button").click(function(event) {
 	event.preventDefault();
 	$("#game-back-dialog").dialog("open");
 });
@@ -233,6 +258,7 @@ $("#back-menu-from-leaderboard-btn-header").click(function(event) {
 function closeAllDialogs() {
 	$("#categories-back-dialog").dialog("close");
 	$("#game-back-dialog").dialog("close");
+	$("hints-dialog").dialog("close");
 	$("info-scan-dialog").dialog("close");
 	$("#right-answer-dialog").dialog("close");
 	$("#score-log-error-dialog").dialog("close");
@@ -250,6 +276,14 @@ $("#exit-button").click(function(event) {
  * Handles informations scan for questions action.
  */
 $('#scan-info-button').unbind().click(scanInfo);
+
+/**
+ * Handles hints display for questions action.
+ */
+$("#hints-button").unbind().click(function() {
+	$("#hints-dialog").dialog("open");
+	clearInterval(hintButtonAnimationInterval);
+});
 
 
 
@@ -429,15 +463,26 @@ function loadQuestionView(loadViewData) {
         $('#scan-res-button').unbind().click(function () {
             var promise = scanAnswer(result.answers);
             promise.then(function (value) {
-            	var shouldGiveClue = gameSession.logOutcome(value, function () {
+            	var shouldGiveHint = gameSession.logOutcome(value, function () {
             		$("#right-answer-dialog").dialog("open");
             		rightAnswerRedirectionTimeout = setTimeout(function() {
             			$("#right-answer-dialog").dialog("close");
             			$.mobile.changePage('#categories-view');
             		}, 2000);
             	});
-            	if(shouldGiveClue) {
-            		// to do: give clue here
+            	if(shouldGiveHint) {
+            		var hint = gameSession.getNextHint();
+            		if(hint !== undefined) {
+            			$("#hints-dialog").append("<p class='dialogs-infos'>" + hint.content + "</p>");
+            			if($("#hints-button").hasClass("ui-state-disabled")) {
+            				$("#hints-button").removeClass("ui-state-disabled");
+            			}
+            			hintButtonAnimationInterval = setInterval(function() {
+            				$("#hints-button").animate({"color": "white", "background-color": "#49789F"}, 500, function() {
+            					$("#hints-button").animate({"color": "#49789F", "background-color": "white"}, 500);
+            				});
+            			}, 3000);
+            		}
             	}
             });
         });
