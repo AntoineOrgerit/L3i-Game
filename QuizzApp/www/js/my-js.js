@@ -30,18 +30,15 @@ $(document).on("mobileinit", function () {
  * been opened programmatically.
  */
 function closeApp() {
-	if (navigator.app) {
-	    navigator.app.exitApp();
-	} else if (navigator.device) {
-	    navigator.device.exitApp();
-	} else {
-		// can't exit application in browser
-		$.mobile.back();
-	}
+    if (navigator.app) {
+        navigator.app.exitApp();
+    } else if (navigator.device) {
+        navigator.device.exitApp();
+    } else {
+        // can't exit application in browser
+        $.mobile.back();
+    }
 }
-
-
-
 
 
 /** ----- LOADER SETTINGS ----- * */
@@ -50,37 +47,35 @@ function closeApp() {
  * Displays the loader until the resources are loaded, or exit the application
  * if no connection to the server.
  */
-$(window).load(function() {
-	$.ajax({url: appConfig['Server-URL'] + "db.php",
-	    type: "HEAD",
-	    timeout: 3000,
-	    error: function(response) {
-	    	navigator.notification.alert("Une erreur de connexion avec le serveur est survenue.\nCode de status : " + response.status,
-	    			closeApp(),
-	    			"Erreur de connexion",
-	    			"Fermer l'application");
-	    }
-	});
+$(window).load(function () {
+    $.ajax({
+        url: appConfig['Server-URL'] + "db.php",
+        type: "HEAD",
+        timeout: 3000,
+        error: function (response) {
+            navigator.notification.alert("Une erreur de connexion avec le serveur est survenue.\nCode de status : " + response.status,
+                closeApp(),
+                "Erreur de connexion",
+                "Fermer l'application");
+        }
+    });
 });
 
 /**
  * Allows to display the loader on the application.
  */
 function showLoader() {
-	$("#content").hide();
-	$("#spinner").show();
+    $("#content").hide();
+    $("#spinner").show();
 }
 
 /**
  * Allows to hide the loader on the application.
  */
 function hideLoader() {
-	$("#content").show();
-	$("#spinner").hide();
+    $("#content").show();
+    $("#spinner").hide();
 }
-
-
-
 
 
 /** ----- STYLING ----- * */
@@ -89,161 +84,200 @@ function hideLoader() {
  * Allows to center the question information on the question view.
  */
 function centerQuestion() {
-	$('#question-content').css('margin-top',($("#game-view").height() - $('#question-content').outerHeight())/2);
+    $('#question-content').css('margin-top', ($("#game-view").height() - $('#question-content').outerHeight()) / 2);
 }
 
 /**
  * Allows to center the score information on the score view.
  */
 function centerScore() {
-	$('#score-content').css('margin-top',($("#score-view").height() - $('#score-content').outerHeight() - $("#score-view div[data-role='header']").outerHeight())/2);
+    $('#score-content').css('margin-top', ($("#score-view").height() - $('#score-content').outerHeight() - $("#score-view div[data-role='header']").outerHeight()) / 2);
 }
-
-
-
 
 
 /** ----- USER GAME INTERACTIONS ----- **/
 
 var rightAnswerRedirectionTimeout;
+var hintButtonAnimationInterval;
 
 /**
  * Defines the HTML object as the dialog to exit categories.
  */
 $("#categories-back-dialog").dialog({
-	autoOpen: false,
-	dialogClass: "no-close",
-	modal: true,
-	buttons: {
-		"Oui": function(event) {
-			event.preventDefault();
-			$("#categories-back-dialog").dialog("close");
-			$.mobile.changePage('#menu-view');
-		},
-		"Non": function(event) {
-			event.preventDefault();
-			$("#categories-back-dialog").dialog("close");
-		}
-	}
+    autoOpen: false,
+    dialogClass: "no-close",
+    modal: true,
+    buttons: {
+        "Oui": function (event) {
+            event.preventDefault();
+            $("#categories-back-dialog").dialog("close");
+            $.mobile.changePage('#menu-view');
+        },
+        "Non": function (event) {
+            event.preventDefault();
+            $("#categories-back-dialog").dialog("close");
+        }
+    }
 });
 
 /**
  * Handles the back button action on the categories view.
  */
-$("#back-menu-from-categories-btn-header").click(function(event) {
-	event.preventDefault();
-	$("#categories-back-dialog").dialog("open");
+$("#back-menu-from-categories-btn-header").click(function (event) {
+    event.preventDefault();
+    $("#categories-back-dialog").dialog("open");
 });
 
 /**
  * Defines the HTML object as the dialog to exit a question.
  */
 $("#game-back-dialog").dialog({
-	autoOpen: false,
-	dialogClass: "no-close",
-	modal: true,
-	buttons: {
-		"Oui": function(event) {
-			event.preventDefault();
-			$("#game-back-dialog").dialog("close");
-			$.mobile.changePage('#categories-view');
-		},
-		"Non": function(event) {
-			event.preventDefault();
-			$("#game-back-dialog").dialog("close");
-		}
-	}
+    autoOpen: false,
+    dialogClass: "no-close",
+    modal: true,
+    buttons: {
+        "Oui": function (event) {
+            event.preventDefault();
+            $("#game-back-dialog").dialog("close");
+            $.mobile.changePage('#categories-view');
+        },
+        "Non": function (event) {
+            event.preventDefault();
+            $("#game-back-dialog").dialog("close");
+        }
+    }
 });
 
 /**
  * Defines the HTML object as the right answer dialog.
  */
 $("#info-scan-dialog").dialog({
-	autoOpen: false,
-	dialogClass: "no-close",
-	width: $(window).width() * 0.8,
-	modal: true,
-	buttons: {
-		"Fermer": function(event) {
-			event.preventDefault();
-			$("#info-scan-dialog").dialog("close");
-		}
-	}
+    autoOpen: false,
+    dialogClass: "no-close",
+    width: $(window).width() * 0.8,
+    modal: true,
+    buttons: {
+        "Fermer": function (event) {
+            event.preventDefault();
+            $("#info-scan-dialog").dialog("close");
+        }
+    }
+});
+
+/**
+ * Defines the HTML object as the hints dialog.
+ */
+$("#hints-dialog").dialog({
+    autoOpen: false,
+    dialogClass: "no-close",
+    width: $(window).width() * 0.8,
+    modal: true,
+    buttons: {
+        "Fermer": function (event) {
+            event.preventDefault();
+            $("#hints-dialog").dialog("close");
+        }
+    }
 });
 
 /**
  * Defines the HTML object as the right answer dialog.
  */
 $("#right-answer-dialog").dialog({
-	autoOpen: false,
-	dialogClass: "no-close",
-	modal: true,
-	buttons: {
-		"Question suivante": function(event) {
-			event.preventDefault();
-			clearTimeout(rightAnswerRedirectionTimeout);
-			$("#right-answer-dialog").dialog("close");
-			$.mobile.changePage('#categories-view');
-		}
-	}
+    autoOpen: false,
+    dialogClass: "no-close",
+    modal: true,
+    buttons: {
+        "Question suivante": function (event) {
+            event.preventDefault();
+            clearTimeout(rightAnswerRedirectionTimeout);
+            $("#right-answer-dialog").dialog("close");
+            $.mobile.changePage('#categories-view');
+        }
+    }
 });
 
 /**
  * Handles the back button action on the game view.
  */
-$("#back-categories-btn-header").click(function(event) {
-	event.preventDefault();
-	$("#game-back-dialog").dialog("open");
+$("#back-categories-btn-header").click(function (event) {
+    event.preventDefault();
+    $("#game-back-dialog").dialog("open");
+});
+
+/**
+ * Handles the skip button action on the game view.
+ */
+$("#skip-button").click(function (event) {
+    event.preventDefault();
+    $("#game-back-dialog").dialog("open");
 });
 
 /**
  * Defines the HTML object as the dialog for score logging issue.
  */
 $("#score-log-error-dialog").dialog({
-	autoOpen: false,
-	dialogClass: "no-close",
-	modal: true,
-	buttons: {
-		"OK": function(event) {
-			event.preventDefault();
-			$("#score-log-error-dialog").dialog("close");
-		}
-	}
+    autoOpen: false,
+    dialogClass: "no-close",
+    modal: true,
+    buttons: {
+        "OK": function (event) {
+            event.preventDefault();
+            $("#score-log-error-dialog").dialog("close");
+        }
+    }
 });
 
 /**
  * Handles the back button action on the score view.
  */
-$("#back-menu-from-score-btn-header").click(function(event) {
-	event.preventDefault();
-	$.mobile.changePage('#menu-view');
+$("#back-menu-from-score-btn-header").click(function (event) {
+    event.preventDefault();
+    $.mobile.changePage('#menu-view');
 });
 
 /**
  * Handles the back button action on the leaderboard view.
  */
-$("#back-menu-from-leaderboard-btn-header").click(function(event) {
-	event.preventDefault();
-	$.mobile.changePage('#menu-view');
+$("#back-menu-from-leaderboard-btn-header").click(function (event) {
+    event.preventDefault();
+    $.mobile.changePage('#menu-view');
+});
+
+/**
+ * Handles the back button action on the help view.
+ */
+$("#back-menu-from-help-btn-header").click(function (event) {
+    event.preventDefault();
+    $.mobile.changePage('#menu-view');
+});
+
+/**
+ * Handles the back button action on the about view.
+ */
+$("#back-menu-from-about-btn-header").click(function (event) {
+    event.preventDefault();
+    $.mobile.changePage('#menu-view');
 });
 
 /**
  * Allows to close all dialogs objects.
  */
 function closeAllDialogs() {
-	$("#categories-back-dialog").dialog("close");
-	$("#game-back-dialog").dialog("close");
-	$("info-scan-dialog").dialog("close");
-	$("#right-answer-dialog").dialog("close");
-	$("#score-log-error-dialog").dialog("close");
+    $("#categories-back-dialog").dialog("close");
+    $("#game-back-dialog").dialog("close");
+    $("hints-dialog").dialog("close");
+    $("info-scan-dialog").dialog("close");
+    $("#right-answer-dialog").dialog("close");
+    $("#score-log-error-dialog").dialog("close");
 }
 
 /**
  * Handles the exit button on the menu view.
  */
-$("#exit-button").click(function(event) {
-	event.preventDefault();
-	closeApp();
+$("#exit-button").click(function (event) {
+    event.preventDefault();
+    closeApp();
 });
 
 /**
@@ -251,8 +285,13 @@ $("#exit-button").click(function(event) {
  */
 $('#scan-info-button').unbind().click(scanInfo);
 
-
-
+/**
+ * Handles hints display for questions action.
+ */
+$("#hints-button").unbind().click(function () {
+    $("#hints-dialog").dialog("open");
+    clearInterval(hintButtonAnimationInterval);
+});
 
 
 /** ----- ANDROID BACK BUTTON OVERRIDE ----- * */
@@ -260,84 +299,89 @@ $('#scan-info-button').unbind().click(scanInfo);
 /**
  * Overrides the Android system back button action.
  */
-document.addEventListener("backbutton", function(event) {
-	event.preventDefault();
-	switch($.mobile.activePage.attr("id")) {
-	case "menu-view":
-		closeApp();
-		break;
-	case "game-view":
-		$("#game-back-dialog").dialog("open");
-		break;
-	case "categories-view":
-		$("#categories-back-dialog").dialog("open");
-		break;
-	default:
-	}
+document.addEventListener("backbutton", function (event) {
+    event.preventDefault();
+    switch ($.mobile.activePage.attr("id")) {
+        case "menu-view":
+            closeApp();
+            break;
+        case "game-view":
+            $("#game-back-dialog").dialog("open");
+            break;
+        case "categories-view":
+            $("#categories-back-dialog").dialog("open");
+            break;
+        default:
+    }
 }, false);
-
-
-
 
 
 /** ----- GENERAL ROUTING ACTIONS FOR THE GAME ----- * */
 
 //var initTime = 0.3 * 60;
-var initTime = 4 * 60;
+var initTime = 1 * 60;
 var gameSession = null;
 
 /**
  * Allows to route the different page loading to specific actions.
  */
 $(document).on("pagebeforechange", function (e, data) {
-	showLoader();
-	// switching on destination page ID to do specific actions
+    showLoader();
+    // switching on destination page ID to do specific actions
     switch (data.toPage[0].id) {
         case "menu-view":
             if (gameSession !== null) {
-            	// destroying game session if finished, or pausing it if saved
-				// in memory
-            	if(gameSession.hasEnded()) {
+                // destroying game session if finished, or pausing it if saved
+                // in memory
+                if (gameSession.hasEnded()) {
                     gameSession = null;
-            	} else {
-            		gameSession.pause();
-            	}
+                } else {
+                    gameSession.pause();
+                }
             }
             loadMenuView();
             break;
         case "categories-view":
-        	// creating game session if it does not exist
-        	if(gameSession == null) {
-        		gameSession = new GameSession(new Timer("decrement", initTime, "#timer", function () {
-        			closeAllDialogs();
-        			logScoreInDatabase(gameSession.getScore());
-        			$.mobile.changePage('#score-view');
+            // creating game session if it does not exist
+            if (gameSession == null) {
+                gameSession = new GameSession(new Timer("decrement", initTime, "#timer", function () {
+                    closeAllDialogs();
+                    const finalScore = gameSession.getScore() < 0 ? 0 : gameSession.getScore();
+                    //console.log("final score " + finalScore);
+                    logScoreInDatabase(finalScore);
+                    $.mobile.changePage('#score-view');
                 }), new Timer("increment", 0), 1);
-        	}
-        	// if it was previously paused or just created, resume it
-        	if(!gameSession.isRunning()) {
-        		gameSession.resume();
-        	}
-        	// if a question has been aborted by a "back" action, abort it in
-			// the game session, or reset the question timer
+            }
+            // if it was previously paused or just created, resume it
+            if (!gameSession.isRunning()) {
+                gameSession.resume();
+            }
+            // if a question has been aborted by a "back" action, abort it in
+            // the game session, or reset the question timer
             if (gameSession.isQuestionRunning()) {
                 gameSession.abortQuestion();
             } else {
-            	gameSession.resetQuestion();
+                gameSession.resetQuestion();
             }
             loadCategoriesView();
             break;
         case "game-view":
-        	// launch timer for question in the game session
-        	gameSession.startQuestion();
+            // launch timer for question in the game session
+            gameSession.startQuestion();
             loadQuestionView(data);
             break;
         case "score-view":
-        	loadScoreView();
-        	break;
+            loadScoreView();
+            break;
         case "leaderboard-view":
-        	loadLeaderboardView();
-        	break;
+            loadLeaderboardView();
+            break;
+        case "help-view":
+            hideLoader();
+            break;
+        case "about-view":
+            hideLoader();
+            break;
         default:
     }
 });
@@ -346,17 +390,14 @@ $(document).on("pagebeforechange", function (e, data) {
  * Allows to log a score value to the online database.
  */
 function logScoreInDatabase(score) {
-	var url = appConfig['Server-URL'] + "addScore.php";
+    var url = appConfig['Server-URL'] + "addScore.php";
     var data = {
         score: score
     };
-	$.post(url, JSON.stringify(data), function(result) {
-		// if we have a result, an error occured
-	});
+    $.post(url, JSON.stringify(data), function (result) {
+        // if we have a result, an error occured
+    });
 }
-
-
-
 
 
 /** ----- PAGE CONTENT LOADING ----- * */
@@ -365,12 +406,12 @@ function logScoreInDatabase(score) {
  * Loads the menu view and adapt the main action button.
  */
 function loadMenuView() {
-	if(gameSession == null) {
-		$("#start-button").text("Commencer");
-	} else {
-		$("#start-button").text("Continuer");
-	}
-	hideLoader();
+    if (gameSession == null) {
+        $("#start-button").text("Commencer");
+    } else {
+        $("#start-button").text("Continuer");
+    }
+    hideLoader();
 }
 
 /**
@@ -388,22 +429,26 @@ function loadCategoriesView() {
             $("#categories-list").append("<a class='ui-btn ui-shadow ui-corner-all' data-role='button' data-transition='none' data-category-id='" + field.id + "'>" + field.theme + "</a>");
         });
         // if not question available for a category, blocking it
-        $.each(result.blocked, function(i, id) {
-        	$("#categories-list a[data-category-id='" + id + "']").addClass("ui-state-disabled");
+        $.each(result.blocked, function (i, id) {
+            $("#categories-list a[data-category-id='" + id + "']").addClass("ui-state-disabled");
         });
         // overriding click action of the categories to send information about
-		// it
+        // it
         $('#categories-list a').on('click', function (event) {
             event.preventDefault();
-            $.mobile.changePage('#game-view', {category_id: $(this).data("category-id"), category_title: $(this).text(), transition: "none"});
+            $.mobile.changePage('#game-view', {
+                category_id: $(this).data("category-id"),
+                category_title: $(this).text(),
+                transition: "none"
+            });
         });
         hideLoader();
     }, "json").error(function (err) {
-    	// handling server error
-    	navigator.notification.alert("Une erreur est survenue lors de l'obtention des catégories de jeu.\nCode de status : " + err.status,
-    			closeApp(),
-    			"Erreur technique",
-    			"Fermer l'application");
+        // handling server error
+        navigator.notification.alert("Une erreur est survenue lors de l'obtention des catégories de jeu.\nCode de status : " + err.status,
+            closeApp(),
+            "Erreur technique",
+            "Fermer l'application");
     });
 }
 
@@ -421,34 +466,48 @@ function loadQuestionView(loadViewData) {
         answered: gameSession.getAnsweredQuestions()
     };
     $.post(url, JSON.stringify(data), function (result) {
-    	gameSession.logQuestion(result);
-    	$("#category-title").text(loadViewData.options.category_title);
+        gameSession.logQuestion(result);
+        $("#category-title").text(loadViewData.options.category_title);
         $("#question").text(result.question);
         // override previous response proposition button action with specific
-		// question data
+        // question data
         $('#scan-res-button').unbind().click(function () {
             var promise = scanAnswer(result.answers);
             promise.then(function (value) {
-            	var shouldGiveClue = gameSession.logOutcome(value, function () {
-            		$("#right-answer-dialog").dialog("open");
-            		rightAnswerRedirectionTimeout = setTimeout(function() {
-            			$("#right-answer-dialog").dialog("close");
-            			$.mobile.changePage('#categories-view');
-            		}, 2000);
-            	});
-            	if(shouldGiveClue) {
-            		// to do: give clue here
-            	}
+                var shouldGiveHint = gameSession.logOutcome(value, function () {
+                    $("#right-answer-dialog").dialog("open");
+                    rightAnswerRedirectionTimeout = setTimeout(function () {
+                        $("#right-answer-dialog").dialog("close");
+                        $.mobile.changePage('#categories-view');
+                    }, 2000);
+                });
+                if (shouldGiveHint) {
+                    var hint = gameSession.getNextHint();
+                    if (hint !== undefined) {
+                        $("#hints-dialog").append("<p class='dialogs-infos'>" + hint.content + "</p>");
+                        if ($("#hints-button").hasClass("ui-state-disabled")) {
+                            $("#hints-button").removeClass("ui-state-disabled");
+                        }
+                        hintButtonAnimationInterval = setInterval(function () {
+                            $("#hints-button").animate({
+                                "color": "white",
+                                "background-color": "#49789F"
+                            }, 500, function () {
+                                $("#hints-button").animate({"color": "#49789F", "background-color": "white"}, 500);
+                            });
+                        }, 3000);
+                    }
+                }
             });
         });
         hideLoader();
         centerQuestion();
     }, "json").error(function (err) {
-    	// handling server error
-    	navigator.notification.alert("Une erreur est survenue lors de l'obtention d'une question de jeu.\nCode de status : " + err.status,
-    			closeApp(),
-    			"Erreur technique",
-    			"Fermer l'application");
+        // handling server error
+        navigator.notification.alert("Une erreur est survenue lors de l'obtention d'une question de jeu.\nCode de status : " + err.status,
+            closeApp(),
+            "Erreur technique",
+            "Fermer l'application");
     });
 }
 
@@ -456,28 +515,26 @@ function loadQuestionView(loadViewData) {
  * Loads the score view.
  */
 function loadScoreView() {
-	$("#score-container").text(gameSession.getScore());
-	hideLoader();
-	centerScore();
+    const finalScore = gameSession.getScore() < 0 ? 0 : gameSession.getScore();
+    $("#score-container").text(finalScore);
+    hideLoader();
+    centerScore();
 }
 
 /**
  * Loads the leaderboard view by retrieving the top 10 scores from the server.
  */
 function loadLeaderboardView() {
-	var url = appConfig['Server-URL'] + "getLeaderboard.php";
-	$.get(url, function(result) {
-		result.leaderboard.forEach(function(item, index) {
-			$("#leaderboard-scores").append("<tr><td>" + (index + 1) + "</td><td>" + item + "</td></tr>");
-		});
-		hideLoader();
-	}).error(function (err) {
-		$("#score-log-error-dialog").dialog("open");
+    var url = appConfig['Server-URL'] + "getLeaderboard.php";
+    $.get(url, function (result) {
+        result.leaderboard.forEach(function (item, index) {
+            $("#leaderboard-scores").append("<tr><td>" + (index + 1) + "</td><td>" + item + "</td></tr>");
+        });
+        hideLoader();
+    }).error(function (err) {
+        $("#score-log-error-dialog").dialog("open");
     });
 }
-
-
-
 
 
 /** ----- SCAN INTERACTIONS ----- * */
@@ -487,11 +544,11 @@ function loadLeaderboardView() {
  */
 function scanInfo() {
     cordova.plugins.barcodeScanner.scan(function (result) {
-    		$("#info-scan-content").text(result.text);
-    		$("#info-scan-dialog").dialog("open");
+            $("#info-scan-content").text(result.text);
+            $("#info-scan-dialog").dialog("open");
         }, function (error) {
-        	$("#info-scan-content").text(error);
-    		$("#info-scan-dialog").dialog("open");
+            $("#info-scan-content").text(error);
+            $("#info-scan-dialog").dialog("open");
         }
     )
 }
@@ -505,20 +562,20 @@ function scanAnswer(answers) {
                 if (isAnAnswer(result.text, answers)) {
                     resolve(gameSession.RIGHT_ANSWER);
                 } else {
-                	$("#wrong-answer").show();
-                	centerQuestion();
-                	resolve(gameSession.WRONG_ANSWER);
-                	// small timeout to prevent UI issue
-                	setTimeout(function() {
+                    $("#wrong-answer").show();
+                    centerQuestion();
+                    resolve(gameSession.WRONG_ANSWER);
+                    // small timeout to prevent UI issue
+                    setTimeout(function () {
                         $("#question-content").effect("shake");
-                	}, 200);
-                	setTimeout(function() {
-                		$("#wrong-answer").fadeOut(1000, centerQuestion);
-                	}, 3000);
+                    }, 200);
+                    setTimeout(function () {
+                        $("#wrong-answer").fadeOut(1000, centerQuestion);
+                    }, 3000);
                 }
             }, function (error) {
-            	$("#info-scan-content").text(error);
-        		$("#info-scan-dialog").dialog("open");
+                $("#info-scan-content").text(error);
+                $("#info-scan-dialog").dialog("open");
                 reject(3);
             }
         );

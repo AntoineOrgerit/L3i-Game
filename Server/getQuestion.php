@@ -52,18 +52,29 @@ while($row = $result->fetch_object()) {
     $data->answers[] = $answer;
 }
 
+// getting hints
+$data->hints = array();
+$stmt = $con->prepare("select intitule as content from `indice` left join `question_indice` on indice.id = question_indice.id_indice where id_question = ? order by priorite asc;");
+$stmt->bind_param('i', $data->id);
+$stmt->execute();
+$result = $stmt->get_result();
+while($row = $result->fetch_object()) {
+    $data->hints[] = $row;
+}
+
 // getting scoring information
 $stmt = $con->prepare("select * from `niveau` where id=?;");
 $stmt->bind_param('i', $json->level_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_object();
-$data->points = $row->points;
-$data->wrong_answer_penalty = $row->penalite_mauvaise_reponse;
-$data->lower_time_bound = $row->temps_basse_limite;
-$data->higher_time_bound = $row->temps_haute_limite;
-$data->lower_bound_multiplier = $row->coefficient_temps_basse_limite;
-$data->higher_bound_multiplier = $row->coefficient_temps_haute_limite;
+$data->scoring_system = new stdClass();
+$data->scoring_system->points = $row->points;
+$data->scoring_system->wrong_answer_penalty = $row->penalite_mauvaise_reponse;
+$data->scoring_system->lower_time_bound = $row->temps_basse_limite;
+$data->scoring_system->higher_time_bound = $row->temps_haute_limite;
+$data->scoring_system->lower_bound_multiplier = $row->coefficient_temps_basse_limite;
+$data->scoring_system->higher_bound_multiplier = $row->coefficient_temps_haute_limite;
 
 echo json_encode($data);
 

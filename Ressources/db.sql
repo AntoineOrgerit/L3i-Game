@@ -1,10 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `l3igame` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `l3igame`;
 -- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: l3igame
 -- ------------------------------------------------------
--- Server version	8.0.17
+-- Server version	5.7.26
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -41,6 +39,32 @@ LOCK TABLES `categorie` WRITE;
 /*!40000 ALTER TABLE `categorie` DISABLE KEYS */;
 INSERT INTO `categorie` VALUES (2,'Qui a écrit l\'article ?'),(4,'Qui a fait quoi ?'),(1,'Qui travaille avec qui ?'),(3,'Qui travaille sur ce projet ?');
 /*!40000 ALTER TABLE `categorie` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `indice`
+--
+
+DROP TABLE IF EXISTS `indice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `indice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `intitule` text COLLATE utf8_bin NOT NULL,
+  `priorite` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `indice`
+--
+
+LOCK TABLES `indice` WRITE;
+/*!40000 ALTER TABLE `indice` DISABLE KEYS */;
+INSERT INTO `indice` VALUES (1,'C\'est l\'actuel Président de l\'Université.',2),(2,'Il ne se consacre plus vraiment à la recherche désormais.',1),(3,'L\'ensemble de ses travaux porte sur les modélisations et métamodélisation.',1),(4,'Certaines personnes portent des travaux sur le thème des treillis.',1),(5,'Il travaille sur l\'application de modèles objets aux données géoréférencées.',2);
+/*!40000 ALTER TABLE `indice` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -108,6 +132,33 @@ INSERT INTO `question` VALUES (1,2,2,'Qui a participé à l\'écriture de l\'art
 UNLOCK TABLES;
 
 --
+-- Table structure for table `question_indice`
+--
+
+DROP TABLE IF EXISTS `question_indice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `question_indice` (
+  `id_question` int(11) NOT NULL,
+  `id_indice` int(11) NOT NULL,
+  PRIMARY KEY (`id_question`,`id_indice`),
+  KEY `question_indice_ibfk_1` (`id_indice`),
+  CONSTRAINT `question_indice_ibfk_1` FOREIGN KEY (`id_indice`) REFERENCES `indice` (`id`),
+  CONSTRAINT `question_indice_ibfk_2` FOREIGN KEY (`id_question`) REFERENCES `question` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `question_indice`
+--
+
+LOCK TABLES `question_indice` WRITE;
+/*!40000 ALTER TABLE `question_indice` DISABLE KEYS */;
+INSERT INTO `question_indice` VALUES (18,1),(18,2),(19,3),(20,4),(19,5);
+/*!40000 ALTER TABLE `question_indice` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `question_reponse`
 --
 
@@ -172,7 +223,7 @@ CREATE TABLE `score` (
   `value` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -181,7 +232,7 @@ CREATE TABLE `score` (
 
 LOCK TABLES `score` WRITE;
 /*!40000 ALTER TABLE `score` DISABLE KEYS */;
-INSERT INTO `score` VALUES (1,110),(2,110),(3,10),(4,150),(5,600),(6,635),(7,815),(8,30),(9,565),(10,280),(11,320),(12,110);
+INSERT INTO `score` VALUES (1,110),(2,110),(3,10),(4,150),(5,600),(6,635),(7,815),(8,30),(9,565),(10,280),(11,320),(12,110),(13,110),(14,0),(15,0),(16,70),(17,0),(18,0),(19,0);
 /*!40000 ALTER TABLE `score` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -194,4 +245,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-07 19:09:16
+-- Dump completed on 2019-10-10 18:59:59
