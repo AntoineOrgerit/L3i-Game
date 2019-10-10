@@ -21,17 +21,18 @@
 </div>
 <!-- BEGIN DIALOG BACK BUTTONS -->
 <div id="categories-back-dialog" class="interaction-dialogs" title="Fin de partie">
-	<p>Êtes-vous sûr de vouloir quitter la partie en cours ?</p>
-	<p class="dialogs-infos">Vous pourrez la reprendre quand vous le souhaitez, tant que vous ne quittez pas l'application.</p>
+    <p>Êtes-vous sûr de vouloir quitter la partie en cours ?</p>
+    <p class="dialogs-infos">Vous pourrez la reprendre quand vous le souhaitez, tant que vous ne quittez pas
+        l'application.</p>
 </div>
 <div id="game-back-dialog" class="interaction-dialogs" title="Abandonner la question">
-	<p>Êtes-vous sûr de vouloir abandonner la question en cours ?</p>
-	<p id="dialog-penalty" class="dialogs-infos">Vous serez pénalisé.</p>
+    <p>Êtes-vous sûr de vouloir abandonner la question en cours ?</p>
+    <p id="dialog-penalty" class="dialogs-infos">Vous serez pénalisé.</p>
 </div>
 <!-- END DIALOG BACK BUTTONS -->
 <!-- BEGIN DIALOG INFO SCAN -->
 <div id="info-scan-dialog" class="interaction-dialogs" title="Résultat du scan">
-	<p id="info-scan-content" class="dialogs-infos"></p>
+    <p id="info-scan-content" class="dialogs-infos"></p>
 </div>
 <!-- END DIALOG INFO SCAN -->
 
@@ -41,54 +42,57 @@
 <!-- END DIALOG HINTS -->
 <!-- BEGIN DIALOG RIGHT ANSWER -->
 <div id="right-answer-dialog" class="interaction-dialogs" title="Bonne réponse !">
-	<p class="dialogs-infos">Redirection automatique dans 2 secondes.</p>
+    <p class="dialogs-infos">Redirection automatique dans 2 secondes.</p>
 </div>
 <!-- END DIALOG RIGHT ANSWER -->
 <!-- BEGIN DIALOG SCORE LOG ISSUE -->
 <div id="score-log-error-dialog" class="interaction-dialogs" title="Erreur de communication">
-	<p>Une erreur de communication est survenue lors de l'envoi de votre score.</p>
-	<p class="dialogs-infos">Votre score ne sera pas comptabilisé au tableau des scores. Merci d'informer un responsable de cette erreur.</p>
+    <p>Une erreur de communication est survenue lors de l'envoi de votre score.</p>
+    <p class="dialogs-infos">Votre score ne sera pas comptabilisé au tableau des scores. Merci d'informer un responsable
+        de cette erreur.</p>
 </div>
 <!-- END DIALOG SCORE LOG ISSUE -->
-	<div id="content" class="content">
-		<!-- START PAGE 1 - MENU -->
-		<div data-role="page" id="menu-view" data-theme="d">
-			<!-- BEGIN HEADER TITLE -->
-			<div data-role="header">
-				<h1>Le mini-jeu de quizz</h1>
-			</div>
-			<!-- END HEADER TITLE -->
-			<!-- BEGIN HEADER MENU TITLE -->
-			<div role="main" class="ui-content">
-				<br> <br>
-				<div class="center-wrapper">
-					<h1>Menu</h1>
-				</div>
-				<!-- END HEADER MENU TITLE -->
-				<br> <br>
-				<!-- BEGIN MENU BUTTONS -->
-				<div class="ui-grid-menu ui-responsive">
-					<div class="ui-block-menu">
-						<a id="start-button" href="#categories-view"
-							class="ui-btn ui-shadow ui-corner-all" data-role="button"
-							data-transition="none"></a>
-						<a id="score-button" href="#leaderboard-view" class="ui-btn ui-shadow ui-corner-all"
-							data-role="button" data-transition="none">Scores</a>
-						<a id="help-button" href="#help-view"
-							class="ui-btn ui-shadow ui-corner-all" data-role="button">Aide</a>
-						<a id="exit-button" href="#" class="ui-btn ui-shadow ui-corner-all" data-role="button"
-							data-transition="none">Quitter</a>
-					</div>
-				</div>
-				<!-- END MENU BUTTONS -->
-			</div>
-			<!-- BEGIN FIXED FOOTER -->
-			<div data-role="footer" data-position="fixed">
-				<h4>L3i - La Rochelle Université</h4>
-			</div>
-			<!-- END FIXED FOOTER -->
-		</div>
-		<!-- END PAGE 1 - MENU -->
+<div id="content" class="content">
+    <!-- START PAGE 1 - MENU -->
+    <div data-role="page" id="menu-view" data-theme="d">
+        <!-- BEGIN HEADER TITLE -->
+        <div data-role="header">
+            <h1>Le mini-jeu de quizz</h1>
+        </div>
+        <!-- END HEADER TITLE -->
+        <!-- BEGIN HEADER MENU TITLE -->
+        <div role="main" class="ui-content">
+            <br> <br>
+            <div class="center-wrapper">
+                <h1>Menu</h1>
+            </div>
+            <!-- END HEADER MENU TITLE -->
+            <br> <br>
+            <!-- BEGIN MENU BUTTONS -->
+            <div class="ui-grid-menu ui-responsive">
+                <div class="ui-block-menu">
+                    <a id="start-button" href="#categories-view"
+                       class="ui-btn ui-shadow ui-corner-all" data-role="button"
+                       data-transition="none"></a>
+                    <a id="score-button" href="#leaderboard-view" class="ui-btn ui-shadow ui-corner-all"
+                       data-role="button" data-transition="none">Scores</a>
+                    <a id="help-button" href="#help-view"
+                       class="ui-btn ui-shadow ui-corner-all" data-role="button">Aide</a>
+                    <a id="about-button" href="#about-view"
+                       class="ui-btn ui-shadow ui-corner-all" data-role="button">A propos</a>
+                    <a id="exit-button" href="#" class="ui-btn ui-shadow ui-corner-all" data-role="button"
+                       data-transition="none">Quitter</a>
+                </div>
+            </div>
+            <!-- END MENU BUTTONS -->
+        </div>
+        <!-- BEGIN FIXED FOOTER -->
+        <div data-role="footer" data-position="fixed">
+            <h4>L3i - La Rochelle Université</h4>
+        </div>
+        <!-- END FIXED FOOTER -->
+    </div>
+    <!-- END PAGE 1 - MENU -->
 
     <!-- START PAGE 2 - CATEGORIES-->
     <div data-role="page" id="categories-view" data-theme="d">
@@ -114,8 +118,8 @@
             </div>
             <!-- END CATEGORIES BUTTONS -->
             <div id="timer-container" class="center-wrapper">
-            	<p>Temps restant :</p>
-            	<div id="timer"></div>
+                <p>Temps restant :</p>
+                <div id="timer"></div>
             </div>
         </div>
         <!-- BEGIN FIXED FOOTER -->
@@ -159,7 +163,8 @@
                                data-role="button">Scan info</a>
                         </div>
                         <div class="ui-block-b">
-                            <a id="hints-button" class="ui-shadow ui-btn ui-corner-all ui-state-disabled" data-role="button">Indices</a>
+                            <a id="hints-button" class="ui-shadow ui-btn ui-corner-all ui-state-disabled"
+                               data-role="button">Indices</a>
                         </div>
                     </div>
                     <div class="ui-grid-a ui-responsive">
@@ -188,7 +193,7 @@
         <!-- END FIXED FOOTER -->
     </div>
     <!-- END PAGE 3 - GAME -->
-    
+
     <!-- START PAGE 4 - SCORE RESULT -->
     <div data-role="page" id="score-view" data-theme="d">
         <!-- BEGIN HEADER TITLE -->
@@ -200,29 +205,29 @@
             <h1>Le mini-jeu de quizz</h1>
         </div>
         <!-- END HEADER TITLE -->
-        <div id="score-content" role="main" class="ui-content" >
-        	<div id="score-congratulation" class="center-wrapper">
-        		<h2 id="score-title">Bravo !</h2>
-        	</div>
-      		<div class="">
-      			<div id="score-header" class="center-wrapper">
-      				<p class="">Vous avez marqué</p>
-      			</div>
-      			<div id="score-display" class="center-wrapper">
-      				<p id="score-container"></p>
-      			</div>
-      			<div id="score-footer" class="center-wrapper">
-      				<p class="">points.</p>
-      			</div>
-      			<br> <br>
-				<div class="ui-grid-menu ui-responsive">
-					<div class="ui-block-menu">
-						<a id="back-to-menu-button" href="#menu-view"
-							class="ui-btn ui-shadow ui-corner-all" data-role="button"
-							data-transition="none">Retour au menu</a>
-					</div>
-				</div>
-      		</div>
+        <div id="score-content" role="main" class="ui-content">
+            <div id="score-congratulation" class="center-wrapper">
+                <h2 id="score-title">Bravo !</h2>
+            </div>
+            <div class="">
+                <div id="score-header" class="center-wrapper">
+                    <p class="">Vous avez marqué</p>
+                </div>
+                <div id="score-display" class="center-wrapper">
+                    <p id="score-container"></p>
+                </div>
+                <div id="score-footer" class="center-wrapper">
+                    <p class="">points.</p>
+                </div>
+                <br> <br>
+                <div class="ui-grid-menu ui-responsive">
+                    <div class="ui-block-menu">
+                        <a id="back-to-menu-button" href="#menu-view"
+                           class="ui-btn ui-shadow ui-corner-all" data-role="button"
+                           data-transition="none">Retour au menu</a>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- BEGIN FIXED FOOTER -->
         <div data-role="footer" data-position="fixed">
@@ -231,7 +236,7 @@
         <!-- END FIXED FOOTER -->
     </div>
     <!-- END PAGE 4 - SCORE RESULT -->
-    
+
     <!-- START PAGE 5 - SCORE LEADERBOARD -->
     <div data-role="page" id="leaderboard-view" data-theme="d">
         <!-- BEGIN HEADER TITLE -->
@@ -243,24 +248,24 @@
             <h1>Le mini-jeu de quizz</h1>
         </div>
         <!-- END HEADER TITLE -->
-        <div role="main" class="ui-content" >
-        	<br><br>
-        	<div class="center-wrapper">
-        		<h2 id="leaderboard-title">Tableau des meilleurs scores :</h2>
-        	</div>
-        	<br><br><br>
-      		<div class="">
-	        	<table id="leaderboard-table">
-	        		<thead>
-	        			<tr>
-	        				<th data-priority="persist">Rang</th>
-	        				<th data-priority="persist">Score</th>
-	        			</tr>
-	        		</thead>
-	        		<tbody id="leaderboard-scores">
-	        		</tbody>
-	        	</table>
-	        </div>
+        <div role="main" class="ui-content">
+            <br><br>
+            <div class="center-wrapper">
+                <h2 id="leaderboard-title">Tableau des meilleurs scores :</h2>
+            </div>
+            <br><br><br>
+            <div class="">
+                <table id="leaderboard-table">
+                    <thead>
+                    <tr>
+                        <th data-priority="persist">Rang</th>
+                        <th data-priority="persist">Score</th>
+                    </tr>
+                    </thead>
+                    <tbody id="leaderboard-scores">
+                    </tbody>
+                </table>
+            </div>
         </div>
         <!-- BEGIN FIXED FOOTER -->
         <div data-role="footer" data-position="fixed">
@@ -269,6 +274,66 @@
         <!-- END FIXED FOOTER -->
     </div>
     <!-- END PAGE 5 - SCORE LEADERBOARD -->
+
+    <!-- START PAGE 6 - HELP -->
+    <div data-role="page" id="help-view" data-theme="d">
+        <!-- BEGIN HEADER TITLE -->
+        <div data-role="header" data-add-back-btn="true"
+             data-position="fixed">
+            <a id="back-menu-from-help-btn-header" class="ui-btn-left"
+               href="#" data-icon="arrow-l" data-iconpos="notext"
+               data-role="button" data-transition="none"></a>
+            <h1>Le mini-jeu de quizz</h1>
+        </div>
+        <!-- END HEADER TITLE -->
+        <div role="main" class="ui-content">
+            <br><br>
+            <div class="center-wrapper">
+                <h2 id="help-title">Aide</h2>
+            </div>
+            <br>
+            <p class="help-block">
+                Votre mission, si vous l'acceptez, sera de répondre au plus grand nombre de questions possibles dans un
+                temps imparti. 4 thèmes sont disponibles, 3 niveaux de difficulté adaptés en fonction de votre
+                progression dans le jeu. Vous aurez 1h pour obtenir le plus grand nombre de points. C'est parti !
+            </p>
+        </div>
+        <!-- BEGIN FIXED FOOTER -->
+        <div data-role="footer" data-position="fixed">
+            <h4>L3i - La Rochelle Université</h4>
+        </div>
+        <!-- END FIXED FOOTER -->
+    </div>
+    <!-- END PAGE 6 - HELP -->
+
+    <!-- START PAGE 7 - ABOUT -->
+    <div data-role="page" id="about-view" data-theme="d">
+        <!-- BEGIN HEADER TITLE -->
+        <div data-role="header" data-add-back-btn="true"
+             data-position="fixed">
+            <a id="back-menu-from-about-btn-header" class="ui-btn-left"
+               href="#" data-icon="arrow-l" data-iconpos="notext"
+               data-role="button" data-transition="none"></a>
+            <h1>Le mini-jeu de quizz</h1>
+        </div>
+        <!-- END HEADER TITLE -->
+        <div role="main" class="ui-content">
+            <br><br>
+            <div class="center-wrapper">
+                <h2 id="about-title">About</h2>
+            </div>
+            <br><br><br>
+            <div class="">
+                Cette application a été réalisée dans le cadre des portes ouvertes de l'Université de La Rochelle.
+            </div>
+        </div>
+        <!-- BEGIN FIXED FOOTER -->
+        <div data-role="footer" data-position="fixed">
+            <h4>L3i - La Rochelle Université</h4>
+        </div>
+        <!-- END FIXED FOOTER -->
+    </div>
+    <!-- END PAGE 7 - END ABOUT -->
 </div>
 <!------------------------------------------------------------------------------------------------- START SCRIPTS JS -->
 <script type="text/javascript" src="cordova.js"></script>

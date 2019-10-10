@@ -245,6 +245,22 @@ $("#back-menu-from-leaderboard-btn-header").click(function (event) {
 });
 
 /**
+ * Handles the back button action on the help view.
+ */
+$("#back-menu-from-help-btn-header").click(function (event) {
+    event.preventDefault();
+    $.mobile.changePage('#menu-view');
+});
+
+/**
+ * Handles the back button action on the about view.
+ */
+$("#back-menu-from-about-btn-header").click(function (event) {
+    event.preventDefault();
+    $.mobile.changePage('#menu-view');
+});
+
+/**
  * Allows to close all dialogs objects.
  */
 function closeAllDialogs() {
@@ -359,6 +375,12 @@ $(document).on("pagebeforechange", function (e, data) {
             break;
         case "leaderboard-view":
             loadLeaderboardView();
+            break;
+        case "help-view":
+            hideLoader();
+            break;
+        case "about-view":
+            hideLoader();
             break;
         default:
     }

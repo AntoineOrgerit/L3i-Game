@@ -171,6 +171,16 @@ function GameSession(globalTimer, questionTimer, initLevel) {
     }
 
     /**
+     * Allows to set the dialog text from abandon pop up with points penalty
+     * @param penalty
+     */
+    function updateDialogPenalty(penalty) {
+        var dialogText;
+        dialogText = "Vous serez pénalisé de " + penalty + " points!";
+        document.getElementById("dialog-penalty").innerHTML = dialogText;
+    }
+
+    /**
      * Allows to log the outcome of a question, i.e. a right or wrong answer, or
      * an abortion action.
      */
@@ -230,16 +240,6 @@ function GameSession(globalTimer, questionTimer, initLevel) {
         // update score
         score -= penalty;
         return penalty;
-    }
-
-    /**
-     * Allows to set the dialog text from abandon pop up with points penalty
-     * @param penalty
-     */
-    function updateDialogPenalty(penalty) {
-        var dialogText;
-        dialogText = "Vous serez pénalisé de " + penalty + " points!";
-        document.getElementById("dialog-penalty").innerHTML = dialogText;
     }
 
     /**
