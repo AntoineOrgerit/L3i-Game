@@ -191,6 +191,7 @@ $("#right-answer-dialog").dialog({
         "Question suivante": function (event) {
             event.preventDefault();
             clearTimeout(rightAnswerRedirectionTimeout);
+            resetHints();
             $("#right-answer-dialog").dialog("close");
             $.mobile.changePage('#categories-view');
         }
@@ -266,8 +267,9 @@ $("#back-menu-from-about-btn-header").click(function (event) {
 function closeAllDialogs() {
     $("#categories-back-dialog").dialog("close");
     $("#game-back-dialog").dialog("close");
-    $("hints-dialog").dialog("close");
-    $("info-scan-dialog").dialog("close");
+    $("#hints-dialog").dialog("close");
+    resetHints();
+    $("#info-scan-dialog").dialog("close");
     $("#right-answer-dialog").dialog("close");
     $("#score-log-error-dialog").dialog("close");
 }
@@ -292,6 +294,16 @@ $("#hints-button").unbind().click(function () {
     $("#hints-dialog").dialog("open");
     clearInterval(hintButtonAnimationInterval);
 });
+
+/**
+ * Allows to reset the hints dialog content and button display.
+ */
+function resetHints() {
+	clearInterval(hintButtonAnimationInterval);
+	console.log("cleaned");
+	$("#hints-button").addClass("ui-state-disabled");
+    $("#hints-dialog").empty();
+}
 
 
 /** ----- ANDROID BACK BUTTON OVERRIDE ----- * */
@@ -360,6 +372,7 @@ $(document).on("pagebeforechange", function (e, data) {
             // the game session, or reset the question timer
             if (gameSession.isQuestionRunning()) {
                 gameSession.abortQuestion();
+                resetHints();
             } else {
                 gameSession.resetQuestion();
             }
@@ -510,6 +523,7 @@ function loadQuestionView(loadViewData) {
                     $("#right-answer-dialog").dialog("open");
                     rightAnswerRedirectionTimeout = setTimeout(function () {
                         $("#right-answer-dialog").dialog("close");
+                        resetHints();
                         $.mobile.changePage('#categories-view');
                     }, 2000);
                 });
