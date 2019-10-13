@@ -22,10 +22,11 @@ function GameSession(globalTimer, questionTimer, initLevel) {
     this.WRONG_ANSWER = 0;
     this.RIGHT_ANSWER = 1;
     this.ABORT_QUESTION = 2;
+    var triggerCheckCompetitionLow = null;
+    var shouldGiveHintCompetition = false;
 
 
     /** ----- SESSION TIMER ----- * */
-
     /**
      * Allows to check if the session has ended.
      */
@@ -203,14 +204,17 @@ function GameSession(globalTimer, questionTimer, initLevel) {
                 currentHintSystem = null;
                 ++ABORT_COUNTER;
                 //console.log("compteur abandon" + ABORT_COUNTER);
-                const penalty = updateScorePenalty();
+                updateScorePenalty();
                 //console.log("penalty " + penalty);
-                //console.log(score);
+                console.log(score);
             } else if (state === this.RIGHT_ANSWER) {
                 currentHintSystem = null;
+                updateScorePenaltyCompetitorHigh();
+                console.log(score);
                 updateScore();
-                //console.log(score);
+                console.log(score);
             }
+            console.log(score);
             if (state === this.RIGHT_ANSWER && onRightAnswer !== undefined) {
                 onRightAnswer();
             }
@@ -294,4 +298,46 @@ function GameSession(globalTimer, questionTimer, initLevel) {
         // if(nbStateZero%2===0) //to do donner indice
         return (nbStateZero % 2 === 0);
     }
+
+    /** COMPETITION MODE **/
+    /**
+     * Allows to chek if an hint is unlocked
+     * @returns {boolean}
+     */
+    this.hintCompetitionLow = function () {
+        return shouldGiveHintCompetition;
+    }
+
+    /**
+     * Allows to check if the gamer has done one scan in 5 min.
+     */
+    this.checkCompetitionLow = function () {
+        triggerCheckCompetitionLow = setInterval(giveHintCompetitionLow, 1000);
+    }
+
+    /**
+     * Allows to unlock an hint if number of wrong answers is equal to 1 and time is over 10 seconds
+     */
+    function giveHintCompetitionLow() {
+        if (currentQuestionScoringSystem !== null) {
+            if (currentQuestionScoringSystem.number_wrong_answers === 1 && questionTimer.getCurrentTime() >= 10) {
+                shouldGiveHintCompetition = true;
+                clearInterval(triggerCheckCompetitionLow);
+            }
+        }
+    }
+
+    /**
+     * Allows to apply a penalty if the gamer scan too many answers. (4)
+     */
+    function updateScorePenaltyCompetitorHigh() {
+        var questionScore = currentQuestionScoringSystem.points;
+        var penalty = 0;
+        console.log(currentQuestionScoringSystem.number_wrong_answers);
+        if (currentQuestionScoringSystem.number_wrong_answers >= 4) {
+            penalty = questionScore / 3;
+        }
+        score -= Math.floor(penalty);
+    }
+
 }

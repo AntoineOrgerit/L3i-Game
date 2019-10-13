@@ -368,6 +368,8 @@ $(document).on("pagebeforechange", function (e, data) {
         case "game-view":
             // launch timer for question in the game session
             gameSession.startQuestion();
+            // launch check if one scan in 5 min
+            gameSession.checkCompetitionLow();
             loadQuestionView(data);
             break;
         case "score-view":
@@ -385,6 +387,7 @@ $(document).on("pagebeforechange", function (e, data) {
         default:
     }
 });
+
 
 /**
  * Allows to log a score value to the online database.
@@ -452,6 +455,29 @@ function loadCategoriesView() {
     });
 }
 
+/**
+ * Allows to display the hint.
+ * @param shouldGiveHint boolean
+ */
+function displayHint(shouldGiveHint) {
+    if (shouldGiveHint) {
+        var hint = gameSession.getNextHint();
+        if (hint !== undefined) {
+            $("#hints-dialog").append("<p class='dialogs-infos'>" + hint.content + "</p>");
+            if ($("#hints-button").hasClass("ui-state-disabled")) {
+                $("#hints-button").removeClass("ui-state-disabled");
+            }
+            hintButtonAnimationInterval = setInterval(function () {
+                $("#hints-button").animate({
+                    "color": "white",
+                    "background-color": "#49789F"
+                }, 500, function () {
+                    $("#hints-button").animate({"color": "#49789F", "background-color": "white"}, 500);
+                });
+            }, 3000);
+        }
+    }
+}
 
 /**
  * Loads the question view by retrieving the information about it from the
@@ -470,6 +496,12 @@ function loadQuestionView(loadViewData) {
         $("#category-title").text(loadViewData.options.category_title);
         $("#question").text(result.question);
         // override previous response proposition button action with specific
+
+        // check if it's possible to unclock an hint each second
+        setInterval(function () {
+            displayHint(gameSession.hintCompetitionLow())
+        }, 1000);
+
         // question data
         $('#scan-res-button').unbind().click(function () {
             var promise = scanAnswer(result.answers);
@@ -481,23 +513,7 @@ function loadQuestionView(loadViewData) {
                         $.mobile.changePage('#categories-view');
                     }, 2000);
                 });
-                if (shouldGiveHint) {
-                    var hint = gameSession.getNextHint();
-                    if (hint !== undefined) {
-                        $("#hints-dialog").append("<p class='dialogs-infos'>" + hint.content + "</p>");
-                        if ($("#hints-button").hasClass("ui-state-disabled")) {
-                            $("#hints-button").removeClass("ui-state-disabled");
-                        }
-                        hintButtonAnimationInterval = setInterval(function () {
-                            $("#hints-button").animate({
-                                "color": "white",
-                                "background-color": "#49789F"
-                            }, 500, function () {
-                                $("#hints-button").animate({"color": "#49789F", "background-color": "white"}, 500);
-                            });
-                        }, 3000);
-                    }
-                }
+                displayHint(shouldGiveHint);
             });
         });
         hideLoader();
