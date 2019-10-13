@@ -323,6 +323,8 @@ function GameSession(globalTimer, questionTimer, initLevel) {
             if (currentQuestionScoringSystem.number_wrong_answers === 1 && questionTimer.getCurrentTime() >= 10) {
                 shouldGiveHintCompetition = true;
                 clearInterval(triggerCheckCompetitionLow);
+            } else {
+                shouldGiveHintCompetition = false;
             }
         }
     }
