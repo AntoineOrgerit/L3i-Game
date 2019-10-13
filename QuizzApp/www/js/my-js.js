@@ -99,6 +99,7 @@ function centerScore() {
 
 var rightAnswerRedirectionTimeout;
 var hintButtonAnimationInterval;
+var competitionCheck;
 
 /**
  * Defines the HTML object as the dialog to exit categories.
@@ -299,9 +300,9 @@ $("#hints-button").unbind().click(function () {
  * Allows to reset the hints dialog content and button display.
  */
 function resetHints() {
-	clearInterval(hintButtonAnimationInterval);
-	console.log("cleaned");
-	$("#hints-button").addClass("ui-state-disabled");
+    clearInterval(hintButtonAnimationInterval);
+    console.log("cleaned");
+    $("#hints-button").addClass("ui-state-disabled");
     $("#hints-dialog").empty();
 }
 
@@ -347,6 +348,7 @@ $(document).on("pagebeforechange", function (e, data) {
                 // in memory
                 if (gameSession.hasEnded()) {
                     gameSession = null;
+                    clearInterval(competitionCheck);
                 } else {
                     gameSession.pause();
                 }
@@ -511,7 +513,7 @@ function loadQuestionView(loadViewData) {
         // override previous response proposition button action with specific
 
         // check if it's possible to unclock an hint each second
-        setInterval(function () {
+        competitionCheck = setInterval(function () {
             displayHint(gameSession.hintCompetitionLow())
         }, 1000);
 
