@@ -99,6 +99,7 @@ function centerScore() {
 
 var rightAnswerRedirectionTimeout;
 var hintButtonAnimationInterval;
+var competitionCheck;
 
 /**
  * Defines the HTML object as the dialog to exit categories.
@@ -191,6 +192,7 @@ $("#right-answer-dialog").dialog({
         "Question suivante": function (event) {
             event.preventDefault();
             clearTimeout(rightAnswerRedirectionTimeout);
+            resetHints();
             $("#right-answer-dialog").dialog("close");
             $.mobile.changePage('#categories-view');
         }
@@ -266,8 +268,9 @@ $("#back-menu-from-about-btn-header").click(function (event) {
 function closeAllDialogs() {
     $("#categories-back-dialog").dialog("close");
     $("#game-back-dialog").dialog("close");
-    $("hints-dialog").dialog("close");
-    $("info-scan-dialog").dialog("close");
+    $("#hints-dialog").dialog("close");
+    resetHints();
+    $("#info-scan-dialog").dialog("close");
     $("#right-answer-dialog").dialog("close");
     $("#score-log-error-dialog").dialog("close");
 }
@@ -292,6 +295,16 @@ $("#hints-button").unbind().click(function () {
     $("#hints-dialog").dialog("open");
     clearInterval(hintButtonAnimationInterval);
 });
+
+/**
+ * Allows to reset the hints dialog content and button display.
+ */
+function resetHints() {
+    clearInterval(hintButtonAnimationInterval);
+    console.log("cleaned");
+    $("#hints-button").addClass("ui-state-disabled");
+    $("#hints-dialog").empty();
+}
 
 
 /** ----- ANDROID BACK BUTTON OVERRIDE ----- * */
@@ -335,6 +348,7 @@ $(document).on("pagebeforechange", function (e, data) {
                 // in memory
                 if (gameSession.hasEnded()) {
                     gameSession = null;
+                    clearInterval(competitionCheck);
                 } else {
                     gameSession.pause();
                 }
@@ -360,6 +374,7 @@ $(document).on("pagebeforechange", function (e, data) {
             // the game session, or reset the question timer
             if (gameSession.isQuestionRunning()) {
                 gameSession.abortQuestion();
+                resetHints();
             } else {
                 gameSession.resetQuestion();
             }
@@ -368,6 +383,8 @@ $(document).on("pagebeforechange", function (e, data) {
         case "game-view":
             // launch timer for question in the game session
             gameSession.startQuestion();
+            // launch check if one scan in 5 min
+            gameSession.checkCompetitionLow();
             loadQuestionView(data);
             break;
         case "score-view":
@@ -385,6 +402,7 @@ $(document).on("pagebeforechange", function (e, data) {
         default:
     }
 });
+
 
 /**
  * Allows to log a score value to the online database.
@@ -452,6 +470,29 @@ function loadCategoriesView() {
     });
 }
 
+/**
+ * Allows to display the hint.
+ * @param shouldGiveHint boolean
+ */
+function displayHint(shouldGiveHint) {
+    if (shouldGiveHint) {
+        var hint = gameSession.getNextHint();
+        if (hint !== undefined) {
+            $("#hints-dialog").append("<p class='dialogs-infos'>" + hint.content + "</p>");
+            if ($("#hints-button").hasClass("ui-state-disabled")) {
+                $("#hints-button").removeClass("ui-state-disabled");
+            }
+            hintButtonAnimationInterval = setInterval(function () {
+                $("#hints-button").animate({
+                    "color": "white",
+                    "background-color": "#49789F"
+                }, 500, function () {
+                    $("#hints-button").animate({"color": "#49789F", "background-color": "white"}, 500);
+                });
+            }, 3000);
+        }
+    }
+}
 
 /**
  * Loads the question view by retrieving the information about it from the
@@ -470,6 +511,12 @@ function loadQuestionView(loadViewData) {
         $("#category-title").text(loadViewData.options.category_title);
         $("#question").text(result.question);
         // override previous response proposition button action with specific
+
+        // check if it's possible to unclock an hint each second
+        competitionCheck = setInterval(function () {
+            displayHint(gameSession.hintCompetitionLow())
+        }, 1000);
+
         // question data
         $('#scan-res-button').unbind().click(function () {
             var promise = scanAnswer(result.answers);
@@ -478,26 +525,11 @@ function loadQuestionView(loadViewData) {
                     $("#right-answer-dialog").dialog("open");
                     rightAnswerRedirectionTimeout = setTimeout(function () {
                         $("#right-answer-dialog").dialog("close");
+                        resetHints();
                         $.mobile.changePage('#categories-view');
                     }, 2000);
                 });
-                if (shouldGiveHint) {
-                    var hint = gameSession.getNextHint();
-                    if (hint !== undefined) {
-                        $("#hints-dialog").append("<p class='dialogs-infos'>" + hint.content + "</p>");
-                        if ($("#hints-button").hasClass("ui-state-disabled")) {
-                            $("#hints-button").removeClass("ui-state-disabled");
-                        }
-                        hintButtonAnimationInterval = setInterval(function () {
-                            $("#hints-button").animate({
-                                "color": "white",
-                                "background-color": "#49789F"
-                            }, 500, function () {
-                                $("#hints-button").animate({"color": "#49789F", "background-color": "white"}, 500);
-                            });
-                        }, 3000);
-                    }
-                }
+                displayHint(shouldGiveHint);
             });
         });
         hideLoader();

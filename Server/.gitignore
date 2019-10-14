@@ -1,0 +1,5 @@
+# conf serveur
+server.ini
+
+# sonar
+/.scannerwork/*
