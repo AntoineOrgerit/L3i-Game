@@ -509,9 +509,17 @@ function loadQuestionView(loadViewData) {
     $.post(url, JSON.stringify(data), function (result) {
         gameSession.logQuestion(result);
         $("#category-title").text(loadViewData.options.category_title);
-        $("#question").text(result.question);
+        if(result.question != null) {
+        	$("#game-question").html("<p id='question' class=''>" + result.question + "</p>");
+        } else {
+        	if(result.image != null) {
+        		$("#game-question").html("<img id='question-img' src='" + result.image + "' alt='Question image'>");
+        	} else {
+        		gameSession.errorQuestion();
+        		$.mobile.changePage('#categories-view');
+        	}
+        }
         // override previous response proposition button action with specific
-
         // check if it's possible to unclock an hint each second
         competitionCheck = setInterval(function () {
             displayHint(gameSession.hintCompetitionLow())
@@ -533,7 +541,17 @@ function loadQuestionView(loadViewData) {
             });
         });
         hideLoader();
-        centerQuestion();
+        // specific vertical centering with picture
+        if(result.image == null) {
+        	centerQuestion();
+        } else {
+        	var img = document.getElementById('question-img');
+        	if(img.complete) {
+        		centerQuestion();
+        	} else {
+        		img.onload = centerQuestion;
+        	}
+        }
     }, "json").error(function (err) {
         // handling server error
         navigator.notification.alert("Une erreur est survenue lors de l'obtention d'une question de jeu.\nCode de status : " + err.status,

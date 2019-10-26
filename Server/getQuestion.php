@@ -13,7 +13,7 @@ if(count($json->answered) != 0) {
     }
 
 // random question by category, only one, and not selecting same ids
-    $query = "select id, intitule from `question` where id_categorie=? and id_niveau=? and id not in ('";
+    $query = "select id, intitule, image from `question` where id_categorie=? and id_niveau=? and id not in ('";
     for ($i = 0; $i < count($ids_to_exclude); $i++) {
         $query = $query . $ids_to_exclude[$i];
         if ($i != count($ids_to_exclude) - 1) {
@@ -22,7 +22,7 @@ if(count($json->answered) != 0) {
     }
     $query = $query . "') order by rand() limit 1;";
 } else {
-    $query = "select id, intitule from `question` where id_categorie=? and id_niveau=? order by rand() limit 1;";
+    $query = "select id, intitule, image from `question` where id_categorie=? and id_niveau=? order by rand() limit 1;";
 }
 $stmt = $con->prepare($query);
 $stmt->bind_param('ii', $json->category_id, $json->level_id);
@@ -33,6 +33,7 @@ $row = $result->fetch_object();
 $data->id = $row->id;
 $data->category_id = $json->category_id;
 $data->question = $row->intitule;
+$data->image = $row->image;
 $data->answers = array();
 
 // getting possible answers
