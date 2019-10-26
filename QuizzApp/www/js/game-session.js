@@ -22,6 +22,7 @@ function GameSession(globalTimer, questionTimer, initLevel) {
     this.WRONG_ANSWER = 0;
     this.RIGHT_ANSWER = 1;
     this.ABORT_QUESTION = 2;
+    this.ERROR_QUESTION = -1;
     var triggerCheckCompetitionLow = null;
     var shouldGiveHintCompetition = false;
 
@@ -92,6 +93,15 @@ function GameSession(globalTimer, questionTimer, initLevel) {
         var time = questionTimer.getCurrentTime();
         questionTimer.reset();
         return time;
+    }
+    
+    /**
+     * Allows to handle error for a question.
+     */
+    this.errorQuestion = function () {
+    	questionTimer.pause();
+    	questionRunning = false;
+    	this.logOutcome(this.ERROR_QUESTION);
     }
 
     /**
